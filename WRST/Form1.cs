@@ -1,10 +1,8 @@
 ﻿using System.Data;
 using System.Diagnostics;
-using System.Linq.Expressions;
-using System.Windows.Forms;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Globalization;
 
-namespace WRST
+namespace WRPT
 {
     public partial class Form1 : Form
     {
@@ -16,7 +14,9 @@ namespace WRST
         DataTable tableSelections = new DataTable();
         DataTable tableResults = new DataTable();
         DataTable tableSecurity = new DataTable();
-
+        DataTable tableDischarges = new DataTable();
+        DataTable tableShortage = new DataTable();
+        DataTable tableControlMonth = new DataTable();
 
         public Form1()
         {
@@ -67,6 +67,13 @@ namespace WRST
             dataGridView5.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridView5.AllowUserToOrderColumns = false;
 
+            dataGridView6.AllowUserToAddRows = false;
+            dataGridView6.AllowUserToDeleteRows = false;
+            dataGridView6.RowHeadersVisible = false;
+            dataGridView6.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridView6.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridView6.AllowUserToOrderColumns = false;
+
             //Начальная инициализация
             tableTributary.Columns.Add(new DataColumn("0", typeof(string))); //Создаем столбец
             DataRow rowTributary = tableTributary.NewRow(); //Добавляем строку
@@ -95,13 +102,16 @@ namespace WRST
             textBox1.Text = "0";
             textBox2.Text = "0";
             textBox3.Text = "0";
-            textBox4.Text = "0";
+            //textBox4.Text = "0";
             textBox5.Text = "0";
             textBox6.Text = "0";
             textBox7.Text = "0";
             textBox8.Text = "0";
             textBox9.Text = "0";
             textBox10.Text = "0";
+            textBox11.Text = "0";
+            textBox12.Text = "0";
+            textBox13.Text = "0";
 
             for (int i = 0; i < 12; i++)
             {
@@ -141,7 +151,26 @@ namespace WRST
             tableSelections.Rows.Add(rowSelections);
             dataGridView5.DataSource = tableSelections;
 
-            
+            for (int i = 0; i < 12; i++)
+            {
+                if (i < 9)
+                {
+                    tableDischarges.Columns.Add(new DataColumn("0" + (i + 1).ToString(), typeof(string)));
+                }
+                else
+                {
+                    tableDischarges.Columns.Add(new DataColumn((i + 1).ToString(), typeof(string)));
+                }
+            }
+            DataRow rowDischarges = tableDischarges.NewRow();
+            for (int i = 0; i < 12; i++)
+            {
+                rowDischarges[i] = 0;
+            }
+            tableDischarges.Rows.Add(rowDischarges);
+            dataGridView6.DataSource = tableDischarges;
+
+
         }
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
@@ -281,24 +310,27 @@ namespace WRST
 
                 List<string> block1 = new List<string>();
                 block1.Add(textBox1.Text);
-                if(radioButton1.Checked == true)
-                    { block1.Add("0"); }
+                if (radioButton1.Checked == true)
+                { block1.Add("0"); }
                 else
-                    { block1.Add("1"); }
+                { block1.Add("1"); }
                 block1.Add(textBox2.Text);
                 block1.Add(textBox3.Text);
-                block1.Add(textBox4.Text);
+                block1.Add(textBox12.Text);
+                block1.Add(textBox13.Text);
+                //block1.Add(textBox4.Text);
                 block1.Add(textBox5.Text);
                 block1.Add(textBox6.Text);
                 block1.Add(textBox7.Text);
+                block1.Add(textBox11.Text);
 
                 List<string> block2 = new List<string>();
                 block2.Add(textBox8.Text);
                 double tmp;
                 for (int i = 0; i < Convert.ToInt32(textBox8.Text); i++)
                 {
-                    tmp = Convert.ToDouble (dataGridView1.Rows[0].Cells[i].Value);
-                    block2.Add(Convert.ToString (tmp));
+                    tmp = Convert.ToDouble(dataGridView1.Rows[0].Cells[i].Value);
+                    block2.Add(Convert.ToString(tmp));
                 }
 
                 List<string> block3 = new List<string>();
@@ -333,13 +365,21 @@ namespace WRST
                     tmp = Convert.ToDouble(dataGridView4.Rows[0].Cells[i].Value);
                     block5.Add(Convert.ToString(tmp));
                 }
-                
+
                 List<string> block6 = new List<string>();
                 for (int i = 0; i < 12; i++)
                 {
                     tmp = Convert.ToDouble(dataGridView5.Rows[0].Cells[i].Value);
                     block6.Add(Convert.ToString(tmp));
                 }
+
+                List<string> block7 = new List<string>();
+                for (int i = 0; i < 12; i++)
+                {
+                    tmp = Convert.ToDouble(dataGridView6.Rows[0].Cells[i].Value);
+                    block7.Add(Convert.ToString(tmp));
+                }
+
                 using (StreamWriter writer = new StreamWriter(filename))
                 {
                     writer.WriteLine(string.Join(";", block1));
@@ -348,6 +388,7 @@ namespace WRST
                     writer.WriteLine(string.Join(";", block4));
                     writer.WriteLine(string.Join(";", block5));
                     writer.WriteLine(string.Join(";", block6));
+                    writer.WriteLine(string.Join(";", block7));
                 }
             }
         }
@@ -376,6 +417,7 @@ namespace WRST
                 List<string> block4 = blocks.ElementAtOrDefault(3);
                 List<string> block5 = blocks.ElementAtOrDefault(4);
                 List<string> block6 = blocks.ElementAtOrDefault(5);
+                List<string> block7 = blocks.ElementAtOrDefault(6);
 
                 try
                 {
@@ -386,10 +428,13 @@ namespace WRST
                     else { radioButton2.Checked = true; }
                     textBox2.Text = block1?.ElementAtOrDefault(2) ?? string.Empty;
                     textBox3.Text = block1?.ElementAtOrDefault(3) ?? string.Empty;
-                    textBox4.Text = block1?.ElementAtOrDefault(4) ?? string.Empty;
-                    textBox5.Text = block1?.ElementAtOrDefault(5) ?? string.Empty;
-                    textBox6.Text = block1?.ElementAtOrDefault(6) ?? string.Empty;
-                    textBox7.Text = block1?.ElementAtOrDefault(7) ?? string.Empty;
+                    textBox12.Text = block1?.ElementAtOrDefault(4) ?? string.Empty;
+                    textBox13.Text = block1?.ElementAtOrDefault(5) ?? string.Empty;
+                    //textBox4.Text = block1?.ElementAtOrDefault(6) ?? string.Empty;
+                    textBox5.Text = block1?.ElementAtOrDefault(6) ?? string.Empty;
+                    textBox6.Text = block1?.ElementAtOrDefault(7) ?? string.Empty;
+                    textBox7.Text = block1?.ElementAtOrDefault(8) ?? string.Empty;
+                    textBox11.Text = block1?.ElementAtOrDefault(9) ?? string.Empty;
 
                     textBox8.Text = block2?.ElementAtOrDefault(0) ?? string.Empty;
                     int n = Convert.ToInt32(textBox8.Text);
@@ -527,19 +572,46 @@ namespace WRST
                     }
                     tableSelections.Rows.Add(rowSelections);
                     dataGridView5.DataSource = tableSelections;
+
+                    tableDischarges.Clear();
+                    for (int i = tableDischarges.Columns.Count - 1; i >= 0; i--)
+                    {
+                        tableDischarges.Columns.RemoveAt(i);
+                    }
+                    for (int i = 0; i < 12; i++)
+                    {
+                        if (i < 9)
+                        {
+                            tableDischarges.Columns.Add(new DataColumn("0" + (i + 1).ToString(), typeof(string)));
+                        }
+                        else
+                        {
+                            tableDischarges.Columns.Add(new DataColumn((i + 1).ToString(), typeof(string)));
+                        }
+                    }
+                    DataRow rowDischarges = tableDischarges.NewRow();
+                    for (int i = 0; i < 12; i++)
+                    {
+                        rowDischarges[i] = block7?.ElementAtOrDefault(i) ?? string.Empty;
+                    }
+                    tableDischarges.Rows.Add(rowDischarges);
+                    dataGridView6.DataSource = tableDischarges;
                 }
                 catch (Exception ex)
                 {
                     textBox1.Text = "0";
                     textBox2.Text = "0";
                     textBox3.Text = "0";
-                    textBox4.Text = "0";
+                    //textBox4.Text = "0";
                     textBox5.Text = "0";
                     textBox6.Text = "0";
                     textBox7.Text = "0";
                     textBox8.Text = "0";
                     textBox9.Text = "0";
                     textBox10.Text = "0";
+                    textBox11.Text = "0";
+                    textBox12.Text = "0";
+                    textBox13.Text = "0";
 
                     MessageBox.Show("Неверный формат файла исходных данных " +
                         "/ файл исходных данных повреждён \n\n" + ex, "Внимание!",
@@ -561,28 +633,42 @@ namespace WRST
             int M1 = 0;
             int NF = 0;
             int JF = 0;
+            //int MA = 1;
+            int MB = 1;
+            int MDA = 0;
             bool LA = false;
             double[] Q = new double[400];
             double[] VV = new double[10];
             double[] ZUU = new double[10];
             double[] QLL = new double[10];
             double[] ZLL = new double[10];
+            double[] VD = new double[12];
+            double[] QU = new double[12];
+            double[] QR = new double[12];
+            double[] DDQR = new double[400];
+            double[] MDEF = new double[400];
             double VU = 0;
             double VR = 0;
-            double QR = 0;
+            //double QR = 0;
             double QPF = 0;
             double DK = 0;
             double EFF = 0;
-            double[] VD = new double[12];
-            double[] QU = new double[12];
+            double VMN = 0;
+            double VI = 0;
+
             try
             {
                 MF = Convert.ToInt32(textBox8.Text);
                 M1 = Convert.ToInt32(textBox1.Text) - 1;
+                //Debug.WriteLine("{0}", M1);
                 NF = Convert.ToInt32(textBox9.Text);
                 JF = Convert.ToInt32(textBox10.Text);
                 LA = false;
+                MB = MF;
+                MDA = Convert.ToInt32(textBox11.Text);
+
                 if (radioButton2.Checked == true) { LA = true; }
+
                 for (int i = 0; i < MF; i++)
                 {
                     Q[i] = Convert.ToDouble(dataGridView1.Rows[0].Cells[i].Value);
@@ -599,17 +685,24 @@ namespace WRST
                 }
                 VU = Convert.ToDouble(textBox2.Text);
                 VR = Convert.ToDouble(textBox3.Text);
-                QR = Convert.ToDouble(textBox4.Text);
+                //QR = Convert.ToDouble(textBox4.Text);
                 QPF = Convert.ToDouble(textBox5.Text);
                 DK = Convert.ToDouble(textBox6.Text);
                 EFF = Convert.ToDouble(textBox7.Text);
-                VD = new double[12];
-                QU = new double[12];
+                VMN = Convert.ToDouble(textBox12.Text);
+                VI = Convert.ToDouble(textBox13.Text);
+
+                //VD = new double[12];
+                //QU = new double[12];
+                //QR = new double[12];
                 for (int i = 0; i < 12; i++)
                 {
                     VD[i] = Convert.ToDouble(dataGridView4.Rows[0].Cells[i].Value);
                     //Debug.WriteLine("{0}, {1}",i, VD[i]);
                     QU[i] = Convert.ToDouble(dataGridView5.Rows[0].Cells[i].Value);
+                    //Debug.WriteLine("{0}, {1}", i, QU[i]);
+                    QR[i] = Convert.ToDouble(dataGridView6.Rows[0].Cells[i].Value);
+                    //Debug.WriteLine("{0}, {1}", i, QR[i]);
                 }
             }
             catch (Exception ex)
@@ -622,8 +715,9 @@ namespace WRST
             double QP1;
             double QS1;
             double DV1;
-            double VM1;
+            double VM1 = 0;
             double VD1;
+            double VD11;
             double[] MDK = new double[400];
             double[] QP = new double[400];
             double[] QS = new double[400];
@@ -638,23 +732,42 @@ namespace WRST
             double ZL1;
             double PH1;
             double PN1;
+            double QRR;
 
             double[] B_Q = new double[400];
             double[] B_QP = new double[400];
             double[] B_PH = new double[400];
-            double[] B_PN = new double[400];;
+            double[] B_PN = new double[400]; ;
 
+            //Debug.WriteLine("{0}", M1);
             int M = 0;
             int MD = M1 - 1;
+            //Debug.WriteLine("MD={0}", MD);
             if (MD <= -1) { MD = 11; }
-            double VM = VD[MD];
-            double DV = 0;
+            double VDI = VD[MD];
+            //Debug.WriteLine("VDI={0}", VDI);
+            double[] DV = new double[400];
+            double VM = VMN;
+            //Debug.WriteLine("VM={0}", VM);
+            //Debug.WriteLine("M={0}, MF={1}", M, MF);
 
             while (M < MF)
             {
-                QP1 = QR + DV / 2.63;
-                //Debug.WriteLine("Start[{0}]. QR={1}, DV={2}, QP1={3}", M, QR, DV, QP1);
-                if (QP1 >= QPF) { QP1 = QPF; }
+                //Debug.WriteLine("MD={0}", MD);
+                //Debug.WriteLine("VM={0}, VDI={1}", VM, VDI);
+                if (VM <= VDI)
+                {
+                    QP1 = QR[MD];
+                    if (MD == 11) QP1 = QR[0];
+                }
+                else
+                {
+                    DV1 = VM - VDI;
+                    QRR = QR[MD];
+                    if (MD == 11) QRR = QR[0];
+                    QP1 = QRR + DV1 / 2.63;
+                    if (QP1 > QPF) QP1 = QPF;
+                }
                 QS1 = 0;
                 MD++;
                 if (MD > 11) { MD = 0; }
@@ -664,9 +777,10 @@ namespace WRST
                 VM1 = VM + DV1;
                 //Debug.WriteLine("VM={0}, DV1={1}, VM1={2}", VM, DV1, VM1);
                 VD1 = VD[MD];
+                VD11 = VD1 - VI;
                 //Debug.WriteLine("VD[MD]={0}, MD={1}", VD1, MD);
                 //Debug.WriteLine("IF VU={0}, VM1={1}, VD1={2}", VU, VM1, VD1);
-                if (VM1 > VU | VM1 < VD1)
+                if (VM1 > VU | VM1 < VD11)
                 {
                     if (VM1 > VU)
                     {
@@ -698,9 +812,8 @@ namespace WRST
                 MDK[M] = MD;
                 QP[M] = QP1;
                 QS[M] = QS1;
-                DV = VM1 - VD1;
+                DV[M] = VM1 - VD1 + VI;
                 //Debug.WriteLine("VM1={0}, VD1={1}, DV={2}",VM1, VD1, DV);
-                DVM[M] = DV;
                 VM11 = VM1 + VR;
                 //Debug.WriteLine("BB");
                 ZU1 = Lag11(VM11, NF, VV, ZUU);
@@ -724,15 +837,30 @@ namespace WRST
                 PN1 = QP1 * (PH1 - PHL) * 9.81 * EFF;
                 PN[M] = PN1;
                 VM = VM1;
+                VDI = VD1;
                 M++;
             }
+            double VMK = VM1;
             double S = 0;
             double S1;
             for (int j = 0; j < MF; j++)
             {
                 S1 = QS[j] * 2.63;
-                S = S + S1;
+                S += S1;
             }
+            double QM = 0;
+            for (int j = 0; j < MF; j++)
+            {
+                QM += Q[j];
+            }
+            double QMM = QM / MF;
+            double QPM = 0;
+            for (int j = 0; j < MF; j++)
+            {
+                QPM += QP[j];
+            }
+            double QPMM = QPM / MF;
+            double EPK = QPMM / QMM;
             double EP = 0;
             double EP1;
             for (int j = 0; j < MF; j++)
@@ -740,13 +868,82 @@ namespace WRST
                 EP1 = PN[j] * 720;
                 EP = EP + EP1;
             }
-            double EEP = EP * 12 / MF;
+            double EEP = (EP * 12 / MF) * (1 + (VMN - VMK) / (2.63 * MF *QMM));
 
+            //DEF
+            int ML = 0;
+            double DQR;
+            M = 0;
+            MD = M1 - 1;
+            //Debug.WriteLine("MD= {0}", MD);
+            if (MD <= -1) { MD = 11; }
+            //Debug.WriteLine("MD= {0}, MF= {1}", MD, MF);
+            while (M < MF)
+            {
+                //Debug.WriteLine("M= {0}, MD= {1}", M, MD);
+                double QPI = QP[M];
+                double QRI = QR[MD];
+                //Debug.WriteLine("QPI= {0}, QRI= {1}", QPI, QRI);
+                if (QPI < QRI)
+                {
+                    DQR = QRI - QPI;
+                    DDQR[ML] = DQR;
+                    MDEF[ML] = M + 1;
+                    //Debug.WriteLine("ML= {0}, DDQR= {1}, MDEF= {2}", ML, DDQR[ML], MDEF[ML]);
+                    ML++;
+                }
+                M++;
+                MD++;
+                if (MD > 11) { MD = 0; }
+            }
 
+            tableShortage.Clear();
+            for (int i = tableShortage.Columns.Count - 1; i >= 0; i--)
+            {
+                tableShortage.Columns.RemoveAt(i);
+            }
+            DataRow rowM = tableShortage.NewRow();
+            DataRow rowD = tableShortage.NewRow();
+            for (int i = 0; i < ML; i++)
+            {
+                tableShortage.Columns.Add();
+                rowM[i] = MDEF[i];
+                rowD[i] = DDQR[i];
+            }
+            tableShortage.Rows.Add(rowM);
+            tableShortage.Rows.Add(rowD);
+            //-DEF
+
+            //MONTH
+            double[] PC = new double[60];
+            ML = 0;
+            M = Month(MDA, M1, ML);
+            while (M < MF)
+            {
+                M = Month(MDA, M1, ML);
+                PC[ML] = PN[M];
+                ML++;
+            }
+            tableControlMonth.Clear();
+            for (int i = tableControlMonth.Columns.Count - 1; i >= 0; i--)
+            {
+                tableControlMonth.Columns.RemoveAt(i);
+            }
+            DataRow rowN = tableControlMonth.NewRow();
+            rowM = tableControlMonth.NewRow();
+            for (int i = 0; i < MF / 12; i++)
+            {
+                tableControlMonth.Columns.Add();
+                rowM[i] = (i + 1) * MDA;
+                rowN[i] = Math.Round(PC[i], 0).ToString("#,#", CultureInfo.CurrentCulture);
+            }
+            tableControlMonth.Rows.Add(rowM);
+            tableControlMonth.Rows.Add(rowN);
+            //-MONTH
 
             List<string> columnsNamesResult = new List<string>()
             { "#", "Месяц", "Приток, м³/с", "Расход ГЭС, м³/с", "Сбросы, м³/с", "Отм. ВБ, м",
-                "Отм. НБ, м", "Напор, м", "Мощность, кВт", "Избыт. объем, млн.м³"};
+                "Отм. НБ, м", "Напор, м", "Мощность, кВт", "Остат. объем, млн.м³"};
 
             tableResults.Clear();
             for (int i = tableResults.Columns.Count - 1; i >= 0; i--)
@@ -770,7 +967,7 @@ namespace WRST
                 dr[6] = Math.Round(ZL[i], 1);
                 dr[7] = Math.Round(PH[i], 2);
                 dr[8] = Math.Round(PN[i], 0);
-                dr[9] = Math.Round(DVM[i], 1);
+                dr[9] = Math.Round(DV[i], 1);
 
                 tableResults.Rows.Add(dr);
             }
@@ -798,19 +995,34 @@ namespace WRST
             for (int i = 0; i < MF; i++)
             {
                 DataRow dr = tableSecurity.NewRow();
-                dr[0] = Math.Round(100 - ((double)i + 1) / ((double)MF + 1) * 100,2);
-                dr[1] = Math.Round(B_Q[i] , 1);
+                dr[0] = Math.Round(100 - ((double)i + 1) / ((double)MF + 1) * 100, 2);
+                dr[1] = Math.Round(B_Q[i], 1);
                 dr[2] = Math.Round(B_QP[i], 1);
                 dr[3] = Math.Round(B_PH[i], 2);
                 dr[4] = Math.Round(B_PN[i], 0);
                 tableSecurity.Rows.Add(dr);
                 //Debug.WriteLine("{0}, {1}, {2}, {3}, {4}", dr[0], dr[1], dr[2], dr[3], dr[4]);
             }
-            
-            Form2 form2 = new Form2(tableResults, tableSecurity, EEP, S);
+
+            Form2 form2 = new Form2(tableResults, tableSecurity,
+                tableShortage, tableControlMonth,
+                EEP, S, QMM, EPK, MDA);
             form2.Show();
         }
 
+        private int Month(int MDA, int M1, int ML)
+        {
+            int M;
+            if (MDA >= M1)
+            {
+                M = (MDA - 1) - (M1 - 1) + 1 + ML * 12;
+            }
+            else
+            {
+                M = (MDA - 1) - (M1 - 1) + 1 + (ML + 1) * 12;
+            }
+            return M;
+        }
         private double Lag11(double D, int N, double[] X, double[] Y)
         {
             double V = 0;
@@ -837,22 +1049,22 @@ namespace WRST
                     //    Y[i], Y[i1], DX, DYDX, V);
                     break;
                 }
-            }   
+            }
             return V;
         }
 
         private double[] Rank(int _MF, double[] _A)
-        {            
+        {
             int K = 0;
-            int N =_MF;
+            int N = _MF;
             int L = 0;
             double[] A = new double[400];
             //double[] B = new double[400];
-            double [] AR = new double[400];
+            double[] AR = new double[400];
 
-            for(int i = 0; i < N; i++)
+            for (int i = 0; i < N; i++)
             {
-                A[i]= _A[i];
+                A[i] = _A[i];
             }
 
             while (N > 0)

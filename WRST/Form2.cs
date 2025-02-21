@@ -1,13 +1,16 @@
-﻿using System.Data;
+﻿using Microsoft.VisualBasic.Devices;
+using System.Data;
+using System.Globalization;
 using System.Text;
 using System.Windows.Forms.DataVisualization.Charting;
 
-namespace WRST
+namespace WRPT
 {
     public partial class Form2 : Form
     {
         public Form2(DataTable tableResults, DataTable tableSecurity,
-            double EEP, double S)
+            DataTable tableShortage, DataTable tableControlMonth,
+            double EEP, double S, double QMM, double EPK, int MDA)
         {
             InitializeComponent();
 
@@ -19,6 +22,9 @@ namespace WRST
 
             dataGridView1.DataSource = tableResults;
             dataGridView2.DataSource = tableSecurity;
+            dataGridView3.DataSource = tableShortage;
+            dataGridView4.DataSource = tableControlMonth;
+
             int ResultCount = tableResults.Rows.Count;
             int SecurityCount = tableSecurity.Rows.Count;
 
@@ -38,7 +44,7 @@ namespace WRST
             y = new int[] { 6 };
             list = new string[] { "Уровень НБ, м" };
             list2 = new string[] { "Месяц", "м" };
-            BuildChart(chart3, tableResults, "line", list, "left", 1, x, y, 
+            BuildChart(chart3, tableResults, "column", list, "left", 1, x, y, 
                 1, ResultCount, 1, true, list2);
             x = new int[] { 0 };
             y = new int[] { 7 };
@@ -77,8 +83,11 @@ namespace WRST
             BuildChart(chart9, tableSecurity, "line", list, "right", 1, x, y,
                 0, 100, 20, false, list2);
 
-            label2.Text = Convert.ToString(Math.Round(EEP,0));
-            label4.Text = Convert.ToString(Math.Round(S, 0));
+            label2.Text = (Math.Round(EEP, 0)).ToString("#,#", CultureInfo.CurrentCulture);
+            label4.Text = (Math.Round(S, 0)).ToString("#,#", CultureInfo.CurrentCulture);
+            label5.Text = (Math.Round(QMM, 1)).ToString("#,#", CultureInfo.CurrentCulture);
+            label7.Text = (Math.Round(EPK, 3)).ToString();
+            label11.Text = $"(месяц {MDA.ToString()})";
         }
 
         private void Form2_Load(object sender, EventArgs e)
@@ -96,6 +105,22 @@ namespace WRST
             dataGridView2.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridView2.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridView2.AllowUserToOrderColumns = false;
+
+            dataGridView3.AllowUserToAddRows = false;
+            dataGridView3.AllowUserToDeleteRows = false;
+            dataGridView3.RowHeadersVisible = false;
+            dataGridView3.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridView3.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridView3.ColumnHeadersVisible = false;
+            dataGridView3.AllowUserToOrderColumns = false;
+
+            dataGridView4.AllowUserToAddRows = false;
+            dataGridView4.AllowUserToDeleteRows = false;
+            dataGridView4.RowHeadersVisible = false;
+            dataGridView4.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridView4.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridView4.ColumnHeadersVisible = false;
+            dataGridView4.AllowUserToOrderColumns = false;
         }
 
         private void BuildChart(Chart ch, DataTable data,
@@ -249,14 +274,51 @@ namespace WRST
                     columnsNames = new List<string>()
                     { "Суммарный объем сбросов, млн.м3"};
                     columnsNames.Add(label4.Text);
-                    writer.WriteLine(string.Join(";", columnsNames)); ;
+                    writer.WriteLine(string.Join(";", columnsNames));
+
+                    columnsNames = new List<string>()
+                    { "Средний расход, м3/с"};
+                    columnsNames.Add(label5.Text);
+                    writer.WriteLine(string.Join(";", columnsNames));
+
+                    columnsNames = new List<string>()
+                    { "Коэффициент использования стока"};
+                    columnsNames.Add(label7.Text);
+                    writer.WriteLine(string.Join(";", columnsNames));
+
+                    writer.WriteLine(string.Join(";", "Дефициты по заданным расходам"));
+                    List<string> ShortageM = new List<string>();
+                    List<string> ShortageD = new List<string>();
+                    ShortageM.Add("Месяц");
+                    ShortageD.Add("Дефицит, м3/с");
+                    for (int i = 0; i < dataGridView3.ColumnCount;i++)
+                    {
+                        double tmp;
+                        tmp = Convert.ToDouble(dataGridView3.Rows[0].Cells[i].Value);
+                        ShortageM.Add(Convert.ToString(tmp));
+                        tmp = Convert.ToDouble(dataGridView3.Rows[1].Cells[i].Value);
+                        ShortageD.Add(Convert.ToString(tmp));
+                    }
+                    writer.WriteLine(string.Join(";", ShortageM));
+                    writer.WriteLine(string.Join(";", ShortageD));
+
+                    writer.WriteLine(string.Join(";", "Мощность контрольного месяца"));
+                    List<string> ControlMonthM = new List<string>();
+                    List<string> ControlMonthN = new List<string>();
+                    ControlMonthM.Add("Месяц");
+                    ControlMonthN.Add("Мощность, кВт");
+                    for (int i = 0; i < dataGridView4.ColumnCount; i++)
+                    {
+                        double tmp;
+                        tmp = Convert.ToDouble(dataGridView4.Rows[0].Cells[i].Value);
+                        ControlMonthM.Add(Convert.ToString(tmp));
+                        tmp = Convert.ToDouble(dataGridView4.Rows[1].Cells[i].Value);
+                        ControlMonthN.Add(Convert.ToString(tmp));
+                    }
+                    writer.WriteLine(string.Join(";", ControlMonthM));
+                    writer.WriteLine(string.Join(";", ControlMonthN));
                 }
             }
-        }
-
-        private void chart6_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

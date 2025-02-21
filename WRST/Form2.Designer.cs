@@ -1,4 +1,4 @@
-﻿namespace WRST
+﻿namespace WRPT
 {
     partial class Form2
     {
@@ -58,6 +58,21 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form2));
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
+            label14 = new Label();
+            label15 = new Label();
+            label13 = new Label();
+            label12 = new Label();
+            label11 = new Label();
+            label10 = new Label();
+            label9 = new Label();
+            dataGridView4 = new DataGridView();
+            dataGridView3 = new DataGridView();
+            label7 = new Label();
+            label8 = new Label();
+            label5 = new Label();
+            label6 = new Label();
+            label4 = new Label();
+            label3 = new Label();
             label2 = new Label();
             label1 = new Label();
             dataGridView2 = new DataGridView();
@@ -75,10 +90,10 @@
             toolStrip1 = new ToolStrip();
             saveButton1 = new ToolStripButton();
             saveFileDialog1 = new SaveFileDialog();
-            label3 = new Label();
-            label4 = new Label();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView4).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridView3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             tabPage2.SuspendLayout();
@@ -102,11 +117,24 @@
             tabControl1.Location = new Point(12, 28);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(1516, 719);
+            tabControl1.Size = new Size(1516, 715);
             tabControl1.TabIndex = 0;
             // 
             // tabPage1
             // 
+            tabPage1.Controls.Add(label14);
+            tabPage1.Controls.Add(label15);
+            tabPage1.Controls.Add(label13);
+            tabPage1.Controls.Add(label12);
+            tabPage1.Controls.Add(label11);
+            tabPage1.Controls.Add(label10);
+            tabPage1.Controls.Add(label9);
+            tabPage1.Controls.Add(dataGridView4);
+            tabPage1.Controls.Add(dataGridView3);
+            tabPage1.Controls.Add(label7);
+            tabPage1.Controls.Add(label8);
+            tabPage1.Controls.Add(label5);
+            tabPage1.Controls.Add(label6);
             tabPage1.Controls.Add(label4);
             tabPage1.Controls.Add(label3);
             tabPage1.Controls.Add(label2);
@@ -116,15 +144,152 @@
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(1508, 691);
+            tabPage1.Size = new Size(1508, 687);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Таблицы";
             tabPage1.UseVisualStyleBackColor = true;
             // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Location = new Point(761, 654);
+            label14.Name = "label14";
+            label14.Size = new Size(91, 15);
+            label14.TabIndex = 18;
+            label14.Text = "Мощность, кВт";
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Location = new Point(761, 622);
+            label15.Name = "label15";
+            label15.Size = new Size(43, 15);
+            label15.TabIndex = 17;
+            label15.Text = "Месяц";
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Location = new Point(6, 654);
+            label13.Name = "label13";
+            label13.Size = new Size(86, 15);
+            label13.TabIndex = 16;
+            label13.Text = "Дефицит, м³/с";
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Location = new Point(6, 622);
+            label12.Name = "label12";
+            label12.Size = new Size(43, 15);
+            label12.TabIndex = 15;
+            label12.Text = "Месяц";
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(1243, 605);
+            label11.Name = "label11";
+            label11.Size = new Size(44, 15);
+            label11.TabIndex = 14;
+            label11.Text = "label11";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(1015, 605);
+            label10.Name = "label10";
+            label10.Size = new Size(191, 15);
+            label10.TabIndex = 13;
+            label10.Text = "Мощность контрольного месяца";
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(294, 605);
+            label9.Name = "label9";
+            label9.Size = new Size(196, 15);
+            label9.TabIndex = 12;
+            label9.Text = "Дефициты по заданным расходам";
+            // 
+            // dataGridView4
+            // 
+            dataGridView4.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView4.Location = new Point(858, 622);
+            dataGridView4.Margin = new Padding(3, 2, 3, 2);
+            dataGridView4.Name = "dataGridView4";
+            dataGridView4.RowHeadersWidth = 51;
+            dataGridView4.Size = new Size(643, 55);
+            dataGridView4.TabIndex = 11;
+            // 
+            // dataGridView3
+            // 
+            dataGridView3.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView3.Location = new Point(98, 622);
+            dataGridView3.Margin = new Padding(3, 2, 3, 2);
+            dataGridView3.Name = "dataGridView3";
+            dataGridView3.RowHeadersWidth = 51;
+            dataGridView3.Size = new Size(657, 55);
+            dataGridView3.TabIndex = 10;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(1394, 571);
+            label7.Name = "label7";
+            label7.Size = new Size(38, 15);
+            label7.TabIndex = 9;
+            label7.Text = "label7";
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(1164, 571);
+            label8.Name = "label8";
+            label8.Size = new Size(204, 15);
+            label8.TabIndex = 8;
+            label8.Text = "Коэффициент использования стока";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(995, 571);
+            label5.Name = "label5";
+            label5.Size = new Size(38, 15);
+            label5.TabIndex = 7;
+            label5.Text = "label5";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(850, 571);
+            label6.Name = "label6";
+            label6.Size = new Size(126, 15);
+            label6.TabIndex = 6;
+            label6.Text = "Средний расход, м³/с";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(685, 571);
+            label4.Name = "label4";
+            label4.Size = new Size(38, 15);
+            label4.TabIndex = 5;
+            label4.Text = "label4";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(452, 571);
+            label3.Name = "label3";
+            label3.Size = new Size(208, 15);
+            label3.TabIndex = 4;
+            label3.Text = "Суммарный объем сбросов, млн.м³";
+            // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(198, 660);
+            label2.Location = new Point(218, 571);
             label2.Name = "label2";
             label2.Size = new Size(38, 15);
             label2.TabIndex = 3;
@@ -133,7 +298,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(6, 660);
+            label1.Location = new Point(6, 571);
             label1.Name = "label1";
             label1.Size = new Size(186, 15);
             label1.TabIndex = 2;
@@ -145,7 +310,8 @@
             dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView2.Location = new Point(975, 6);
             dataGridView2.Name = "dataGridView2";
-            dataGridView2.Size = new Size(527, 639);
+            dataGridView2.RowHeadersWidth = 51;
+            dataGridView2.Size = new Size(527, 562);
             dataGridView2.TabIndex = 1;
             // 
             // dataGridView1
@@ -153,7 +319,8 @@
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Location = new Point(6, 6);
             dataGridView1.Name = "dataGridView1";
-            dataGridView1.Size = new Size(1026, 639);
+            dataGridView1.RowHeadersWidth = 51;
+            dataGridView1.Size = new Size(1026, 562);
             dataGridView1.TabIndex = 0;
             // 
             // tabPage2
@@ -170,7 +337,7 @@
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(1508, 691);
+            tabPage2.Size = new Size(1508, 687);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Графики";
             tabPage2.UseVisualStyleBackColor = true;
@@ -244,7 +411,6 @@
             chart6.Size = new Size(311, 161);
             chart6.TabIndex = 5;
             chart6.Text = "chart6";
-            chart6.Click += chart6_Click;
             // 
             // chart5
             // 
@@ -328,10 +494,11 @@
             // 
             // toolStrip1
             // 
+            toolStrip1.ImageScalingSize = new Size(20, 20);
             toolStrip1.Items.AddRange(new ToolStripItem[] { saveButton1 });
             toolStrip1.Location = new Point(0, 0);
             toolStrip1.Name = "toolStrip1";
-            toolStrip1.Size = new Size(1540, 25);
+            toolStrip1.Size = new Size(1540, 27);
             toolStrip1.TabIndex = 1;
             toolStrip1.Text = "toolStrip1";
             // 
@@ -341,43 +508,27 @@
             saveButton1.Image = Properties.Resources.save;
             saveButton1.ImageTransparentColor = Color.Magenta;
             saveButton1.Name = "saveButton1";
-            saveButton1.Size = new Size(23, 22);
+            saveButton1.Size = new Size(24, 24);
             saveButton1.Text = "Сохранить результат расчета";
             saveButton1.Click += toolStripButton1_Click;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(341, 660);
-            label3.Name = "label3";
-            label3.Size = new Size(208, 15);
-            label3.TabIndex = 4;
-            label3.Text = "Суммарный объем сбросов, млн.м³";
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new Point(555, 660);
-            label4.Name = "label4";
-            label4.Size = new Size(38, 15);
-            label4.TabIndex = 5;
-            label4.Text = "label4";
             // 
             // Form2
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1540, 759);
+            ClientSize = new Size(1540, 754);
             Controls.Add(toolStrip1);
             Controls.Add(tabControl1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form2";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Сезонное и годичное регулирование - Результаты расчета";
+            Text = "Многолетнее регулирование - Результаты расчета";
             Load += Form2_Load;
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
             tabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView4).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridView3).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             tabPage2.ResumeLayout(false);
@@ -419,5 +570,18 @@
         private Label label1;
         private Label label3;
         private Label label4;
+        private Label label7;
+        private Label label8;
+        private Label label5;
+        private Label label6;
+        private DataGridView dataGridView4;
+        private DataGridView dataGridView3;
+        private Label label11;
+        private Label label10;
+        private Label label9;
+        private Label label12;
+        private Label label13;
+        private Label label14;
+        private Label label15;
     }
 }
