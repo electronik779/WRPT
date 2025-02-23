@@ -117,7 +117,7 @@
             tabControl1.Location = new Point(12, 28);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(1516, 715);
+            tabControl1.Size = new Size(1516, 730);
             tabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -144,7 +144,7 @@
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(1508, 687);
+            tabPage1.Size = new Size(1508, 702);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Таблицы";
             tabPage1.UseVisualStyleBackColor = true;
@@ -219,7 +219,7 @@
             dataGridView4.Margin = new Padding(3, 2, 3, 2);
             dataGridView4.Name = "dataGridView4";
             dataGridView4.RowHeadersWidth = 51;
-            dataGridView4.Size = new Size(643, 55);
+            dataGridView4.Size = new Size(643, 69);
             dataGridView4.TabIndex = 11;
             // 
             // dataGridView3
@@ -229,7 +229,7 @@
             dataGridView3.Margin = new Padding(3, 2, 3, 2);
             dataGridView3.Name = "dataGridView3";
             dataGridView3.RowHeadersWidth = 51;
-            dataGridView3.Size = new Size(657, 55);
+            dataGridView3.Size = new Size(657, 69);
             dataGridView3.TabIndex = 10;
             // 
             // label7
@@ -516,7 +516,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1540, 754);
+            ClientSize = new Size(1540, 769);
             Controls.Add(toolStrip1);
             Controls.Add(tabControl1);
             Icon = (Icon)resources.GetObject("$this.Icon");

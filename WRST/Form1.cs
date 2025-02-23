@@ -747,7 +747,7 @@ namespace WRPT
             double VDI = VD[MD];
             //Debug.WriteLine("VDI={0}", VDI);
             double[] DV = new double[400];
-            double VM = VMN;
+            double VM = VI;
             //Debug.WriteLine("VM={0}", VM);
             //Debug.WriteLine("M={0}, MF={1}", M, MF);
 
@@ -812,7 +812,7 @@ namespace WRPT
                 MDK[M] = MD;
                 QP[M] = QP1;
                 QS[M] = QS1;
-                DV[M] = VM1 - VD1 + VI;
+                DV[M] = VM1;
                 //Debug.WriteLine("VM1={0}, VD1={1}, DV={2}",VM1, VD1, DV);
                 VM11 = VM1 + VR;
                 //Debug.WriteLine("BB");
@@ -908,7 +908,7 @@ namespace WRPT
             {
                 tableShortage.Columns.Add();
                 rowM[i] = MDEF[i];
-                rowD[i] = DDQR[i];
+                rowD[i] = Math.Round(DDQR[i], 1);
             }
             tableShortage.Rows.Add(rowM);
             tableShortage.Rows.Add(rowD);

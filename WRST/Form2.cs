@@ -294,10 +294,11 @@ namespace WRPT
                     for (int i = 0; i < dataGridView3.ColumnCount;i++)
                     {
                         double tmp;
-                        tmp = Convert.ToDouble(dataGridView3.Rows[0].Cells[i].Value);
-                        ShortageM.Add(Convert.ToString(tmp));
+                        int itmp;
+                        itmp = Convert.ToInt32(dataGridView3.Rows[0].Cells[i].Value);
+                        ShortageM.Add(Convert.ToString(itmp));
                         tmp = Convert.ToDouble(dataGridView3.Rows[1].Cells[i].Value);
-                        ShortageD.Add(Convert.ToString(tmp));
+                        ShortageD.Add(Convert.ToString(Math.Round(tmp, 1)));
                     }
                     writer.WriteLine(string.Join(";", ShortageM));
                     writer.WriteLine(string.Join(";", ShortageD));
@@ -310,10 +311,11 @@ namespace WRPT
                     for (int i = 0; i < dataGridView4.ColumnCount; i++)
                     {
                         double tmp;
-                        tmp = Convert.ToDouble(dataGridView4.Rows[0].Cells[i].Value);
-                        ControlMonthM.Add(Convert.ToString(tmp));
+                        int itmp;
+                        itmp = Convert.ToInt32(dataGridView4.Rows[0].Cells[i].Value);
+                        ControlMonthM.Add(Convert.ToString(itmp));
                         tmp = Convert.ToDouble(dataGridView4.Rows[1].Cells[i].Value);
-                        ControlMonthN.Add(Convert.ToString(tmp));
+                        ControlMonthN.Add(Convert.ToString(Math.Round(tmp, 0)));
                     }
                     writer.WriteLine(string.Join(";", ControlMonthM));
                     writer.WriteLine(string.Join(";", ControlMonthN));
