@@ -777,7 +777,7 @@ namespace WRPT
                 VM1 = VM + DV1;
                 //Debug.WriteLine("VM={0}, DV1={1}, VM1={2}", VM, DV1, VM1);
                 VD1 = VD[MD];
-                VD11 = VD1 - VI;
+                VD11 = VD1 - VMN;
                 //Debug.WriteLine("VD[MD]={0}, MD={1}", VD1, MD);
                 //Debug.WriteLine("IF VU={0}, VM1={1}, VD1={2}", VU, VM1, VD1);
                 if (VM1 > VU | VM1 < VD11)
