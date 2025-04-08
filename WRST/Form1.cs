@@ -512,8 +512,29 @@ namespace WRPT
                     textBox11.Text = block1?.ElementAtOrDefault(9) ?? string.Empty;
 
                     textBox8.Text = block2?.ElementAtOrDefault(0) ?? string.Empty;
-                    int n = Convert.ToInt32(textBox8.Text);
-                    int m = Convert.ToInt32(textBox1.Text);
+
+                    int m;
+                    try
+                    { m = GetInt(textBox1.Text, 0); }
+                    catch
+                    {
+                        textBox1.BackColor = Color.Red;
+                        MessageBox.Show("Необходимо ввести целое число.", "Внимание!",
+                        MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    int n;
+                    try
+                    { n = GetInt(textBox8.Text, 0); }
+                    catch
+                    {
+                        textBox8.BackColor = Color.Red;
+                        MessageBox.Show("Необходимо ввести целое число.", "Внимание!",
+                        MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
+                        return;
+                    }
+
                     int years = n / 12;
                     if (dataGridView1.ColumnCount != n)
                     {
@@ -541,7 +562,15 @@ namespace WRPT
 
 
                     textBox9.Text = block3?.ElementAtOrDefault(0) ?? string.Empty;
-                    n = Convert.ToInt32(textBox9.Text);
+                    try
+                    { n = GetInt(textBox9.Text, 0); }
+                    catch
+                    {
+                        textBox9.BackColor = Color.Red;
+                        MessageBox.Show("Необходимо ввести целое число.", "Внимание!",
+                        MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
+                        return;
+                    }
                     if (dataGridView2.ColumnCount != n)
                     {
                         tableUpstream.Clear();
@@ -570,7 +599,15 @@ namespace WRPT
 
 
                     textBox10.Text = block4?.ElementAtOrDefault(0) ?? string.Empty;
-                    n = Convert.ToInt32(textBox10.Text);
+                    try
+                    { n = GetInt(textBox10.Text, 0); }
+                    catch
+                    {
+                        textBox10.BackColor = Color.Red;
+                        MessageBox.Show("Необходимо ввести целое число.", "Внимание!",
+                        MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
+                        return;
+                    }
                     if (dataGridView3.ColumnCount != n)
                     {
                         tableDownstream.Clear();
