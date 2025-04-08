@@ -536,22 +536,21 @@ namespace WRPT
                     }
 
                     int years = n / 12;
-                    if (dataGridView1.ColumnCount != n)
+
+                    //Очищаем таблицу
+                    tableTributary.Clear();
+                    for (int i = tableTributary.Columns.Count - 1; i >= 0; i--)
                     {
-                        //Очищаем таблицу
-                        tableTributary.Clear();
-                        for (int i = tableTributary.Columns.Count - 1; i >= 0; i--)
-                        {
-                            tableTributary.Columns.RemoveAt(i);
-                        }
-                        //Создаем таблицу по заданному количеству столбцов
-                        for (int i = 0; i < n; i++)
-                        {
-                            if (m > years * 12) { m = 1; }
-                            tableTributary.Columns.Add(new DataColumn(m.ToString(), typeof(string)));
-                            m++;
-                        }
+                        tableTributary.Columns.RemoveAt(i);
                     }
+                    //Создаем таблицу по заданному количеству столбцов
+                    for (int i = 0; i < n; i++)
+                    {
+                        if (m > years * 12) { m = 1; }
+                        tableTributary.Columns.Add(new DataColumn(m.ToString(), typeof(string)));
+                        m++;
+                    }
+
                     DataRow rowTributary = tableTributary.NewRow();
                     for (int i = 0; i < n; i++)
                     {
@@ -571,18 +570,17 @@ namespace WRPT
                         MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
                         return;
                     }
-                    if (dataGridView2.ColumnCount != n)
+
+                    tableUpstream.Clear();
+                    for (int i = tableUpstream.Columns.Count - 1; i >= 0; i--)
                     {
-                        tableUpstream.Clear();
-                        for (int i = tableUpstream.Columns.Count - 1; i >= 0; i--)
-                        {
-                            tableUpstream.Columns.RemoveAt(i);
-                        }
-                        for (int i = 0; i < n; i++)
-                        {
-                            tableUpstream.Columns.Add(new DataColumn(i.ToString(), typeof(string)));
-                        }
+                        tableUpstream.Columns.RemoveAt(i);
                     }
+                    for (int i = 0; i < n; i++)
+                    {
+                        tableUpstream.Columns.Add(new DataColumn(i.ToString(), typeof(string)));
+                    }
+
                     DataRow rowUpstream0 = tableUpstream.NewRow();
                     DataRow rowUpstream1 = tableUpstream.NewRow();
                     for (int i = 0; i < n; i++)
@@ -608,17 +606,14 @@ namespace WRPT
                         MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
                         return;
                     }
-                    if (dataGridView3.ColumnCount != n)
+                    tableDownstream.Clear();
+                    for (int i = tableDownstream.Columns.Count - 1; i >= 0; i--)
                     {
-                        tableDownstream.Clear();
-                        for (int i = tableDownstream.Columns.Count - 1; i >= 0; i--)
-                        {
-                            tableDownstream.Columns.RemoveAt(i);
-                        }
-                        for (int i = 0; i < n; i++)
-                        {
-                            tableDownstream.Columns.Add(new DataColumn(i.ToString(), typeof(string)));
-                        }
+                        tableDownstream.Columns.RemoveAt(i);
+                    }
+                    for (int i = 0; i < n; i++)
+                    {
+                        tableDownstream.Columns.Add(new DataColumn(i.ToString(), typeof(string)));
                     }
                     DataRow rowDownstream0 = tableDownstream.NewRow();
                     DataRow rowDownstream1 = tableDownstream.NewRow();
