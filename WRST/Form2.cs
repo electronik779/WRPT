@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualBasic.Devices;
-using System.Data;
+﻿using System.Data;
 using System.Globalization;
 using System.Text;
 using System.Windows.Forms.DataVisualization.Charting;
@@ -32,37 +31,37 @@ namespace WRPT
             int[] y = new int[] { 2, 3, 4 };
             string[] list = new string[] { "Приток", "Расход ГЭС", "Сбросы" };
             string[] list2 = new string[] { "Месяц", "м³/с" };
-            BuildChart(chart1, tableResults, "column", list, "left", 3, x, y, 
+            BuildChart(chart1, tableResults, "column", list, "left", 3, x, y,
                 1, ResultCount, 1, false, list2);
             x = new int[] { 0 };
             y = new int[] { 5 };
             list = new string[] { "Уровень ВБ" };
             list2 = new string[] { "Месяц", "м" };
-            BuildChart(chart2, tableResults, "line", list, "left", 1, x, y, 
+            BuildChart(chart2, tableResults, "line", list, "left", 1, x, y,
                 1, ResultCount, 1, true, list2);
             x = new int[] { 0 };
             y = new int[] { 6 };
             list = new string[] { "Уровень НБ, м" };
             list2 = new string[] { "Месяц", "м" };
-            BuildChart(chart3, tableResults, "column", list, "left", 1, x, y, 
+            BuildChart(chart3, tableResults, "column", list, "left", 1, x, y,
                 1, ResultCount, 1, true, list2);
             x = new int[] { 0 };
             y = new int[] { 7 };
             list = new string[] { "Напор" };
             list2 = new string[] { "Месяц", "м" };
-            BuildChart(chart4, tableResults, "column", list, "left", 1, x, y, 
+            BuildChart(chart4, tableResults, "column", list, "left", 1, x, y,
                 1, ResultCount, 1, true, list2);
             x = new int[] { 0 };
             y = new int[] { 8 };
             list = new string[] { "Мощность" };
             list2 = new string[] { "Месяц", "кВт" };
-            BuildChart(chart5, tableResults, "column", list, "left", 1, x, y, 
+            BuildChart(chart5, tableResults, "column", list, "left", 1, x, y,
                 1, ResultCount, 1, false, list2);
             x = new int[] { 0 };
             y = new int[] { 1 };
             list = new string[] { "Приток" };
             list2 = new string[] { "Обеспеченность, %", "м³/с" };
-            BuildChart(chart6, tableSecurity, "line", list, "right", 1, x, y, 
+            BuildChart(chart6, tableSecurity, "line", list, "right", 1, x, y,
                 0, 100, 20, false, list2);
             x = new int[] { 0 };
             y = new int[] { 2 };
@@ -124,7 +123,7 @@ namespace WRPT
         }
 
         private void BuildChart(Chart ch, DataTable data,
-            string type, string[] list, string pos, int n, int[] x, int[] y, 
+            string type, string[] list, string pos, int n, int[] x, int[] y,
             int Xmin, int Xmax, int step, bool isLimit, string[] axis)
         //название диаграммы,
         //название таблицы данных,
@@ -244,7 +243,7 @@ namespace WRPT
                             double tmp;
                             tmp = Convert.ToDouble(dataGridView1.Rows[j].Cells[i].Value);
                             //Debug.WriteLine("{0}, {1}, {2}", j, i, tmp);
-                            list.Add (tmp.ToString());
+                            list.Add(tmp.ToString());
                         }
                         writer.WriteLine(string.Join(';', list));
                     }
@@ -291,7 +290,7 @@ namespace WRPT
                     List<string> ShortageD = new List<string>();
                     ShortageM.Add("Месяц");
                     ShortageD.Add("Дефицит, м3/с");
-                    for (int i = 0; i < dataGridView3.ColumnCount;i++)
+                    for (int i = 0; i < dataGridView3.ColumnCount; i++)
                     {
                         double tmp;
                         int itmp;
