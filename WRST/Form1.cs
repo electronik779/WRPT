@@ -18,6 +18,8 @@ namespace WRPT
         DataTable tableShortage = new DataTable();
         DataTable tableControlMonth = new DataTable();
 
+        DataTable tableExtRemainder = new DataTable();
+
         public Form1()
         {
             InitializeComponent();
@@ -1238,8 +1240,38 @@ namespace WRPT
                 //Debug.WriteLine("{0}, {1}, {2}, {3}, {4}", dr[0], dr[1], dr[2], dr[3], dr[4]);
             }
 
+            List<string> columnsExtRemainder = new List<string>()
+            { "#", "Месяц", "Дисп. - задан.", "Дисп. - расч."};
+
+            tableExtRemainder.Clear();
+            for (int i = tableExtRemainder.Columns.Count - 1; i >= 0; i--)
+            {
+                tableExtRemainder.Columns.RemoveAt(i);
+            }
+
+            foreach (string colName in columnsExtRemainder)
+            {
+                tableExtRemainder.Columns.Add(new DataColumn(colName, typeof(double)));
+            }
+            M = M1;
+            if (M > 11) M = 0;
+            for (int i = 0; i < MF; i++)
+            {
+                DataRow dr = tableExtRemainder.NewRow();
+                dr[0] = i + 1;
+                dr[1] = M + 1;
+                dr[2] = VD[M];
+                dr[3] = Math.Round(DVM[i] + VD[M], 1);
+                M++;
+                if (M > 11) M = 0;
+
+                tableExtRemainder.Rows.Add(dr);
+            }
+
+
             Form2 form2 = new Form2(tableResults, tableSecurity,
                 tableShortage, tableControlMonth,
+                tableExtRemainder,
                 EEP, S, QMM, EPK, MDA);
             form2.Show();
         }

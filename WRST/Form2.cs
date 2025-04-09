@@ -9,6 +9,7 @@ namespace WRPT
     {
         public Form2(DataTable tableResults, DataTable tableSecurity,
             DataTable tableShortage, DataTable tableControlMonth,
+            DataTable tableExtRemainder,
             double EEP, double S, double QMM, double EPK, int MDA)
         {
             InitializeComponent();
@@ -23,6 +24,7 @@ namespace WRPT
             dataGridView2.DataSource = tableSecurity;
             dataGridView3.DataSource = tableShortage;
             dataGridView4.DataSource = tableControlMonth;
+            dataGridView5.DataSource = tableExtRemainder;
 
             int ResultCount = tableResults.Rows.Count;
             int SecurityCount = tableSecurity.Rows.Count;
@@ -82,6 +84,13 @@ namespace WRPT
             BuildChart(chart9, tableSecurity, "line", list, "right", 1, x, y,
                 0, 100, 20, false, list2);
 
+            x = new int[] { 0, 0 };
+            y = new int[] { 2, 3 };
+            list = new string[] { "Диспетчерские остатки - задано", "Диспетчерские остатки - расчет" };
+            list2 = new string[] { "#", "млн.м³" };
+            BuildChart(chart10, tableExtRemainder, "line", list, "left", 2, x, y,
+                1, ResultCount, 1, false, list2);
+
             label2.Text = (Math.Round(EEP, 0)).ToString("#,#", CultureInfo.CurrentCulture);
             label4.Text = (Math.Round(S, 0)).ToString("#,#", CultureInfo.CurrentCulture);
             label5.Text = (Math.Round(QMM, 1)).ToString("#,#", CultureInfo.CurrentCulture);
@@ -91,35 +100,13 @@ namespace WRPT
 
         private void Form2_Load(object sender, EventArgs e)
         {
-            dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.AllowUserToDeleteRows = false;
-            dataGridView1.RowHeadersVisible = false;
-            dataGridView1.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView1.AllowUserToOrderColumns = false;
-
-            dataGridView2.AllowUserToAddRows = false;
-            dataGridView2.AllowUserToDeleteRows = false;
-            dataGridView2.RowHeadersVisible = false;
-            dataGridView2.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView2.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView2.AllowUserToOrderColumns = false;
-
-            dataGridView3.AllowUserToAddRows = false;
-            dataGridView3.AllowUserToDeleteRows = false;
-            dataGridView3.RowHeadersVisible = false;
-            dataGridView3.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView3.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            TableFormat(dataGridView1, 95);
+            TableFormat(dataGridView2, 100);
+            TableFormat(dataGridView3, 100);
             dataGridView3.ColumnHeadersVisible = false;
-            dataGridView3.AllowUserToOrderColumns = false;
-
-            dataGridView4.AllowUserToAddRows = false;
-            dataGridView4.AllowUserToDeleteRows = false;
-            dataGridView4.RowHeadersVisible = false;
-            dataGridView4.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView4.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            TableFormat(dataGridView4, 100);
             dataGridView4.ColumnHeadersVisible = false;
-            dataGridView4.AllowUserToOrderColumns = false;
+            TableFormat(dataGridView5, 75);
         }
 
         private void BuildChart(Chart ch, DataTable data,
@@ -319,6 +306,20 @@ namespace WRPT
                     writer.WriteLine(string.Join(";", ControlMonthM));
                     writer.WriteLine(string.Join(";", ControlMonthN));
                 }
+            }
+        }
+        private void TableFormat(DataGridView table, int width)
+        {
+            table.AllowUserToAddRows = false;
+            table.AllowUserToDeleteRows = false;
+            table.RowHeadersVisible = false;
+            table.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            table.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            table.AllowUserToOrderColumns = false;
+
+            for (int i = 0; i < table.Columns.Count; i++)
+            {
+                table.Columns[i].Width = width;
             }
         }
     }
