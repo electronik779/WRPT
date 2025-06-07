@@ -173,9 +173,9 @@
             label15.AutoSize = true;
             label15.Location = new Point(761, 622);
             label15.Name = "label15";
-            label15.Size = new Size(43, 15);
+            label15.Size = new Size(53, 15);
             label15.TabIndex = 17;
-            label15.Text = "Месяц";
+            label15.Text = "Месяц #";
             // 
             // label13
             // 
@@ -191,9 +191,9 @@
             label12.AutoSize = true;
             label12.Location = new Point(6, 622);
             label12.Name = "label12";
-            label12.Size = new Size(43, 15);
+            label12.Size = new Size(53, 15);
             label12.TabIndex = 15;
-            label12.Text = "Месяц";
+            label12.Text = "Месяц #";
             // 
             // label11
             // 

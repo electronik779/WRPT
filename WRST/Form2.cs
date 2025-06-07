@@ -7,14 +7,20 @@ namespace WRPT
 {
     public partial class Form2 : Form
     {
+        double[] QRG;
+
         public Form2(DataTable tableResults, DataTable tableSecurity,
             DataTable tableShortage, DataTable tableControlMonth,
             DataTable tableExtRemainder,
-            double EEP, double S, double QMM, double EPK, int MDA)
+            double EEP, double S, double QMM, double EPK, int MDA, double[] QR)
+            //double EEP, double S, double QMM, double EPK, int MDA, double QPF)
         {
             InitializeComponent();
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+            dataGridView1.CellFormatting += new DataGridViewCellFormattingEventHandler(dataGridView1_CellFormatting);
+            QRG = QR;
 
             saveFileDialog1.Filter = "CSV файлы (*.csv)|*.csv";
             saveFileDialog1.DefaultExt = "csv";
@@ -96,6 +102,19 @@ namespace WRPT
             label5.Text = (Math.Round(QMM, 1)).ToString("#,#", CultureInfo.CurrentCulture);
             label7.Text = (Math.Round(EPK, 3)).ToString();
             label11.Text = $"(месяц {MDA.ToString()})";
+        }
+
+        private void dataGridView1_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            int index = e.RowIndex - e.RowIndex / 12 * 12;
+            if (e.ColumnIndex == 3 && Convert.ToDouble(e.Value) < QRG[index])
+            {
+                e.CellStyle.BackColor = Color.Coral;
+            }
+            if (e.ColumnIndex == 3 && Convert.ToDouble(e.Value) < 0)
+            {
+                e.CellStyle.BackColor = Color.Red;
+            }
         }
 
         private void Form2_Load(object sender, EventArgs e)

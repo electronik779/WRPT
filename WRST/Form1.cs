@@ -403,58 +403,50 @@ namespace WRPT
 
                 List<string> block2 = new List<string>();
                 block2.Add(textBox8.Text);
-                double tmp;
+
                 for (int i = 0; i < Convert.ToInt32(textBox8.Text); i++)
                 {
-                    tmp = Convert.ToDouble(dataGridView1.Rows[0].Cells[i].Value);
-                    block2.Add(Convert.ToString(tmp));
+                    block2.Add(Convert.ToString(dataGridView1.Rows[0].Cells[i].Value));
                 }
 
                 List<string> block3 = new List<string>();
                 block3.Add(textBox9.Text);
                 for (int i = 0; i < Convert.ToInt32(textBox9.Text); i++)
                 {
-                    tmp = Convert.ToDouble(dataGridView2.Rows[0].Cells[i].Value);
-                    block3.Add(Convert.ToString(tmp));
+                    block3.Add(Convert.ToString(dataGridView2.Rows[0].Cells[i].Value));
                 }
                 for (int i = 0; i < Convert.ToInt32(textBox9.Text); i++)
                 {
-                    tmp = Convert.ToDouble(dataGridView2.Rows[1].Cells[i].Value);
-                    block3.Add(Convert.ToString(tmp));
+                    block3.Add(Convert.ToString(dataGridView2.Rows[1].Cells[i].Value));
                 }
 
                 List<string> block4 = new List<string>();
                 block4.Add(textBox10.Text);
                 for (int i = 0; i < Convert.ToInt32(textBox10.Text); i++)
                 {
-                    tmp = Convert.ToDouble(dataGridView3.Rows[0].Cells[i].Value);
-                    block4.Add(Convert.ToString(tmp));
+                    block4.Add(Convert.ToString(dataGridView3.Rows[0].Cells[i].Value));
                 }
                 for (int i = 0; i < Convert.ToInt32(textBox10.Text); i++)
                 {
-                    tmp = Convert.ToDouble(dataGridView3.Rows[1].Cells[i].Value);
-                    block4.Add(Convert.ToString(tmp));
+                    block4.Add(Convert.ToString(dataGridView3.Rows[1].Cells[i].Value));
                 }
 
                 List<string> block5 = new List<string>();
                 for (int i = 0; i < 12; i++)
                 {
-                    tmp = Convert.ToDouble(dataGridView4.Rows[0].Cells[i].Value);
-                    block5.Add(Convert.ToString(tmp));
+                    block5.Add(Convert.ToString(dataGridView4.Rows[0].Cells[i].Value));
                 }
 
                 List<string> block6 = new List<string>();
                 for (int i = 0; i < 12; i++)
                 {
-                    tmp = Convert.ToDouble(dataGridView5.Rows[0].Cells[i].Value);
-                    block6.Add(Convert.ToString(tmp));
+                    block6.Add(Convert.ToString(dataGridView5.Rows[0].Cells[i].Value));
                 }
 
                 List<string> block7 = new List<string>();
                 for (int i = 0; i < 12; i++)
                 {
-                    tmp = Convert.ToDouble(dataGridView6.Rows[0].Cells[i].Value);
-                    block7.Add(Convert.ToString(tmp));
+                    block7.Add(Convert.ToString(dataGridView6.Rows[0].Cells[i].Value));
                 }
 
                 using (StreamWriter writer = new StreamWriter(filename))
@@ -758,7 +750,7 @@ namespace WRPT
             double VI = 0;
 
             try
-            { MF = GetInt(textBox8.Text, 0); }
+            { MF = GetInt(textBox8.Text, 0); } //кол-во значений притока
             catch
             {
                 textBox8.BackColor = Color.Red;
@@ -767,7 +759,7 @@ namespace WRPT
                 return;
             }
             try
-            { M1 = GetInt(textBox1.Text, 0) - 1; }
+            { M1 = GetInt(textBox1.Text, 0) - 1; } //начальный месяц
             catch
             {
                 textBox1.BackColor = Color.Red;
@@ -777,7 +769,7 @@ namespace WRPT
             }
             //Debug.WriteLine("{0}", M1);
             try
-            { NF = GetInt(textBox9.Text, 0); }
+            { NF = GetInt(textBox9.Text, 0); } //кол-во точек кривой вдхр
             catch
             {
                 textBox9.BackColor = Color.Red;
@@ -786,7 +778,7 @@ namespace WRPT
                 return;
             }
             try
-            { JF = GetInt(textBox10.Text, 0); }
+            { JF = GetInt(textBox10.Text, 0); } //кол-во точек кривой нб
             catch
             {
                 textBox10.BackColor = Color.Red;
@@ -794,10 +786,10 @@ namespace WRPT
                 MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
                 return;
             }
-            LA = false;
+            LA = false; //индивидуальная
             MB = MF;
             try
-            { MDA = GetInt(textBox11.Text, 0); }
+            { MDA = GetInt(textBox11.Text, 0); } //номер контрольного месяца
             catch
             {
                 textBox11.BackColor = Color.Red;
@@ -806,7 +798,7 @@ namespace WRPT
                 return;
             }
 
-            if (radioButton2.Checked == true) { LA = true; }
+            if (radioButton2.Checked == true) { LA = true; } //груповая
 
             for (int i = 0; i < MF; i++)
             {
@@ -977,7 +969,8 @@ namespace WRPT
 
             //Debug.WriteLine("{0}", M1);
             int M = 0;
-            int MD = M1 - 1;
+            int NY = (MF / 12 - 1) * 12;
+            int MD = M1 - NY;
             //Debug.WriteLine("MD={0}", MD);
             if (MD <= -1) { MD = 11; }
             double VDI = VD[MD];
@@ -1110,7 +1103,8 @@ namespace WRPT
             int ML = 0;
             double DQR;
             M = 0;
-            MD = M1 - 1;
+            NY = (MF / 12 - 1) * 12;
+            MD = M1 - NY;
             //Debug.WriteLine("MD= {0}", MD);
             if (MD <= -1) { MD = 11; }
             //Debug.WriteLine("MD= {0}, MF= {1}", MD, MF);
@@ -1153,10 +1147,12 @@ namespace WRPT
             //MONTH
             double[] PC = new double[60];
             ML = 0;
-            M = Month(MDA, M1, ML);
+            //M = Month(MDA, M1, ML);
+            M = ML * 12 + MDA - 1;
             while (M < MF)
             {
-                M = Month(MDA, M1, ML);
+                //M = Month(MDA, M1, ML);
+                M = ML * 12 + MDA - 1;
                 PC[ML] = PN[M];
                 ML++;
             }
@@ -1261,7 +1257,7 @@ namespace WRPT
                 dr[0] = i + 1;
                 dr[1] = M + 1;
                 dr[2] = VD[M];
-                dr[3] = Math.Round(DVM[i] + VD[M], 1);
+                dr[3] = Math.Round(DV[i], 1);
                 M++;
                 if (M > 11) M = 0;
 
@@ -1272,7 +1268,8 @@ namespace WRPT
             Form2 form2 = new Form2(tableResults, tableSecurity,
                 tableShortage, tableControlMonth,
                 tableExtRemainder,
-                EEP, S, QMM, EPK, MDA);
+                EEP, S, QMM, EPK, MDA, QR);
+                //EEP, S, QMM, EPK, MDA, QPF);
             form2.Show();
         }
 

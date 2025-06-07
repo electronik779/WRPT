@@ -93,6 +93,7 @@
             executeButton3 = new ToolStripButton();
             openFileDialog1 = new OpenFileDialog();
             saveFileDialog1 = new SaveFileDialog();
+            label5 = new Label();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             tabPage2.SuspendLayout();
@@ -394,7 +395,7 @@
             dataGridView1.Location = new Point(105, 76);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.Size = new Size(545, 73);
+            dataGridView1.Size = new Size(545, 80);
             dataGridView1.TabIndex = 0;
             // 
             // textBox8
@@ -455,7 +456,7 @@
             dataGridView2.Location = new Point(105, 76);
             dataGridView2.Name = "dataGridView2";
             dataGridView2.RowHeadersWidth = 51;
-            dataGridView2.Size = new Size(545, 73);
+            dataGridView2.Size = new Size(545, 80);
             dataGridView2.TabIndex = 12;
             // 
             // button2
@@ -526,7 +527,7 @@
             dataGridView3.Location = new Point(105, 76);
             dataGridView3.Name = "dataGridView3";
             dataGridView3.RowHeadersWidth = 51;
-            dataGridView3.Size = new Size(545, 73);
+            dataGridView3.Size = new Size(545, 80);
             dataGridView3.TabIndex = 16;
             // 
             // button3
@@ -552,12 +553,13 @@
             label8.AutoSize = true;
             label8.Location = new Point(6, 41);
             label8.Name = "label8";
-            label8.Size = new Size(343, 15);
+            label8.Size = new Size(286, 15);
             label8.TabIndex = 6;
-            label8.Text = "Количество узловых точек кривой объемов водохранилища";
+            label8.Text = "Количество узловых точек кривой батиграфии НБ";
             // 
             // tabPage5
             // 
+            tabPage5.Controls.Add(label5);
             tabPage5.Controls.Add(label34);
             tabPage5.Controls.Add(label35);
             tabPage5.Controls.Add(dataGridView4);
@@ -594,7 +596,7 @@
             dataGridView4.Location = new Point(105, 76);
             dataGridView4.Name = "dataGridView4";
             dataGridView4.RowHeadersWidth = 51;
-            dataGridView4.Size = new Size(545, 73);
+            dataGridView4.Size = new Size(545, 80);
             dataGridView4.TabIndex = 20;
             // 
             // tabPage6
@@ -635,7 +637,7 @@
             dataGridView5.Location = new Point(105, 76);
             dataGridView5.Name = "dataGridView5";
             dataGridView5.RowHeadersWidth = 51;
-            dataGridView5.Size = new Size(545, 73);
+            dataGridView5.Size = new Size(545, 80);
             dataGridView5.TabIndex = 24;
             // 
             // tabPage7
@@ -676,7 +678,7 @@
             dataGridView6.Location = new Point(105, 76);
             dataGridView6.Name = "dataGridView6";
             dataGridView6.RowHeadersWidth = 51;
-            dataGridView6.Size = new Size(545, 73);
+            dataGridView6.Size = new Size(545, 80);
             dataGridView6.TabIndex = 27;
             // 
             // Column1
@@ -738,6 +740,15 @@
             // openFileDialog1
             // 
             openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(105, 46);
+            label5.Name = "label5";
+            label5.Size = new Size(234, 15);
+            label5.TabIndex = 23;
+            label5.Text = "Диспетчерские остатки на конец месяца:";
             // 
             // Form1
             // 
@@ -844,5 +855,6 @@
         private Label label10;
         private Label label11;
         private DataGridView dataGridView6;
+        private Label label5;
     }
 }
