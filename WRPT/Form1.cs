@@ -192,7 +192,10 @@ namespace WRPT
 
             int m;
             try
-            { m = GetInt(textBox1.Text, 0); }
+            { 
+                m = GetInt(textBox1.Text, 0);
+                if (m > 12) { LimitMsg("12"); m = 12; textBox1.Text = "12"; }//Месяцев в году 12
+            }
             catch
             {
                 textBox1.BackColor = Color.Red;
@@ -203,7 +206,10 @@ namespace WRPT
 
             int n;
             try
-            { n = GetInt(textBox8.Text, 0); }
+            {
+                n = GetInt(textBox8.Text, 0);
+                if (n > 600) { LimitMsg("600"); n = 600; textBox8.Text = "600"; }//Кол-во эл-тов массива Q
+            }
             catch
             {
                 textBox8.BackColor = Color.Red;
@@ -250,7 +256,10 @@ namespace WRPT
 
             int n;
             try
-            { n = GetInt(textBox9.Text, 0); }
+            { 
+                n = GetInt(textBox9.Text, 0);
+                if (n > 20) { LimitMsg("20"); n = 20; textBox9.Text = "20"; }//Кол-во эл-тов массивов VV и ZUU
+            }
             catch
             {
                 textBox9.BackColor = Color.Red;
@@ -290,7 +299,10 @@ namespace WRPT
 
             int n;
             try
-            { n = GetInt(textBox10.Text, 0); }
+            {
+                n = GetInt(textBox10.Text, 0);
+                if (n > 20) { LimitMsg("20"); n = 20; textBox10.Text = "20"; }//Кол-во эл-тов массива QLL и ZLL
+            }
             catch
             {
                 textBox10.BackColor = Color.Red;
@@ -722,6 +734,13 @@ namespace WRPT
         }
         private void toolStripButton3_Click(object sender, EventArgs e)
         {
+            // Проверяем, существует ли Form2
+            if (Application.OpenForms["Form2"] != null)
+            {
+                // Если Form2 открыта, закрываем ее
+                ((Form)Application.OpenForms["Form2"]).Close();
+            }
+
             int MF = 0;
             int M1 = 0;
             int NF = 0;
@@ -730,16 +749,16 @@ namespace WRPT
             int MB = 1;
             int MDA = 0;
             bool LA = false;
-            double[] Q = new double[400];
-            double[] VV = new double[10];
-            double[] ZUU = new double[10];
-            double[] QLL = new double[10];
-            double[] ZLL = new double[10];
+            double[] Q = new double[600];
+            double[] VV = new double[20];
+            double[] ZUU = new double[20];
+            double[] QLL = new double[20];
+            double[] ZLL = new double[20];
             double[] VD = new double[12];
             double[] QU = new double[12];
             double[] QR = new double[12];
-            double[] DDQR = new double[400];
-            double[] MDEF = new double[400];
+            double[] DDQR = new double[600];
+            double[] MDEF = new double[600];
             double VU = 0;
             double VR = 0;
             //double QR = 0;
@@ -750,7 +769,10 @@ namespace WRPT
             double VI = 0;
 
             try
-            { MF = GetInt(textBox8.Text, 0); } //кол-во значений притока
+            { 
+                MF = GetInt(textBox8.Text, 0);  //кол-во значений притока
+                if (MF == 0) { ZeroMsg(textBox8, "Приток"); }
+            }
             catch
             {
                 textBox8.BackColor = Color.Red;
@@ -759,7 +781,11 @@ namespace WRPT
                 return;
             }
             try
-            { M1 = GetInt(textBox1.Text, 0) - 1; } //начальный месяц
+            {
+                M1 = GetInt(textBox1.Text, 0) - 1;  //начальный месяц
+                if (M1 < 0) { ZeroMsg(textBox1, "Общие данные"); }
+                if (M1 > 11) { LimitMsg("12"); M1 = 11; textBox1.Text = "12"; }//Кол-во месяцев в году
+            }
             catch
             {
                 textBox1.BackColor = Color.Red;
@@ -769,7 +795,10 @@ namespace WRPT
             }
             //Debug.WriteLine("{0}", M1);
             try
-            { NF = GetInt(textBox9.Text, 0); } //кол-во точек кривой вдхр
+            {
+                NF = GetInt(textBox9.Text, 0);  //кол-во точек кривой вдхр
+                if (NF == 0) { ZeroMsg(textBox9, "Параметры вдхр."); }
+            }
             catch
             {
                 textBox9.BackColor = Color.Red;
@@ -778,7 +807,10 @@ namespace WRPT
                 return;
             }
             try
-            { JF = GetInt(textBox10.Text, 0); } //кол-во точек кривой нб
+            {
+                JF = GetInt(textBox10.Text, 0);  //кол-во точек кривой нб
+                if (JF == 0) { ZeroMsg(textBox10, "Параметры НБ"); }
+            }
             catch
             {
                 textBox10.BackColor = Color.Red;
@@ -825,6 +857,12 @@ namespace WRPT
                     return;
                 }
             }
+            if (!CheckArrayOrder(VV, NF))
+            {
+                TableErr("Параметры вдхр.\nОбъемы");
+                return;
+            }
+
             for (int i = 0; i < JF; i++)
             {
                 try
@@ -839,9 +877,17 @@ namespace WRPT
                     return;
                 }
             }
+            if (!CheckArrayOrder(QLL, JF))
+            {
+                TableErr("Параметры НБ.\nРасходы");
+                return;
+            }
 
             try
-            { VU = GetDouble(textBox2.Text, 0d); }
+            {
+                VU = GetDouble(textBox2.Text, 0d);
+                if (VU == 0) { ZeroMsg(textBox2, "Общие данные"); }
+            }
             catch
             {
                 textBox2.BackColor = Color.Red;
@@ -850,7 +896,10 @@ namespace WRPT
                 return;
             }
             try
-            { VR = GetDouble(textBox3.Text, 0d); }
+            {
+                VR = GetDouble(textBox3.Text, 0d);
+                if (VR == 0) { ZeroMsg(textBox3, "Общие данные"); }
+            }
             catch
             {
                 textBox3.BackColor = Color.Red;
@@ -860,7 +909,10 @@ namespace WRPT
             }
             //QR = Convert.ToDouble(textBox4.Text);
             try
-            { QPF = GetDouble(textBox5.Text, 0d); }
+            {
+                QPF = GetDouble(textBox5.Text, 0d);
+                if (QPF == 0) { ZeroMsg(textBox5, "Общие данные"); }
+            }
             catch
             {
                 textBox5.BackColor = Color.Red;
@@ -878,7 +930,10 @@ namespace WRPT
                 return;
             }
             try
-            { EFF = GetDouble(textBox7.Text, 0d); }
+            {
+                EFF = GetDouble(textBox7.Text, 0d);
+                if (EFF == 0) { ZeroMsg(textBox7, "Общие данные"); }
+            }
             catch
             {
                 textBox7.BackColor = Color.Red;
@@ -887,7 +942,10 @@ namespace WRPT
                 return;
             }
             try
-            { VMN = GetDouble(textBox12.Text, 0d); }
+            {
+                VMN = GetDouble(textBox12.Text, 0d);
+                if (VMN == 0) { ZeroMsg(textBox12, "Общие данные"); }
+            }
             catch
             {
                 textBox12.BackColor = Color.Red;
@@ -939,20 +997,20 @@ namespace WRPT
                 //Debug.WriteLine("{0}, {1}", i, QR[i]);
             }
 
-            double[] DVM = new double[400];
+            double[] DVM = new double[600];
             double QP1;
             double QS1;
             double DV1;
             double VM1 = 0;
             double VD1;
             double VD11;
-            double[] MDK = new double[400];
-            double[] QP = new double[400];
-            double[] QS = new double[400];
-            double[] ZU = new double[400];
-            double[] ZL = new double[400];
-            double[] PH = new double[400];
-            double[] PN = new double[400];
+            double[] MDK = new double[600];
+            double[] QP = new double[600];
+            double[] QS = new double[600];
+            double[] ZU = new double[600];
+            double[] ZL = new double[600];
+            double[] PH = new double[600];
+            double[] PN = new double[600];
             double PHL;
             double VM11;
             double ZU1;
@@ -962,10 +1020,10 @@ namespace WRPT
             double PN1;
             double QRR;
 
-            double[] B_Q = new double[400];
-            double[] B_QP = new double[400];
-            double[] B_PH = new double[400];
-            double[] B_PN = new double[400]; ;
+            double[] B_Q = new double[600];
+            double[] B_QP = new double[600];
+            double[] B_PH = new double[600];
+            double[] B_PN = new double[600]; ;
 
             //Debug.WriteLine("{0}", M1);
             int M = 0;
@@ -975,12 +1033,12 @@ namespace WRPT
             if (MD <= -1) { MD = 11; }
             double VDI = VD[MD];
             //Debug.WriteLine("VDI={0}", VDI);
-            double[] DV = new double[400];
+            double[] DV = new double[600];
             double VM = VI;
             //Debug.WriteLine("VM={0}", VM);
             //Debug.WriteLine("M={0}, MF={1}", M, MF);
 
-            while (M < MF)
+            while (M <= MF)
             {
                 //Debug.WriteLine("MD={0}", MD);
                 //Debug.WriteLine("VM={0}, VDI={1}", VM, VDI);
@@ -1321,9 +1379,9 @@ namespace WRPT
             int K = 0;
             int N = _MF;
             int L = 0;
-            double[] A = new double[400];
+            double[] A = new double[600];
             //double[] B = new double[400];
-            double[] AR = new double[400];
+            double[] AR = new double[600];
 
             for (int i = 0; i < N; i++)
             {
@@ -1365,6 +1423,7 @@ namespace WRPT
             //}
             return AR;
         }
+
         private double GetDouble(string str, double defaultValue)
         {
             double result;
@@ -1381,6 +1440,7 @@ namespace WRPT
 
             return result;
         }
+
         private Int32 GetInt(string str, Int32 defaultValue)
         {
             Int32 result;
@@ -1397,5 +1457,63 @@ namespace WRPT
 
             return result;
         }
+
+        private void LimitMsg(string str)
+        {
+            MessageBox.Show($"Значение не должно превышать {str}.", "Внимание!",
+                MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
+        }
+
+        private void ZeroMsg(TextBox textBox, string tab)
+        {
+            textBox.BackColor = Color.Red;
+            MessageBox.Show($"Вкладка {tab}. Значение не может быть равно нулю.", "Внимание!",
+                MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
+        }
+
+        private bool CheckArrayOrder(double[] A, int N)
+        {
+            for (int i = 0; i < N - 1; i++)
+            {
+                //Debug.WriteLine("A.L={0}, i={1}, A={2}, A+1={3}", N, i, A[i], A[i + 1]);
+                if (A[i] >= A[i + 1])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private void TableErr(string str)
+        {
+            MessageBox.Show($"{str} необходимо задавать по возрастанию.", "Внимание!",
+                MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
+        }
+
+        private void textBox8_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                button1_Click(sender, e);
+                e.Handled = true;
+            }
+        }
+        private void textBox9_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                button2_Click(sender, e);
+                e.Handled = true;
+            }
+        }
+        private void textBox10_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                button3_Click(sender, e);
+                e.Handled = true;
+            }
+        }
+
     }
 }

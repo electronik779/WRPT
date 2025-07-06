@@ -169,7 +169,7 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(3, 221);
+            label9.Location = new Point(3, 216);
             label9.Name = "label9";
             label9.Size = new Size(287, 15);
             label9.TabIndex = 36;
@@ -186,7 +186,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(3, 192);
+            label6.Location = new Point(3, 187);
             label6.Name = "label6";
             label6.Size = new Size(356, 15);
             label6.TabIndex = 34;
@@ -203,7 +203,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(3, 337);
+            label1.Location = new Point(3, 332);
             label1.Name = "label1";
             label1.Size = new Size(169, 15);
             label1.TabIndex = 32;
@@ -220,7 +220,7 @@
             // label22
             // 
             label22.AutoSize = true;
-            label22.Location = new Point(3, 308);
+            label22.Location = new Point(3, 303);
             label22.Name = "label22";
             label22.Size = new Size(76, 15);
             label22.TabIndex = 30;
@@ -261,7 +261,7 @@
             // label20
             // 
             label20.AutoSize = true;
-            label20.Location = new Point(3, 279);
+            label20.Location = new Point(0, 274);
             label20.Name = "label20";
             label20.Size = new Size(106, 15);
             label20.TabIndex = 23;
@@ -270,7 +270,7 @@
             // label19
             // 
             label19.AutoSize = true;
-            label19.Location = new Point(3, 250);
+            label19.Location = new Point(3, 245);
             label19.Name = "label19";
             label19.Size = new Size(244, 15);
             label19.TabIndex = 20;
@@ -279,7 +279,7 @@
             // label16
             // 
             label16.AutoSize = true;
-            label16.Location = new Point(3, 163);
+            label16.Location = new Point(3, 158);
             label16.Name = "label16";
             label16.Size = new Size(238, 15);
             label16.TabIndex = 13;
@@ -320,7 +320,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(3, 134);
+            label3.Location = new Point(3, 129);
             label3.Name = "label3";
             label3.Size = new Size(241, 15);
             label3.TabIndex = 3;
@@ -329,7 +329,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(6, 75);
+            label4.Location = new Point(6, 71);
             label4.Name = "label4";
             label4.Size = new Size(114, 15);
             label4.TabIndex = 2;
@@ -338,7 +338,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(6, 41);
+            label2.Location = new Point(6, 37);
             label2.Name = "label2";
             label2.Size = new Size(336, 15);
             label2.TabIndex = 1;
@@ -405,6 +405,7 @@
             textBox8.Size = new Size(100, 23);
             textBox8.TabIndex = 7;
             textBox8.TextChanged += textBox8_TextChanged;
+            textBox8.KeyDown += textBox8_KeyDown;
             // 
             // label23
             // 
@@ -476,6 +477,7 @@
             textBox9.Size = new Size(100, 23);
             textBox9.TabIndex = 5;
             textBox9.TextChanged += textBox9_TextChanged;
+            textBox9.KeyDown += textBox9_KeyDown;
             // 
             // label7
             // 
@@ -499,7 +501,7 @@
             tabPage4.Padding = new Padding(3);
             tabPage4.Size = new Size(656, 362);
             tabPage4.TabIndex = 3;
-            tabPage4.Text = "Батиграфия НБ";
+            tabPage4.Text = "Параметры НБ";
             tabPage4.UseVisualStyleBackColor = true;
             // 
             // label31
@@ -547,15 +549,16 @@
             textBox10.Size = new Size(100, 23);
             textBox10.TabIndex = 7;
             textBox10.TextChanged += textBox10_TextChanged;
+            textBox10.KeyDown += textBox10_KeyDown;
             // 
             // label8
             // 
             label8.AutoSize = true;
             label8.Location = new Point(6, 41);
             label8.Name = "label8";
-            label8.Size = new Size(286, 15);
+            label8.Size = new Size(334, 15);
             label8.TabIndex = 6;
-            label8.Text = "Количество узловых точек кривой батиграфии НБ";
+            label8.Text = "Количество узловых точек кривой отметок нижнего бьефа";
             // 
             // tabPage5
             // 
@@ -667,9 +670,9 @@
             label10.AutoSize = true;
             label10.Location = new Point(6, 111);
             label10.Name = "label10";
-            label10.Size = new Size(72, 15);
+            label10.Size = new Size(75, 15);
             label10.TabIndex = 29;
-            label10.Text = "Отбор, м³/с";
+            label10.Text = "Расход, м³/с";
             // 
             // label11
             // 

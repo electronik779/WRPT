@@ -40,62 +40,70 @@ namespace WRPT
             string[] list = new string[] { "Приток", "Расход ГЭС", "Сбросы" };
             string[] list2 = new string[] { "Месяц", "м³/с" };
             BuildChart(chart1, tableResults, "column", list, "left", 3, x, y,
-                1, ResultCount, 1, false, list2);
+                1, ResultCount, 0, 0, 1, 0, false, list2);
+
             x = new int[] { 0 };
             y = new int[] { 5 };
             list = new string[] { "Уровень ВБ" };
             list2 = new string[] { "Месяц", "м" };
             BuildChart(chart2, tableResults, "line", list, "left", 1, x, y,
-                1, ResultCount, 1, true, list2);
+                1, ResultCount, 0, 0, 1, 0, true, list2);
+
             x = new int[] { 0 };
             y = new int[] { 6 };
             list = new string[] { "Уровень НБ, м" };
             list2 = new string[] { "Месяц", "м" };
             BuildChart(chart3, tableResults, "column", list, "left", 1, x, y,
-                1, ResultCount, 1, true, list2);
+                1, ResultCount, 0, 0, 1, 0, true, list2);
+
             x = new int[] { 0 };
             y = new int[] { 7 };
             list = new string[] { "Напор" };
             list2 = new string[] { "Месяц", "м" };
             BuildChart(chart4, tableResults, "column", list, "left", 1, x, y,
-                1, ResultCount, 1, true, list2);
+                1, ResultCount, 0, 0, 1, 0, true, list2);
+
             x = new int[] { 0 };
             y = new int[] { 8 };
             list = new string[] { "Мощность" };
             list2 = new string[] { "Месяц", "кВт" };
             BuildChart(chart5, tableResults, "column", list, "left", 1, x, y,
-                1, ResultCount, 1, false, list2);
+                1, ResultCount, 0, 0, 1, 0, false, list2);
+
             x = new int[] { 0 };
             y = new int[] { 1 };
             list = new string[] { "Приток" };
             list2 = new string[] { "Обеспеченность, %", "м³/с" };
             BuildChart(chart6, tableSecurity, "line", list, "right", 1, x, y,
-                0, 100, 20, false, list2);
+                0, 100, 0, 0, 20, 0, false, list2);
+
             x = new int[] { 0 };
             y = new int[] { 2 };
             list = new string[] { "Расход ГЭС" };
             list2 = new string[] { "Обеспеченность, %", "м³/с" };
             BuildChart(chart7, tableSecurity, "line", list, "right", 1, x, y,
-                0, 100, 20, false, list2);
+                0, 100, 0, 0, 20, 0, false, list2);
+
             x = new int[] { 0 };
             y = new int[] { 3 };
             list = new string[] { "Напор" };
             list2 = new string[] { "Обеспеченность, %", "м" };
             BuildChart(chart8, tableSecurity, "line", list, "right", 1, x, y,
-                0, 100, 20, true, list2);
+                0, 100, 0, 0, 20, 0, true, list2);
+
             x = new int[] { 0 };
             y = new int[] { 4 };
             list = new string[] { "Мощность" };
             list2 = new string[] { "Обеспеченность, %", "кВт" };
             BuildChart(chart9, tableSecurity, "line", list, "right", 1, x, y,
-                0, 100, 20, false, list2);
+                0, 100, 0, 0, 20, 0, false, list2);
 
             x = new int[] { 0, 0 };
             y = new int[] { 2, 3 };
             list = new string[] { "Диспетчерские остатки - задано", "Диспетчерские остатки - расчет" };
             list2 = new string[] { "#", "млн.м³" };
             BuildChart(chart10, tableExtRemainder, "line", list, "left", 2, x, y,
-                1, ResultCount, 1, false, list2);
+                1, ResultCount, 0, 0, 1, 0, false, list2);
 
             label2.Text = (Math.Round(EEP, 0)).ToString("#,#", CultureInfo.CurrentCulture);
             label4.Text = (Math.Round(S, 0)).ToString("#,#", CultureInfo.CurrentCulture);
@@ -130,7 +138,7 @@ namespace WRPT
 
         private void BuildChart(Chart ch, DataTable data,
             string type, string[] list, string pos, int n, int[] x, int[] y,
-            int Xmin, int Xmax, int step, bool isLimit, string[] axis)
+            int Xmin, int Xmax, int Ymin, int Ymax, int stepX, int stepY, bool isLimit, string[] axis)
         //название диаграммы,
         //название таблицы данных,
         //тип графика: column - столбчетая, остальное - линия,
@@ -141,10 +149,20 @@ namespace WRPT
         //номер столбца DataTable с координатами Y,
         //минимальное значение оси X,
         //максимальное значение оси X,
+        //минимальное значение оси Y,
+        //максимальное значение оси Y,
         //шаг подписей оси X,
+        //шаг подписей оси Y,
         //ограничивать min - max оси Y
         //список названий осей - первая X, вторая Y.
         {
+            //Debug.WriteLine("Xmax {0}, Xmin {1}, Ymax {2}, Ymin {3}, Xmax-Xmin {4}, Ymax-Ymin {5}", 
+            //    Xmax, Xmin, Ymax, Ymin, Xmax - Xmin, Ymax - Ymin);
+            //if (Xmax - Xmin <= 0) return;
+
+            // Кратность значений Макс и Мин
+            double multiple = 5;
+
             // Создаем новый объект диаграммы
             ch.ChartAreas.Clear();
             ch.Series.Clear();
@@ -152,7 +170,7 @@ namespace WRPT
             ch.ChartAreas.Add(new ChartArea("ChartArea"));
             ch.ChartAreas[0].AxisX.Minimum = Xmin;
             ch.ChartAreas[0].AxisX.Maximum = Xmax;
-            ch.ChartAreas[0].AxisX.Interval = step;
+            ch.ChartAreas[0].AxisX.Interval = stepX;
             ch.Legends[0].DockedToChartArea = "ChartArea";
             ch.Legends[0].IsDockedInsideChartArea = true;
 
@@ -172,28 +190,53 @@ namespace WRPT
                 ch.ChartAreas[0].AxisY.Title = axis[1];
             }
 
+            double MaxY = Math.Ceiling((double)data.Rows[0][y[0]] / multiple) * multiple;
+            double MinY = Math.Floor((double)data.Rows[0][y[0]] / multiple) * multiple;
             for (int seriesNum = 0; seriesNum < n; seriesNum++)
             {
-                if (isLimit)
+                //int MaxY = Convert.ToInt32(data.Rows[0][y[seriesNum]]);
+                //int MinY = Convert.ToInt32(data.Rows[0][y[seriesNum]]);
+                //Debug.WriteLine("{0}, {1}, {2}", seriesNum, MinY, MaxY);
+                if ((double)data.Rows[0][y[seriesNum]] > MaxY)
                 {
-                    int MaxY = Convert.ToInt32(data.Rows[0][y[seriesNum]]);
-                    int MinY = Convert.ToInt32(data.Rows[0][y[seriesNum]]);
-                    //Debug.WriteLine("{0}, {1}, {2}", seriesNum, MinY, MaxY);
+                    MaxY = Math.Ceiling((double)data.Rows[0][y[seriesNum]] / multiple) * multiple;
+                }
+                if ((double)data.Rows[0][y[seriesNum]] < MinY)
+                {
+                    MinY = Math.Floor((double)data.Rows[0][y[seriesNum]] / multiple) * multiple;
+                }
+
+                if (isLimit || (Ymin == Ymax))
+                {
                     for (int i = 0; i < data.Rows.Count; i++)
                     {
-                        double Fig1 = Math.Floor(Convert.ToDouble(data.Rows[i][y[seriesNum]]));
-                        double Fig2 = Math.Ceiling(Convert.ToDouble(data.Rows[i][y[seriesNum]]));
+                        double Fig1 = Math.Floor((double)data.Rows[i][y[seriesNum]] / multiple) * multiple;
+                        double Fig2 = Math.Ceiling((double)data.Rows[i][y[seriesNum]] / multiple) * multiple;
                         if (Fig1 < MinY)
-                        { MinY = Convert.ToInt32(Fig1); }
+                        { MinY = Fig1; }
 
                         if (Fig2 > MaxY)
-                        { MaxY = Convert.ToInt32(Fig2); }
+                        { MaxY = Fig2; }
                     }
 
-                    //Debug.WriteLine("{0}, {1}", MinY, MaxY);
-                    ch.ChartAreas[0].AxisY.Minimum = MinY;
-                    ch.ChartAreas[0].AxisY.Maximum = MaxY;
+                    if (MaxY == MinY)
+                    {
+                        MaxY += multiple;
+                        MinY -= multiple;
+                    }
                 }
+                else
+                {
+                    if (Ymin != Ymax)
+                    {
+                        MinY = Ymin;
+                        MaxY = Ymax;
+                    }
+                }
+                //Debug.WriteLine("{0}, {1}", MinY, MaxY);
+                ch.ChartAreas[0].AxisY.Minimum = MinY;
+                ch.ChartAreas[0].AxisY.Maximum = MaxY;
+                if (stepY != 0) ch.ChartAreas[0].AxisY.Interval = stepY;
 
                 // Добавляем серию
                 Series series = new Series
@@ -219,6 +262,7 @@ namespace WRPT
                 ch.Series.Add(series);
             }
         }
+
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
