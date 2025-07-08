@@ -9,11 +9,13 @@ namespace WRPT
     public partial class Form2 : Form
     {
         double[] QRG = new double[12];
+        int M1;
 
         public Form2(DataTable tableResults, DataTable tableSecurity,
             DataTable tableShortage, DataTable tableControlMonth,
             DataTable tableExtRemainder,
-            double EEP, double S, double QMM, double EPK, int MDA, double[] QR)
+            double EEP, double S, double QMM, double EPK, int MDA,
+            double[] QR, int M1)
             //double EEP, double S, double QMM, double EPK, int MDA, double QPF)
         {
             InitializeComponent();
@@ -25,6 +27,7 @@ namespace WRPT
             {
                 QRG[i] = QR[i];
             }
+            this.M1 = M1;
 
             saveFileDialog1.Filter = "CSV файлы (*.csv)|*.csv";
             saveFileDialog1.DefaultExt = "csv";
@@ -121,6 +124,8 @@ namespace WRPT
 
             label2.Text = (Math.Round(EEP, 0)).ToString("#,#", CultureInfo.CurrentCulture);
             label4.Text = (Math.Round(S, 0)).ToString("#,#", CultureInfo.CurrentCulture);
+            if (label4.Text == "") { label4.Text = "0"; }
+            //Debug.WriteLine("S={0}", S);
             label5.Text = (Math.Round(QMM, 1)).ToString("#,#", CultureInfo.CurrentCulture);
             label7.Text = (Math.Round(EPK, 3)).ToString();
             label11.Text = $"(месяц {MDA.ToString()})";
@@ -128,8 +133,10 @@ namespace WRPT
 
         private void dataGridView1_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            int index = e.RowIndex - e.RowIndex / 12 * 12;
-            Debug.WriteLine("e.index={0}, index={1}", e.RowIndex, index);
+            int index = e.RowIndex + M1;
+            int yind = index / 12;
+            if (index >= 12 * yind) { index = index - 12 * yind; }
+            //Debug.WriteLine("e.index+M1={0}, index={1}, yind={2}", e.RowIndex + M1, index, yind);
             if (e.ColumnIndex == 3 && Convert.ToDouble(e.Value) < QRG[index])
             {
                 e.CellStyle.BackColor = Color.Coral;

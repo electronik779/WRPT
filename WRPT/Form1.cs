@@ -1027,8 +1027,7 @@ namespace WRPT
 
             //Debug.WriteLine("{0}", M1);
             int M = 0;
-            //int NY = (MF / 12 - 1) * 12;
-            int MD = M1 - 1;
+            int MD = M1 - 1; // В ридах M1 - 1
             //Debug.WriteLine("MD={0}", MD);
             if (MD < 0) { MD = 11; }
             if (MD > 11) { MD = 0; }
@@ -1325,7 +1324,7 @@ namespace WRPT
             Form2 form2 = new Form2(tableResults, tableSecurity,
                 tableShortage, tableControlMonth,
                 tableExtRemainder,
-                EEP, S, QMM, EPK, MDA, QR);
+                EEP, S, QMM, EPK, MDA, QR, M1);
                 //EEP, S, QMM, EPK, MDA, QPF);
             form2.Show();
         }
