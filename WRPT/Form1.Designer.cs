@@ -163,7 +163,7 @@
             textBox13.Location = new Point(433, 213);
             textBox13.Name = "textBox13";
             textBox13.Size = new Size(100, 23);
-            textBox13.TabIndex = 37;
+            textBox13.TabIndex = 7;
             textBox13.TextChanged += textBox13_TextChanged;
             // 
             // label9
@@ -180,7 +180,7 @@
             textBox12.Location = new Point(433, 184);
             textBox12.Name = "textBox12";
             textBox12.Size = new Size(100, 23);
-            textBox12.TabIndex = 35;
+            textBox12.TabIndex = 6;
             textBox12.TextChanged += textBox12_TextChanged;
             // 
             // label6
@@ -197,7 +197,7 @@
             textBox11.Location = new Point(433, 329);
             textBox11.Name = "textBox11";
             textBox11.Size = new Size(100, 23);
-            textBox11.TabIndex = 33;
+            textBox11.TabIndex = 11;
             textBox11.TextChanged += textBox11_TextChanged;
             // 
             // label1
@@ -214,7 +214,7 @@
             textBox7.Location = new Point(433, 300);
             textBox7.Name = "textBox7";
             textBox7.Size = new Size(100, 23);
-            textBox7.TabIndex = 31;
+            textBox7.TabIndex = 10;
             textBox7.TextChanged += textBox7_TextChanged;
             // 
             // label22
@@ -231,7 +231,7 @@
             textBox6.Location = new Point(433, 271);
             textBox6.Name = "textBox6";
             textBox6.Size = new Size(100, 23);
-            textBox6.TabIndex = 28;
+            textBox6.TabIndex = 9;
             textBox6.TextChanged += textBox6_TextChanged;
             // 
             // textBox5
@@ -239,7 +239,7 @@
             textBox5.Location = new Point(433, 242);
             textBox5.Name = "textBox5";
             textBox5.Size = new Size(100, 23);
-            textBox5.TabIndex = 27;
+            textBox5.TabIndex = 8;
             textBox5.TextChanged += textBox5_TextChanged;
             // 
             // textBox3
@@ -247,7 +247,7 @@
             textBox3.Location = new Point(433, 155);
             textBox3.Name = "textBox3";
             textBox3.Size = new Size(100, 23);
-            textBox3.TabIndex = 25;
+            textBox3.TabIndex = 5;
             textBox3.TextChanged += textBox3_TextChanged;
             // 
             // textBox2
@@ -255,7 +255,7 @@
             textBox2.Location = new Point(433, 126);
             textBox2.Name = "textBox2";
             textBox2.Size = new Size(100, 23);
-            textBox2.TabIndex = 24;
+            textBox2.TabIndex = 4;
             textBox2.TextChanged += textBox2_TextChanged;
             // 
             // label20
@@ -290,7 +290,7 @@
             textBox1.Location = new Point(436, 34);
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(100, 23);
-            textBox1.TabIndex = 9;
+            textBox1.TabIndex = 1;
             textBox1.TextChanged += textBox1_TextChanged;
             // 
             // radioButton2
@@ -299,7 +299,7 @@
             radioButton2.Location = new Point(436, 94);
             radioButton2.Name = "radioButton2";
             radioButton2.Size = new Size(83, 19);
-            radioButton2.TabIndex = 7;
+            radioButton2.TabIndex = 3;
             radioButton2.Text = "Групповая";
             radioButton2.UseVisualStyleBackColor = true;
             radioButton2.CheckedChanged += radioButton2_CheckedChanged;
@@ -311,7 +311,7 @@
             radioButton1.Location = new Point(436, 69);
             radioButton1.Name = "radioButton1";
             radioButton1.Size = new Size(117, 19);
-            radioButton1.TabIndex = 6;
+            radioButton1.TabIndex = 2;
             radioButton1.TabStop = true;
             radioButton1.Text = "Индивидуальная";
             radioButton1.UseVisualStyleBackColor = true;

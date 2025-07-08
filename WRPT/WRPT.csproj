@@ -8,13 +8,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <SupportedOSPlatformVersion>8.0</SupportedOSPlatformVersion>
     <StartupObject>WRPT.Program</StartupObject>
-    <ApplicationIcon>Perennial.ico</ApplicationIcon>
+    <ApplicationIcon>Perennial_n.ico</ApplicationIcon>
     <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
     <SignAssembly>False</SignAssembly>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Perennial.ico" />
+    <Content Include="Perennial_n.ico" />
   </ItemGroup>
 
   <ItemGroup>
