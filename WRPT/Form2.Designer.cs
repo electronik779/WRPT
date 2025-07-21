@@ -96,6 +96,7 @@
             toolStrip1 = new ToolStrip();
             saveButton1 = new ToolStripButton();
             saveFileDialog1 = new SaveFileDialog();
+            label16 = new Label();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView4).BeginInit();
@@ -504,6 +505,7 @@
             // 
             // tabPage3
             // 
+            tabPage3.Controls.Add(label16);
             tabPage3.Controls.Add(chart10);
             tabPage3.Controls.Add(dataGridView5);
             tabPage3.Location = new Point(4, 24);
@@ -511,7 +513,7 @@
             tabPage3.Padding = new Padding(3);
             tabPage3.Size = new Size(1508, 702);
             tabPage3.TabIndex = 2;
-            tabPage3.Text = "Диспетчерсие графики";
+            tabPage3.Text = "Диспетчерсий график";
             tabPage3.UseVisualStyleBackColor = true;
             // 
             // chart10
@@ -560,6 +562,15 @@
             saveButton1.Text = "Сохранить результат расчета";
             saveButton1.Click += toolStripButton1_Click;
             // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(806, 16);
+            label16.Name = "label16";
+            label16.Size = new Size(231, 15);
+            label16.TabIndex = 2;
+            label16.Text = "Диспетчерские остатки на конец месяца";
+            // 
             // Form2
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -590,6 +601,7 @@
             ((System.ComponentModel.ISupportInitialize)chart2).EndInit();
             ((System.ComponentModel.ISupportInitialize)chart1).EndInit();
             tabPage3.ResumeLayout(false);
+            tabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)chart10).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView5).EndInit();
             toolStrip1.ResumeLayout(false);
@@ -637,5 +649,6 @@
         private TabPage tabPage3;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart10;
         private DataGridView dataGridView5;
+        private Label label16;
     }
 }
