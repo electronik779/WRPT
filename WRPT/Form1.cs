@@ -1,6 +1,5 @@
 ﻿using System.Data;
 using System.Globalization;
-using System.Linq.Expressions;
 
 namespace WRPT
 {
@@ -192,7 +191,7 @@ namespace WRPT
 
             int m;
             try
-            { 
+            {
                 m = GetInt(textBox1.Text, 0);
                 if (m > 12) { LimitMsg("12"); m = 12; textBox1.Text = "12"; }//Месяцев в году 12
             }
@@ -256,7 +255,7 @@ namespace WRPT
 
             int n;
             try
-            { 
+            {
                 n = GetInt(textBox9.Text, 0);
                 if (n > 20) { LimitMsg("20"); n = 20; textBox9.Text = "20"; }//Кол-во эл-тов массивов VV и ZUU
             }
@@ -769,7 +768,7 @@ namespace WRPT
             double VI = 0;
 
             try
-            { 
+            {
                 MF = GetInt(textBox8.Text, 0);  //кол-во значений притока
                 if (MF == 0) { ZeroMsg(textBox8, "Приток"); }
             }
@@ -1023,7 +1022,7 @@ namespace WRPT
             double[] B_Q = new double[600];
             double[] B_QP = new double[600];
             double[] B_PH = new double[600];
-            double[] B_PN = new double[600]; 
+            double[] B_PN = new double[600];
 
             //Debug.WriteLine("{0}", M1);
             int M = 0;
@@ -1325,7 +1324,7 @@ namespace WRPT
                 tableShortage, tableControlMonth,
                 tableExtRemainder,
                 EEP, S, QMM, EPK, MDA, QR, M1);
-                //EEP, S, QMM, EPK, MDA, QPF);
+            //EEP, S, QMM, EPK, MDA, QPF);
             form2.Show();
         }
 
@@ -1417,13 +1416,14 @@ namespace WRPT
                 L++;
                 N--;
             }
-            //ARmin = AR[1];
+            //double ARmin = AR[1];
+            //double[] B = new double[20];
 
             //for (int i = 0; i < 20; i++)
             //{
             //    L = i * (_MF - 1) / 19;
             //    B[i] = AR[L];
-            //    //Debug.WriteLine("L={0}, i={1}, MF={2}", L, i, _MF);
+            //    //Debug.WriteLine("L={0}, i={1}, MF={2}, B[i]={3}", L, i, _MF, B[i]);
             //}
             return AR;
         }

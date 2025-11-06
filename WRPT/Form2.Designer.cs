@@ -82,21 +82,21 @@
             dataGridView1 = new DataGridView();
             tabPage2 = new TabPage();
             chart9 = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            chart8 = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            chart7 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             chart6 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             chart5 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            chart7 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             chart4 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            chart8 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             chart3 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             chart2 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             tabPage3 = new TabPage();
+            label16 = new Label();
             chart10 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             dataGridView5 = new DataGridView();
             toolStrip1 = new ToolStrip();
             saveButton1 = new ToolStripButton();
             saveFileDialog1 = new SaveFileDialog();
-            label16 = new Label();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView4).BeginInit();
@@ -105,11 +105,11 @@
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)chart9).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)chart8).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)chart7).BeginInit();
             ((System.ComponentModel.ISupportInitialize)chart6).BeginInit();
             ((System.ComponentModel.ISupportInitialize)chart5).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)chart7).BeginInit();
             ((System.ComponentModel.ISupportInitialize)chart4).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)chart8).BeginInit();
             ((System.ComponentModel.ISupportInitialize)chart3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)chart2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)chart1).BeginInit();
@@ -133,6 +133,7 @@
             // 
             // tabPage1
             // 
+            tabPage1.AutoScroll = true;
             tabPage1.Controls.Add(label14);
             tabPage1.Controls.Add(label15);
             tabPage1.Controls.Add(label13);
@@ -336,12 +337,13 @@
             // 
             // tabPage2
             // 
+            tabPage2.AutoScroll = true;
             tabPage2.Controls.Add(chart9);
-            tabPage2.Controls.Add(chart8);
-            tabPage2.Controls.Add(chart7);
             tabPage2.Controls.Add(chart6);
             tabPage2.Controls.Add(chart5);
+            tabPage2.Controls.Add(chart7);
             tabPage2.Controls.Add(chart4);
+            tabPage2.Controls.Add(chart8);
             tabPage2.Controls.Add(chart3);
             tabPage2.Controls.Add(chart2);
             tabPage2.Controls.Add(chart1);
@@ -355,12 +357,11 @@
             // 
             // chart9
             // 
-            chart9.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             chartArea1.Name = "ChartArea1";
             chart9.ChartAreas.Add(chartArea1);
             legend1.Name = "Legend1";
             chart9.Legends.Add(legend1);
-            chart9.Location = new Point(1038, 507);
+            chart9.Location = new Point(1197, 507);
             chart9.Name = "chart9";
             series1.ChartArea = "ChartArea1";
             series1.Legend = "Legend1";
@@ -370,90 +371,87 @@
             chart9.TabIndex = 8;
             chart9.Text = "chart9";
             // 
-            // chart8
+            // chart6
             // 
-            chart8.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             chartArea2.Name = "ChartArea1";
-            chart8.ChartAreas.Add(chartArea2);
+            chart6.ChartAreas.Add(chartArea2);
+            legend2.DockedToChartArea = "ChartArea1";
+            legend2.IsDockedInsideChartArea = false;
             legend2.Name = "Legend1";
-            chart8.Legends.Add(legend2);
-            chart8.Location = new Point(1035, 340);
-            chart8.Name = "chart8";
+            chart6.Legends.Add(legend2);
+            chart6.Location = new Point(1194, 6);
+            chart6.Name = "chart6";
             series2.ChartArea = "ChartArea1";
             series2.Legend = "Legend1";
             series2.Name = "Series1";
-            chart8.Series.Add(series2);
-            chart8.Size = new Size(311, 161);
-            chart8.TabIndex = 7;
-            chart8.Text = "chart8";
-            // 
-            // chart7
-            // 
-            chart7.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            chartArea3.Name = "ChartArea1";
-            chart7.ChartAreas.Add(chartArea3);
-            legend3.Name = "Legend1";
-            chart7.Legends.Add(legend3);
-            chart7.Location = new Point(1038, 173);
-            chart7.Name = "chart7";
-            series3.ChartArea = "ChartArea1";
-            series3.Legend = "Legend1";
-            series3.Name = "Series1";
-            chart7.Series.Add(series3);
-            chart7.Size = new Size(308, 161);
-            chart7.TabIndex = 6;
-            chart7.Text = "chart7";
-            // 
-            // chart6
-            // 
-            chart6.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            chartArea4.Name = "ChartArea1";
-            chart6.ChartAreas.Add(chartArea4);
-            legend4.DockedToChartArea = "ChartArea1";
-            legend4.IsDockedInsideChartArea = false;
-            legend4.Name = "Legend1";
-            chart6.Legends.Add(legend4);
-            chart6.Location = new Point(1035, 6);
-            chart6.Name = "chart6";
-            series4.ChartArea = "ChartArea1";
-            series4.Legend = "Legend1";
-            series4.Name = "Series1";
-            chart6.Series.Add(series4);
+            chart6.Series.Add(series2);
             chart6.Size = new Size(311, 161);
             chart6.TabIndex = 5;
             chart6.Text = "chart6";
             // 
             // chart5
             // 
-            chartArea5.Name = "ChartArea1";
-            chart5.ChartAreas.Add(chartArea5);
-            legend5.Name = "Legend1";
-            chart5.Legends.Add(legend5);
+            chartArea3.Name = "ChartArea1";
+            chart5.ChartAreas.Add(chartArea3);
+            legend3.Name = "Legend1";
+            chart5.Legends.Add(legend3);
             chart5.Location = new Point(6, 554);
             chart5.Name = "chart5";
-            series5.ChartArea = "ChartArea1";
-            series5.Legend = "Legend1";
-            series5.Name = "Series1";
-            chart5.Series.Add(series5);
+            series3.ChartArea = "ChartArea1";
+            series3.Legend = "Legend1";
+            series3.Name = "Series1";
+            chart5.Series.Add(series3);
             chart5.Size = new Size(1023, 131);
             chart5.TabIndex = 4;
             chart5.Text = "chart5";
             // 
+            // chart7
+            // 
+            chartArea4.Name = "ChartArea1";
+            chart7.ChartAreas.Add(chartArea4);
+            legend4.Name = "Legend1";
+            chart7.Legends.Add(legend4);
+            chart7.Location = new Point(1197, 173);
+            chart7.Name = "chart7";
+            series4.ChartArea = "ChartArea1";
+            series4.Legend = "Legend1";
+            series4.Name = "Series1";
+            chart7.Series.Add(series4);
+            chart7.Size = new Size(308, 161);
+            chart7.TabIndex = 6;
+            chart7.Text = "chart7";
+            // 
             // chart4
             // 
-            chartArea6.Name = "ChartArea1";
-            chart4.ChartAreas.Add(chartArea6);
-            legend6.Name = "Legend1";
-            chart4.Legends.Add(legend6);
+            chartArea5.Name = "ChartArea1";
+            chart4.ChartAreas.Add(chartArea5);
+            legend5.Name = "Legend1";
+            chart4.Legends.Add(legend5);
             chart4.Location = new Point(3, 417);
             chart4.Name = "chart4";
-            series6.ChartArea = "ChartArea1";
-            series6.Legend = "Legend1";
-            series6.Name = "Series1";
-            chart4.Series.Add(series6);
+            series5.ChartArea = "ChartArea1";
+            series5.Legend = "Legend1";
+            series5.Name = "Series1";
+            chart4.Series.Add(series5);
             chart4.Size = new Size(1026, 131);
             chart4.TabIndex = 3;
             chart4.Text = "chart4";
+            // 
+            // chart8
+            // 
+            chartArea6.Name = "ChartArea1";
+            chart8.ChartAreas.Add(chartArea6);
+            legend6.Name = "Legend1";
+            chart8.Legends.Add(legend6);
+            chart8.Location = new Point(1191, 340);
+            chart8.Name = "chart8";
+            series6.ChartArea = "ChartArea1";
+            series6.Legend = "Legend1";
+            series6.Name = "Series1";
+            chart8.Series.Add(series6);
+            chart8.Size = new Size(311, 161);
+            chart8.TabIndex = 7;
+            chart8.Text = "chart8";
             // 
             // chart3
             // 
@@ -505,6 +503,7 @@
             // 
             // tabPage3
             // 
+            tabPage3.AutoScroll = true;
             tabPage3.Controls.Add(label16);
             tabPage3.Controls.Add(chart10);
             tabPage3.Controls.Add(dataGridView5);
@@ -516,9 +515,17 @@
             tabPage3.Text = "Диспетчерсий график";
             tabPage3.UseVisualStyleBackColor = true;
             // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(806, 16);
+            label16.Name = "label16";
+            label16.Size = new Size(231, 15);
+            label16.TabIndex = 2;
+            label16.Text = "Диспетчерские остатки на конец месяца";
+            // 
             // chart10
             // 
-            chart10.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             chartArea10.Name = "ChartArea1";
             chart10.ChartAreas.Add(chartArea10);
             legend10.Name = "Legend1";
@@ -535,7 +542,6 @@
             // 
             // dataGridView5
             // 
-            dataGridView5.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             dataGridView5.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView5.Location = new Point(6, 6);
             dataGridView5.Name = "dataGridView5";
@@ -562,19 +568,11 @@
             saveButton1.Text = "Сохранить результат расчета";
             saveButton1.Click += toolStripButton1_Click;
             // 
-            // label16
-            // 
-            label16.AutoSize = true;
-            label16.Location = new Point(806, 16);
-            label16.Name = "label16";
-            label16.Size = new Size(231, 15);
-            label16.TabIndex = 2;
-            label16.Text = "Диспетчерские остатки на конец месяца";
-            // 
             // Form2
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoScroll = true;
             ClientSize = new Size(1540, 769);
             Controls.Add(toolStrip1);
             Controls.Add(tabControl1);
@@ -592,11 +590,11 @@
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             tabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)chart9).EndInit();
-            ((System.ComponentModel.ISupportInitialize)chart8).EndInit();
-            ((System.ComponentModel.ISupportInitialize)chart7).EndInit();
             ((System.ComponentModel.ISupportInitialize)chart6).EndInit();
             ((System.ComponentModel.ISupportInitialize)chart5).EndInit();
+            ((System.ComponentModel.ISupportInitialize)chart7).EndInit();
             ((System.ComponentModel.ISupportInitialize)chart4).EndInit();
+            ((System.ComponentModel.ISupportInitialize)chart8).EndInit();
             ((System.ComponentModel.ISupportInitialize)chart3).EndInit();
             ((System.ComponentModel.ISupportInitialize)chart2).EndInit();
             ((System.ComponentModel.ISupportInitialize)chart1).EndInit();
