@@ -318,7 +318,6 @@
             // 
             // dataGridView2
             // 
-            dataGridView2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView2.Location = new Point(975, 6);
             dataGridView2.Name = "dataGridView2";
