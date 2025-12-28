@@ -1292,7 +1292,7 @@ namespace WRPT
             }
 
             List<string> columnsExtRemainder = new List<string>()
-            { "#", "Месяц", "Дисп. - задан.", "Дисп. - расч."};
+            { "#", "Месяц", "Дисп. - задан., млн.м³", "Остатки - расч., млн.м³"};
 
             tableExtRemainder.Clear();
             for (int i = tableExtRemainder.Columns.Count - 1; i >= 0; i--)
@@ -1305,20 +1305,40 @@ namespace WRPT
                 tableExtRemainder.Columns.Add(new DataColumn(colName, typeof(double)));
             }
             M = M1;
-            if (M > 11) M = 0;
-            for (int i = 0; i < MF; i++)
+            //if (M > 11) M = 0;
+            //for (int i = 0; i < MF; i++)
+            //{
+            //    DataRow dr = tableExtRemainder.NewRow();
+            //    dr[0] = i + 1;
+            //    dr[1] = M + 1;
+            //    dr[2] = VD[M];
+            //    dr[3] = Math.Round(DV[i], 1);
+            //    M++;
+            //    if (M > 11) M = 0;
+
+            //    tableExtRemainder.Rows.Add(dr);
+            //}
+
+            int Pointer = MF - M;
+            int Counter = 0;
+            int Month = 0;
+
+            while (Counter < MF)
             {
+                //Debug.WriteLine("Pointer= {0}, Counter= {1}, Month= {2}", Pointer, Counter, Month);
                 DataRow dr = tableExtRemainder.NewRow();
-                dr[0] = i + 1;
-                dr[1] = M + 1;
-                dr[2] = VD[M];
-                dr[3] = Math.Round(DV[i], 1);
-                M++;
-                if (M > 11) M = 0;
-
+                dr[0] = Pointer + 1;
+                dr[1] = Month + 1;
+                dr[2] = VD[Month];
+                dr[3] = Math.Round(DV[Pointer] + VD[Month], 1);
                 tableExtRemainder.Rows.Add(dr);
-            }
 
+                Counter++;
+                Pointer++;
+                if (Pointer == MF) { Pointer = 0; }
+                Month++;
+                if (Month > 11) { Month = 0; }
+            }
 
             Form2 form2 = new Form2(tableResults, tableSecurity,
                 tableShortage, tableControlMonth,
