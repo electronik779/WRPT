@@ -129,7 +129,7 @@ namespace WRPT
             BuildChart(chart10, tableExtRemainder, "line", list, "left", 1, x, y,
                 1, 12, 0, 0, 1, 0, false, list2, 0, 12, true);
 
-            double tmp = (double)tableExtRemainder.Rows[tableExtRemainder.Rows.Count - 1][0] / 12;
+            double tmp = (double)tableExtRemainder.Rows.Count / 12;
             //Debug.WriteLine("Number_of_years= {0}", tmp);
             int Number_of_years = Convert.ToInt32(tmp);
 
@@ -180,7 +180,7 @@ namespace WRPT
             dataGridView3.ColumnHeadersVisible = false;
             TableFormat(dataGridView4, 100);
             dataGridView4.ColumnHeadersVisible = false;
-            TableFormat(dataGridView5, 75);
+            TableFormat(dataGridView5, 80);
         }
 
         //private void BuildChart(Chart ch, DataTable data,
@@ -485,7 +485,7 @@ namespace WRPT
                 else
                 {
                     int Count = 0;
-                    Debug.WriteLine("Begin= {0}, End= {1}", Begin_row, End_row);
+                    //Debug.WriteLine("Begin= {0}, End= {1}", Begin_row, End_row);
                     for (int i = Begin_row; i < End_row; i++)
                     {
                         //Debug.WriteLine("i = {0}", i);
