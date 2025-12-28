@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Diagnostics;
 using System.Globalization;
 
 namespace WRPT
@@ -996,7 +997,7 @@ namespace WRPT
             }
 
             double[] DVM = new double[600];
-            double QP1;
+            double QP1 = 0;
             double QS1;
             double DV1;
             double VM1 = 0;
@@ -1016,7 +1017,7 @@ namespace WRPT
             double ZL1;
             double PH1;
             double PN1;
-            double QRR;
+            double QRR = 0;
             double DVI;
 
             double[] B_Q = new double[600];
@@ -1026,7 +1027,7 @@ namespace WRPT
 
             //Debug.WriteLine("{0}", M1);
             int M = 0;
-            int MD = M1 - 1; // В ридах M1 - 1
+            int MD = M1 - 1; // В ридах M1 - 1 т.к. нумерация месяцев 0-11
             //Debug.WriteLine("MD={0}", MD);
             if (MD < 0) { MD = 11; }
             if (MD > 11) { MD = 0; }
@@ -1037,21 +1038,23 @@ namespace WRPT
             //Debug.WriteLine("VM={0}", VM);
             //Debug.WriteLine("M={0}, MF={1}", M, MF);
 
-            while (M <= MF)
+            while (M < MF)
             {
                 //Debug.WriteLine("MD={0}", MD);
                 //Debug.WriteLine("VM={0}, VDI={1}", VM, VDI);
                 if (VM <= VDI)
                 {
-                    QP1 = QR[MD];
+                    if (MD == 11) QP1 = QR[0];
+                    if (MD < 11) QP1 = QR[MD + 1];
                 }
                 else
                 {
                     DVI = VM - VDI;
-                    QRR = QR[MD];
+                    if (MD == 11) QRR = QR[0];
+                    if (MD < 11) QRR = QR[MD + 1];
                     QP1 = QRR + DVI / 2.63;
+                    if (QP1 > QPF) QP1 = QPF;
                 }
-                if (QP1 > QPF) QP1 = QPF;
                 QS1 = 0;
                 MD++;
                 if (MD > 11) { MD = 0; }
@@ -1059,25 +1062,36 @@ namespace WRPT
                 //Debug.WriteLine("Start[{0}]. DV1={1}, Q[M]={2}, QP1={3}, QS1={4} QU[MD]={5}, MD={6}",
                 //    M, DV1, Q[M], QP1, QS1, QU[MD], MD);
                 VM1 = VM + DV1;
-                //Debug.WriteLine("VM={0}, DV1={1}, VM1={2}", VM, DV1, VM1);
+                //Debug.WriteLine("M={0}, VM1={1}, VM={2}, DV1={3}", M, VM1, VM, DV1);
                 VD1 = VD[MD];
-                VD11 = VD1 - VMN;
+                //Debug.WriteLine("M={0}, MD={1}, VD[MD]={2}", M, MD, VD[MD]);
+                //VD11 = VD1 - VMN;
+                VD11 = VD1 - VI;
                 //Debug.WriteLine("VD[MD]={0}, MD={1}", VD1, MD);
-                //Debug.WriteLine("IF VU={0}, VM1={1}, VD1={2}", VU, VM1, VD1);
-                if (VM1 > VU | VM1 < VD11)
+                //Debug.WriteLine("IF VU={0}, VM1={1}, VD11={2}", VU, VM1, VD11);
+                if (VM1 <= VU && VM1 >= VD11)
                 {
+                    // Ничего не делаем
+                    //Debug.WriteLine("M={0}, VM1 <= VU && VM1 >= VD11", M);
+                }
+                else
+                {
+                    //Debug.WriteLine("M={0}, !(VM1 <= VU && VM1 >= VD11)", M);
                     if (VM1 > VU)
                     {
+                        //Debug.WriteLine("M={0}, VM1 > VU", M);
                         QP1 = QP1 + (VM1 - VU) / 2.63;
                         //Debug.WriteLine("VM1>VU[{0}]. VM1={1}, VU={2}, QP1={3}",M, VM1, VU, QP1);
                         if (QP1 <= QPF)
                         {
+                            //Debug.WriteLine("M={0}, QP1 <= QPF", M);
                             DV1 = (Q[M] - QP1 - QS1 - QU[MD]) * 2.63;
                             //Debug.WriteLine("VM1 > VU . QP1 <= QPF[{0}]. DV1={1}", M, DV);
                             VM1 = VM + DV1;
                         }
                         else
                         {
+                            //Debug.WriteLine("M={0}, !(QP1 <= QPF)", M);
                             QS1 = QP1 - QPF;
                             QP1 = QPF;
                             //Debug.WriteLine("VM1>VU, QP1>QPF[{0}]", M);
@@ -1086,6 +1100,7 @@ namespace WRPT
                     }
                     else
                     {
+                        //Debug.WriteLine("M={0}, !(VM1 > VU)", M);
                         QP1 = QP1 + (VM1 - VD11) / 2.63;
                         //Debug.WriteLine("VM1<=VU[{0}]. VM1={1}, VD11={2}, QP1={3}", M, VM1, VD11, QP1);
                         DV1 = (Q[M] - QP1 - QS1 - QU[MD]) * 2.63;
@@ -1096,8 +1111,9 @@ namespace WRPT
                 MDK[M] = MD;
                 QP[M] = QP1;
                 QS[M] = QS1;
-                DV[M] = VM1;
-                //Debug.WriteLine("VM1={0}, VD1={1}, DV={2}",VM1, VD1, DV);
+                //DV[M] = VM1;
+                DV[M] = VM1-VD1+VI;
+                //Debug.WriteLine("M={0}, DV[M]={1}, VM1={2}, VD1={3}, VI={4}",M, DV[M], VM1, VD1, VI);
                 VM11 = VM1 + VR;
                 //Debug.WriteLine("BB");
                 ZU1 = Lag11(VM11, NF, VV, ZUU);
@@ -1142,13 +1158,14 @@ namespace WRPT
                 QPM += QP[j];
             }
             double QPMM = QPM / MF;
+            //Debug.WriteLine("MF= {0}", MF);
             double EPK = QPMM / QMM;
             double EP = 0;
             double EP1;
             for (int j = 0; j < MF; j++)
             {
                 EP1 = PN[j] * 720;
-                EP = EP + EP1;
+                EP += EP1;
             }
             double EEP = (EP * 12 / MF) * (1 + (VMN - VMK) / (2.63 * MF * QMM));
 
@@ -1157,24 +1174,24 @@ namespace WRPT
             double DQR;
             M = 0;
             //NY = (MF / 12 - 1) * 12;
-            MD = M1 - 1;
+            MD = M1;
             //Debug.WriteLine("MD= {0}", MD);
             if (MD < 0) { MD = 11; }
             if (MD > 11) { MD = 0; }
             //Debug.WriteLine("MD= {0}, MF= {1}", MD, MF);
-            while (M <= MF)
+            while (M < MF)
             {
                 //Debug.WriteLine("M= {0}, MD= {1}", M, MD);
                 double QPI = QP[M];
                 double QRI = QR[MD];
-                //Debug.WriteLine("QPI= {0}, QRI= {1}", QPI, QRI);
+                //Debug.WriteLine("QP[{0}]= {1}, QR[{2}]= {3}", M, QPI,MD, QRI);
                 if (QPI < QRI)
                 {
                     DQR = QRI - QPI;
                     DDQR[ML] = DQR;
                     MDEF[ML] = M + 1;
-                    //Debug.WriteLine("ML= {0}, DDQR= {1}, MDEF= {2}", ML, DDQR[ML], MDEF[ML]);
                     ML++;
+                    //Debug.WriteLine("ML= {0}, DDQR= {1}, MDEF= {2}", ML, DDQR[ML], MDEF[ML]);
                 }
                 M++;
                 MD++;
@@ -1200,17 +1217,22 @@ namespace WRPT
 
             //MONTH
             double[] PC = new double[60];
-            ML = 0;
-            //M = Month(MDA, M1, ML);
-            M = ML * 12 + MDA - 1;
-            while (M < MF)
+            ML = 1;
+            while (ML <= MF / 12)
             {
-                //M = Month(MDA, M1, ML);
-                M = ML * 12 + MDA - 1;
-                if (M < 0) { M = 0; }
-                PC[ML] = PN[M];
+                if (MDA < M1 + 1)
+                {
+                    M = MDA - M1 - 1 + ML * 12;
+                }
+                else
+                {
+                    M = MDA - M1 -1 + (ML - 1) * 12;
+                }
+                //Debug.WriteLine("ML= {0}, M= {1}, M1= {2}", ML, M, M1);
+                PC[ML - 1] = PN[M];
                 ML++;
             }
+
             tableControlMonth.Clear();
             for (int i = tableControlMonth.Columns.Count - 1; i >= 0; i--)
             {
@@ -1221,7 +1243,17 @@ namespace WRPT
             for (int i = 0; i < MF / 12; i++)
             {
                 tableControlMonth.Columns.Add();
-                rowM[i] = (i + 1) * MDA;
+
+                if (MDA < M1 + 1)
+                {
+                    M = MDA - M1 + (i + 1) * 12;
+                }
+                else
+                {
+                    M = MDA - M1 + i * 12;
+                }
+
+                rowM[i] = M;
                 rowN[i] = Math.Round(PC[i], 0).ToString("#,#", CultureInfo.CurrentCulture);
             }
             tableControlMonth.Rows.Add(rowM);
@@ -1292,7 +1324,7 @@ namespace WRPT
             }
 
             List<string> columnsExtRemainder = new List<string>()
-            { "#", "Месяц", "Дисп. - задан., млн.м³", "Остатки - расч., млн.м³"};
+            { "#", "Месяц", "Дисп. - задан. верхн., млн.м³", "Дисп. - нижн., млн.м³", "Остатки - расч., млн.м³"};
 
             tableExtRemainder.Clear();
             for (int i = tableExtRemainder.Columns.Count - 1; i >= 0; i--)
@@ -1330,7 +1362,8 @@ namespace WRPT
                 dr[0] = Pointer + 1;
                 dr[1] = Month + 1;
                 dr[2] = VD[Month];
-                dr[3] = Math.Round(DV[Pointer] + VD[Month], 1);
+                dr[3] = VD[Month] - VMN;
+                dr[4] = Math.Round(DV[Pointer], 1);
                 tableExtRemainder.Rows.Add(dr);
 
                 Counter++;
@@ -1354,19 +1387,6 @@ namespace WRPT
                 MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
         }
 
-        private int Month(int MDA, int M1, int ML)
-        {
-            int M;
-            if (MDA >= M1)
-            {
-                M = (MDA - 1) - (M1 - 1) + 1 + ML * 12;
-            }
-            else
-            {
-                M = (MDA - 1) - (M1 - 1) + 1 + (ML + 1) * 12;
-            }
-            return M;
-        }
         private double Lag11(double D, int N, double[] X, double[] Y)
         {
             double V = 0;

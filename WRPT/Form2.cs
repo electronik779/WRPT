@@ -57,63 +57,63 @@ namespace WRPT
             string[] list = new string[] { "Приток", "Расход ГЭС", "Сбросы" };
             string[] list2 = new string[] { "#", "м³/с" };
             BuildChart(chart1, tableResults, "column", list, "left", 3, x, y,
-                1, ResultCount, 0, 0, 1, 0, false, list2, 0, -1, true);
+                1, ResultCount, 0, 0, 1, 0, false, list2, 0, -1, true, 2);
 
             x = new int[] { 0 };
             y = new int[] { 5 };
             list = new string[] { "Уровень ВБ" };
             list2 = new string[] { "#", "м" };
             BuildChart(chart2, tableResults, "line", list, "left", 1, x, y,
-                1, ResultCount, 0, 0, 1, 0, true, list2, 0, -1, true);
+                1, ResultCount, 0, 0, 1, 0, true, list2, 0, -1, true, 2);
 
             x = new int[] { 0 };
             y = new int[] { 6 };
             list = new string[] { "Уровень НБ, м" };
             list2 = new string[] { "#", "м" };
             BuildChart(chart3, tableResults, "column", list, "left", 1, x, y,
-                1, ResultCount, 0, 0, 1, 0, true, list2, 0, -1, true);
+                1, ResultCount, 0, 0, 1, 0, true, list2, 0, -1, true, 2);
 
             x = new int[] { 0 };
             y = new int[] { 7 };
             list = new string[] { "Напор" };
             list2 = new string[] { "#", "м" };
             BuildChart(chart4, tableResults, "column", list, "left", 1, x, y,
-                1, ResultCount, 0, 0, 1, 0, true, list2, 0, -1, true);
+                1, ResultCount, 0, 0, 1, 0, true, list2, 0, -1, true, 2);
 
             x = new int[] { 0 };
             y = new int[] { 8 };
             list = new string[] { "Мощность" };
             list2 = new string[] { "#", "кВт" };
             BuildChart(chart5, tableResults, "column", list, "left", 1, x, y,
-                1, ResultCount, 0, 0, 1, 0, false, list2, 0, -1, true);
+                1, ResultCount, 0, 0, 1, 0, false, list2, 0, -1, true, 2);
 
             x = new int[] { 0 };
             y = new int[] { 1 };
             list = new string[] { "Приток" };
             list2 = new string[] { "Обеспеченность, %", "м³/с" };
             BuildChart(chart6, tableSecurity, "line", list, "right", 1, x, y,
-                0, 100, 0, 0, 20, 0, false, list2, 0, -1, true);
+                0, 100, 0, 0, 20, 0, false, list2, 0, -1, true, 2);
 
             x = new int[] { 0 };
             y = new int[] { 2 };
             list = new string[] { "Расход ГЭС" };
             list2 = new string[] { "Обеспеченность, %", "м³/с" };
             BuildChart(chart7, tableSecurity, "line", list, "right", 1, x, y,
-                0, 100, 0, 0, 20, 0, false, list2, 0, -1, true);
+                0, 100, 0, 0, 20, 0, false, list2, 0, -1, true, 2);
 
             x = new int[] { 0 };
             y = new int[] { 3 };
             list = new string[] { "Напор" };
             list2 = new string[] { "Обеспеченность, %", "м" };
             BuildChart(chart8, tableSecurity, "line", list, "right", 1, x, y,
-                0, 100, 0, 0, 20, 0, true, list2, 0, -1, true);
+                0, 100, 0, 0, 20, 0, true, list2, 0, -1, true, 2);
 
             x = new int[] { 0 };
             y = new int[] { 4 };
             list = new string[] { "Мощность" };
             list2 = new string[] { "Обеспеченность, %", "кВт" };
             BuildChart(chart9, tableSecurity, "line", list, "right", 1, x, y,
-                0, 100, 0, 0, 20, 0, false, list2, 0, -1, true);
+                0, 100, 0, 0, 20, 0, false, list2, 0, -1, true, 2);
 
             //x = new int[] { 0, 0 };
             //y = new int[] { 2, 3 };
@@ -124,10 +124,17 @@ namespace WRPT
 
             x = new int[] { 1 };
             y = new int[] { 2 };
-            list = new string[] { "Противоперебойная линия" };
-            list2 = new string[] { "Конец месяца", "млн.м³" };
+            list = new string[] { "Диспетч. график - верх" };
+            list2 = new string[] { "Месяц", "млн.м³" };
             BuildChart(chart10, tableExtRemainder, "line", list, "left", 1, x, y,
-                1, 12, 0, 0, 1, 0, false, list2, 0, 12, true);
+                1, 12, 0, 0, 1, 0, false, list2, 0, 12, true, 3);
+
+            x = new int[] { 1 };
+            y = new int[] { 3 };
+            list = new string[] { "Диспетч. график - низ" };
+            list2 = new string[] { "Месяц", "млн.м³" };
+            BuildChart(chart10, tableExtRemainder, "line", list, "left", 1, x, y,
+                1, 12, 0, 0, 1, 0, false, list2, 0, 12, false, 3);
 
             double tmp = (double)tableExtRemainder.Rows.Count / 12;
             //Debug.WriteLine("Number_of_years= {0}", tmp);
@@ -136,15 +143,15 @@ namespace WRPT
             for (int i = 0; i < Number_of_years; i++)
             {
                 x = new int[] { 1 };
-                y = new int[] { 3 };
+                y = new int[] { 4 };
                 list = new string[] { "Год " + (i + 1) };
-                list2 = new string[] { "Конец месяца", "млн.м³" };
+                list2 = new string[] { "Месяц", "млн.м³" };
                 int start = i * 12;
                 int end = (i + 1) * 12;
                 if (start < 0) start = 0;
                 //Debug.WriteLine("Year= {0}, start= {1}, end= {2}", i, start, end);
                 BuildChart(chart10, tableExtRemainder, "line", list, "left", 1, x, y,
-                    1, 12, 0, 0, 1, 0, false, list2, start, end, false);
+                    1, 12, 0, 0, 1, 0, false, list2, start, end, false, 1);
             }
 
             label2.Text = (Math.Round(EEP, 0)).ToString("#,#", CultureInfo.CurrentCulture);
@@ -313,7 +320,7 @@ namespace WRPT
         private void BuildChart(Chart ch, DataTable data,
             string type, string[] list, string pos, int n, int[] x, int[] y,
             int Xmin, int Xmax, int Ymin, int Ymax, int stepX, int stepY, bool isLimit, string[] axis,
-            int Begin_row, int End_row, bool new_chart)
+            int Begin_row, int End_row, bool new_chart, int Width)
         //название диаграммы,
         //название таблицы данных,
         //тип графика: column - столбчетая, остальное - линия,
@@ -425,6 +432,14 @@ namespace WRPT
 
                             if (Fig2 > MaxY)
                             { MaxY = Fig2; }
+
+                            Fig1 = Math.Floor((double)data.Rows[i][4] / multiple) * multiple;
+                            Fig2 = Math.Ceiling((double)data.Rows[i][4] / multiple) * multiple;
+                            if (Fig1 < MinY)
+                            { MinY = Fig1; }
+
+                            if (Fig2 > MaxY)
+                            { MaxY = Fig2; }
                         }
                     }
 
@@ -450,15 +465,8 @@ namespace WRPT
                 // Добавляем серию
                 Series series = new Series();
 
-                if (new_chart)
-                {
-                    series.BorderWidth = 2;
-                }
-                else
-                {
-                    series.BorderWidth = 1;
-                }
-
+                series.BorderWidth = Width;
+                
                 if (new_chart)
                 {
                     series.Name = list[seriesNum];

@@ -616,14 +616,14 @@
             chart10.ChartAreas.Add(chartArea10);
             legend10.Name = "Legend1";
             chart10.Legends.Add(legend10);
-            chart10.Location = new Point(386, 8);
+            chart10.Location = new Point(445, 8);
             chart10.Margin = new Padding(3, 4, 3, 4);
             chart10.Name = "chart10";
             series10.ChartArea = "ChartArea1";
             series10.Legend = "Legend1";
             series10.Name = "Series1";
             chart10.Series.Add(series10);
-            chart10.Size = new Size(1330, 920);
+            chart10.Size = new Size(1271, 920);
             chart10.TabIndex = 1;
             chart10.Text = "chart10";
             // 
@@ -650,7 +650,7 @@
             dataGridView5.Margin = new Padding(3, 4, 3, 4);
             dataGridView5.Name = "dataGridView5";
             dataGridView5.RowHeadersWidth = 51;
-            dataGridView5.Size = new Size(373, 920);
+            dataGridView5.Size = new Size(432, 920);
             dataGridView5.TabIndex = 0;
             // 
             // toolStrip1
