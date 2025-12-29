@@ -961,6 +961,13 @@ namespace WRPT
                 MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
                 return;
             }
+            if (VI < 0 || VI > VU)
+            {
+                textBox13.BackColor = Color.Red;
+                MessageBox.Show($"Начальное наполнение должно быть в пределах полезного объема (0-{VU}).", "Внимание!",
+                MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
+                return;
+            }
 
             //VD = new double[12];
             //QU = new double[12];
@@ -968,7 +975,15 @@ namespace WRPT
             for (int i = 0; i < 12; i++)
             {
                 try
-                { VD[i] = GetDouble((string)dataGridView4.Rows[0].Cells[i].Value, 0d); }
+                { 
+                    VD[i] = GetDouble((string)dataGridView4.Rows[0].Cells[i].Value, 0d);
+                    if (VD[i] < 0 || VD[i] > VU) 
+                    {
+                        MessageBox.Show($"Вкладка Диспетчерские остатки:\nДиспетчерские остатки должны быть в пределах полезного объема (0-{VU}).", "Внимание!",
+                        MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
+                        return;
+                    }
+                }
                 catch
                 {
                     MessageBox.Show("Вкладка Диспетчерские остатки:\nГде-то в таблице введено не число. Необходимо ввести число.", "Внимание!",
@@ -1027,7 +1042,7 @@ namespace WRPT
 
             //Debug.WriteLine("{0}", M1);
             int M = 0;
-            int MD = M1 - 1; // В ридах M1 - 1 т.к. нумерация месяцев 0-11
+            int MD = M1 - 1; // В ридах (M1 - 1) т.к. нумерация месяцев 0-11
             //Debug.WriteLine("MD={0}", MD);
             if (MD < 0) { MD = 11; }
             if (MD > 11) { MD = 0; }
@@ -1040,6 +1055,7 @@ namespace WRPT
 
             while (M < MF)
             {
+                QS1 = 0;
                 //Debug.WriteLine("MD={0}", MD);
                 //Debug.WriteLine("VM={0}, VDI={1}", VM, VDI);
                 if (VM <= VDI)
@@ -1053,11 +1069,13 @@ namespace WRPT
                     if (MD == 11) QRR = QR[0];
                     if (MD < 11) QRR = QR[MD + 1];
                     QP1 = QRR + DVI / 2.63;
-                    if (QP1 > QPF) QP1 = QPF;
+                    if (QP1 > QPF) { QP1 = QPF; }
                 }
-                QS1 = 0;
+
+                //QS1 = 0;
                 MD++;
                 if (MD > 11) { MD = 0; }
+
                 DV1 = (Q[M] - QP1 - QS1 - QU[MD]) * 2.63;
                 //Debug.WriteLine("Start[{0}]. DV1={1}, Q[M]={2}, QP1={3}, QS1={4} QU[MD]={5}, MD={6}",
                 //    M, DV1, Q[M], QP1, QS1, QU[MD], MD);
@@ -1065,13 +1083,13 @@ namespace WRPT
                 //Debug.WriteLine("M={0}, VM1={1}, VM={2}, DV1={3}", M, VM1, VM, DV1);
                 VD1 = VD[MD];
                 //Debug.WriteLine("M={0}, MD={1}, VD[MD]={2}", M, MD, VD[MD]);
-                //VD11 = VD1 - VMN;
-                VD11 = VD1 - VI;
+                VD11 = VD1 - VMN;
+                //if (VD11 < 0) VD11 = 0;
                 //Debug.WriteLine("VD[MD]={0}, MD={1}", VD1, MD);
                 //Debug.WriteLine("IF VU={0}, VM1={1}, VD11={2}", VU, VM1, VD11);
                 if (VM1 <= VU && VM1 >= VD11)
                 {
-                    // Ничего не делаем
+                    // Ничего не делаем. Расход равен гарантированному.
                     //Debug.WriteLine("M={0}, VM1 <= VU && VM1 >= VD11", M);
                 }
                 else
@@ -1084,6 +1102,7 @@ namespace WRPT
                         //Debug.WriteLine("VM1>VU[{0}]. VM1={1}, VU={2}, QP1={3}",M, VM1, VU, QP1);
                         if (QP1 <= QPF)
                         {
+                            QS1 = 0;
                             //Debug.WriteLine("M={0}, QP1 <= QPF", M);
                             DV1 = (Q[M] - QP1 - QS1 - QU[MD]) * 2.63;
                             //Debug.WriteLine("VM1 > VU . QP1 <= QPF[{0}]. DV1={1}", M, DV);
@@ -1094,15 +1113,16 @@ namespace WRPT
                             //Debug.WriteLine("M={0}, !(QP1 <= QPF)", M);
                             QS1 = QP1 - QPF;
                             QP1 = QPF;
-                            //Debug.WriteLine("VM1>VU, QP1>QPF[{0}]", M);
+                            DV1 = (Q[M] - QP1 - QS1 - QU[MD]) * 2.63;
                             VM1 = VU;
                         }
                     }
-                    else
+                    if (VM1 < VD11)
                     {
                         //Debug.WriteLine("M={0}, !(VM1 > VU)", M);
+                        Debug.WriteLine("M= {0}, QP1= {1}", M, QP1);
                         QP1 = QP1 + (VM1 - VD11) / 2.63;
-                        //Debug.WriteLine("VM1<=VU[{0}]. VM1={1}, VD11={2}, QP1={3}", M, VM1, VD11, QP1);
+                        Debug.WriteLine("M= {0}, QP1= {1}, VM1={2}, VD11={3}", M, QP1, VM1, VD11);
                         DV1 = (Q[M] - QP1 - QS1 - QU[MD]) * 2.63;
                         //Debug.WriteLine("VM1 <= VU");
                         VM1 = VM + DV1;
@@ -1362,7 +1382,9 @@ namespace WRPT
                 dr[0] = Pointer + 1;
                 dr[1] = Month + 1;
                 dr[2] = VD[Month];
-                dr[3] = VD[Month] - VMN;
+                double tmp = VD[Month] - VMN;
+                if (tmp < 0) tmp = 0;
+                dr[3] = tmp;
                 dr[4] = Math.Round(DV[Pointer], 1);
                 tableExtRemainder.Rows.Add(dr);
 
