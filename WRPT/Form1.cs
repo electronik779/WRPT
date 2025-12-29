@@ -1120,9 +1120,9 @@ namespace WRPT
                     if (VM1 < VD11)
                     {
                         //Debug.WriteLine("M={0}, !(VM1 > VU)", M);
-                        Debug.WriteLine("M= {0}, QP1= {1}", M, QP1);
+                        //Debug.WriteLine("M= {0}, QP1= {1}", M, QP1);
                         QP1 = QP1 + (VM1 - VD11) / 2.63;
-                        Debug.WriteLine("M= {0}, QP1= {1}, VM1={2}, VD11={3}", M, QP1, VM1, VD11);
+                        //Debug.WriteLine("M= {0}, QP1= {1}, VM1={2}, VD11={3}", M, QP1, VM1, VD11);
                         DV1 = (Q[M] - QP1 - QS1 - QU[MD]) * 2.63;
                         //Debug.WriteLine("VM1 <= VU");
                         VM1 = VM + DV1;
@@ -1395,11 +1395,8 @@ namespace WRPT
                 if (Month > 11) { Month = 0; }
             }
 
-            Form2 form2 = new Form2(tableResults, tableSecurity,
-                tableShortage, tableControlMonth,
-                tableExtRemainder,
-                EEP, S, QMM, EPK, MDA, QR, M1);
-            //EEP, S, QMM, EPK, MDA, QPF);
+            Form2 form2 = new Form2(tableResults, tableSecurity, tableShortage, tableControlMonth, tableExtRemainder,
+                EEP, S, QMM, EPK, MDA, QR, M1, VU);
             form2.Show();
         }
 

@@ -15,12 +15,15 @@ namespace WRPT
             DataTable tableShortage, DataTable tableControlMonth,
             DataTable tableExtRemainder,
             double EEP, double S, double QMM, double EPK, int MDA,
-            double[] QR, int M1)
-            //double EEP, double S, double QMM, double EPK, int MDA, double QPF)
+            double[] QR, int M1, double VU)
+
         {
             InitializeComponent();
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+            int VUi = Convert.ToInt32(VU); 
+            //Debug.WriteLine("VUi= {0}", VUi);
 
             dataGridView1.CellFormatting += new DataGridViewCellFormattingEventHandler(dataGridView1_CellFormatting);
             for (int i = 0; i < QR.Length; i++)
@@ -127,14 +130,14 @@ namespace WRPT
             list = new string[] { "Диспетч. график - верх" };
             list2 = new string[] { "Месяц", "млн.м³" };
             BuildChart(chart10, tableExtRemainder, "line", list, "left", 1, x, y,
-                1, 12, 0, 0, 1, 0, false, list2, 0, 12, true, 3);
+                1, 12, 0, VUi, 1, 0, false, list2, 0, 12, true, 3);
 
             x = new int[] { 1 };
             y = new int[] { 3 };
             list = new string[] { "Диспетч. график - низ" };
             list2 = new string[] { "Месяц", "млн.м³" };
             BuildChart(chart10, tableExtRemainder, "line", list, "left", 1, x, y,
-                1, 12, 0, 0, 1, 0, false, list2, 0, 12, false, 3);
+                1, 12, 0, VUi, 1, 0, false, list2, 0, 12, false, 3);
 
             double tmp = (double)tableExtRemainder.Rows.Count / 12;
             //Debug.WriteLine("Number_of_years= {0}", tmp);
@@ -151,7 +154,7 @@ namespace WRPT
                 if (start < 0) start = 0;
                 //Debug.WriteLine("Year= {0}, start= {1}, end= {2}", i, start, end);
                 BuildChart(chart10, tableExtRemainder, "line", list, "left", 1, x, y,
-                    1, 12, 0, 0, 1, 0, false, list2, start, end, false, 1);
+                    1, 12, 0, VUi, 1, 0, false, list2, start, end, false, 1);
             }
 
             label2.Text = (Math.Round(EEP, 0)).ToString("#,#", CultureInfo.CurrentCulture);
