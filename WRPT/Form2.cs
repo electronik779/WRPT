@@ -360,6 +360,8 @@ namespace WRPT
                 ch.ChartAreas.Add(new ChartArea("ChartArea"));
                 ch.ChartAreas[0].AxisX.Minimum = Xmin;
                 ch.ChartAreas[0].AxisX.Maximum = Xmax;
+                if (Xmax - Xmin > 100) stepX = Convert.ToInt32(Math.Round(((double)(Xmax - Xmin)) / 100, MidpointRounding.AwayFromZero)) + 1;
+                //Debug.WriteLine("Xmax-Xmin= {0}, StepX= {1}", Xmax - Xmin, stepX);
                 ch.ChartAreas[0].AxisX.Interval = stepX;
                 ch.Legends[0].DockedToChartArea = "ChartArea";
                 ch.Legends[0].IsDockedInsideChartArea = true;
@@ -418,32 +420,32 @@ namespace WRPT
                             if (Fig2 > MaxY)
                             { MaxY = Fig2; }
                         }
-                        else
-                        {
-                            double Fig1 = Math.Floor((double)data.Rows[i][3] / multiple) * multiple;
-                            double Fig2 = Math.Ceiling((double)data.Rows[i][3] / multiple) * multiple;
-                            if (Fig1 < MinY)
-                            { MinY = Fig1; }
+                        //else
+                        //{
+                        //    double Fig1 = Math.Floor((double)data.Rows[i][3] / multiple) * multiple;
+                        //    double Fig2 = Math.Ceiling((double)data.Rows[i][3] / multiple) * multiple;
+                        //    if (Fig1 < MinY)
+                        //    { MinY = Fig1; }
 
-                            if (Fig2 > MaxY)
-                            { MaxY = Fig2; }
+                        //    if (Fig2 > MaxY)
+                        //    { MaxY = Fig2; }
                             
-                            Fig1 = Math.Floor((double)data.Rows[i][2] / multiple) * multiple;
-                            Fig2 = Math.Ceiling((double)data.Rows[i][2] / multiple) * multiple;
-                            if (Fig1 < MinY)
-                            { MinY = Fig1; }
+                        //    Fig1 = Math.Floor((double)data.Rows[i][2] / multiple) * multiple;
+                        //    Fig2 = Math.Ceiling((double)data.Rows[i][2] / multiple) * multiple;
+                        //    if (Fig1 < MinY)
+                        //    { MinY = Fig1; }
 
-                            if (Fig2 > MaxY)
-                            { MaxY = Fig2; }
+                        //    if (Fig2 > MaxY)
+                        //    { MaxY = Fig2; }
 
-                            Fig1 = Math.Floor((double)data.Rows[i][4] / multiple) * multiple;
-                            Fig2 = Math.Ceiling((double)data.Rows[i][4] / multiple) * multiple;
-                            if (Fig1 < MinY)
-                            { MinY = Fig1; }
+                        //    Fig1 = Math.Floor((double)data.Rows[i][4] / multiple) * multiple;
+                        //    Fig2 = Math.Ceiling((double)data.Rows[i][4] / multiple) * multiple;
+                        //    if (Fig1 < MinY)
+                        //    { MinY = Fig1; }
 
-                            if (Fig2 > MaxY)
-                            { MaxY = Fig2; }
-                        }
+                        //    if (Fig2 > MaxY)
+                        //    { MaxY = Fig2; }
+                        //}
                     }
 
                     if (MaxY == MinY)
