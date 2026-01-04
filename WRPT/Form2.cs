@@ -11,7 +11,7 @@ namespace WRPT
         double[] QRG = new double[12];
         int M1;
 
-        public Form2(DataTable tableResults, DataTable tableSecurity,
+        public Form2(DataTable tableResults, DataTable tableSecurity, DataTable tableSecurity_graph,
             DataTable tableShortage, DataTable tableControlMonth,
             DataTable tableExtRemainder,
             double EEP, double S, double QMM, double EPK, int MDA,
@@ -38,8 +38,9 @@ namespace WRPT
 
             if (tableResults.Rows.Count == 0 || tableResults.Columns.Count == 0 ||
                 tableSecurity.Rows.Count == 0 || tableSecurity.Columns.Count == 0 ||
+                tableSecurity_graph.Rows.Count == 0 || tableSecurity_graph.Columns.Count == 0 ||
                 tableExtRemainder.Rows.Count == 0 || tableExtRemainder.Columns.Count == 0 ||
-                tableResults.Rows.Count == 0 || tableSecurity.Rows.Count == 0)
+                tableResults.Rows.Count == 0 || tableResults.Columns.Count == 0)
             {
                 MessageBox.Show("Расчет не выполнен.\nПроверьте исходные данные.", "Внимание!",
                     MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
@@ -53,7 +54,7 @@ namespace WRPT
             dataGridView5.DataSource = tableExtRemainder;
 
             int ResultCount = tableResults.Rows.Count;
-            int SecurityCount = tableSecurity.Rows.Count;
+            //int SecurityCount = tableSecurity.Rows.Count;
 
             int[] x = new int[] { 0, 0, 0 };
             int[] y = new int[] { 2, 3, 4 };
@@ -94,28 +95,28 @@ namespace WRPT
             y = new int[] { 1 };
             list = new string[] { "Приток" };
             list2 = new string[] { "Обеспеченность, %", "м³/с" };
-            BuildChart(chart6, tableSecurity, "line", list, "right", 1, x, y,
+            BuildChart(chart6, tableSecurity_graph, "line", list, "right", 1, x, y,
                 0, 100, 0, 0, 20, 0, false, list2, 0, -1, true, 2);
 
             x = new int[] { 0 };
             y = new int[] { 2 };
             list = new string[] { "Расход ГЭС" };
             list2 = new string[] { "Обеспеченность, %", "м³/с" };
-            BuildChart(chart7, tableSecurity, "line", list, "right", 1, x, y,
+            BuildChart(chart7, tableSecurity_graph, "line", list, "right", 1, x, y,
                 0, 100, 0, 0, 20, 0, false, list2, 0, -1, true, 2);
 
             x = new int[] { 0 };
             y = new int[] { 3 };
             list = new string[] { "Напор" };
             list2 = new string[] { "Обеспеченность, %", "м" };
-            BuildChart(chart8, tableSecurity, "line", list, "right", 1, x, y,
+            BuildChart(chart8, tableSecurity_graph, "line", list, "right", 1, x, y,
                 0, 100, 0, 0, 20, 0, true, list2, 0, -1, true, 2);
 
             x = new int[] { 0 };
             y = new int[] { 4 };
             list = new string[] { "Мощность" };
             list2 = new string[] { "Обеспеченность, %", "кВт" };
-            BuildChart(chart9, tableSecurity, "line", list, "right", 1, x, y,
+            BuildChart(chart9, tableSecurity_graph, "line", list, "right", 1, x, y,
                 0, 100, 0, 0, 20, 0, false, list2, 0, -1, true, 2);
 
             //x = new int[] { 0, 0 };
