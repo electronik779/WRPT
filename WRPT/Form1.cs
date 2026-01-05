@@ -462,7 +462,7 @@ namespace WRPT
                     block7.Add(Convert.ToString(dataGridView6.Rows[0].Cells[i].Value));
                 }
 
-                using (StreamWriter writer = new StreamWriter(filename))
+                using (StreamWriter writer = new StreamWriter(filename, true, System.Text.Encoding.UTF8))
                 {
                     writer.WriteLine(string.Join(";", block1));
                     writer.WriteLine(string.Join(";", block2));
@@ -477,7 +477,7 @@ namespace WRPT
 
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
-            if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 // получаем выбранный файл
                 string filename = openFileDialog1.FileName;

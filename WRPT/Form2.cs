@@ -529,8 +529,7 @@ namespace WRPT
                     File.Delete(filename);
                 }
 
-                using (StreamWriter writer = new StreamWriter(filename, true,
-                    System.Text.Encoding.GetEncoding(1251)))
+                using (StreamWriter writer = new StreamWriter(filename, true, Encoding.UTF8))
                 {
                     List<string> columnsNames = new List<string>()
                    { "#", "Месяц", "Приток, м3/с", "Расход ГЭС, м3/с", "Сбросы, м3/с", "Отм. ВБ, м",
@@ -552,6 +551,8 @@ namespace WRPT
                         writer.WriteLine(string.Join(';', list));
                     }
 
+                    writer.WriteLine("\n");
+
                     columnsNames = new List<string>()
                    { "Обеспеченность, %", "Приток, м3/с", "Расход ГЭС, м3/с",
                         "Напор, м", "Мощность, кВт"};
@@ -569,25 +570,35 @@ namespace WRPT
                         writer.WriteLine(string.Join(';', list));
                     }
 
+                    writer.WriteLine("\n");
+
                     columnsNames = new List<string>()
                     { "Среднегодовая выработка, кВт ч"};
                     columnsNames.Add(label2.Text);
                     writer.WriteLine(string.Join(";", columnsNames));
+
+                    writer.WriteLine("\n");
 
                     columnsNames = new List<string>()
                     { "Суммарный объем сбросов, млн.м3"};
                     columnsNames.Add(label4.Text);
                     writer.WriteLine(string.Join(";", columnsNames));
 
+                    writer.WriteLine("\n");
+
                     columnsNames = new List<string>()
                     { "Средний расход, м3/с"};
                     columnsNames.Add(label5.Text);
                     writer.WriteLine(string.Join(";", columnsNames));
 
+                    writer.WriteLine("\n");
+
                     columnsNames = new List<string>()
                     { "Коэффициент использования стока"};
                     columnsNames.Add(label7.Text);
                     writer.WriteLine(string.Join(";", columnsNames));
+
+                    writer.WriteLine("\n");
 
                     writer.WriteLine(string.Join(";", "Дефициты по заданным расходам"));
                     List<string> ShortageM = new List<string>();
@@ -605,6 +616,8 @@ namespace WRPT
                     }
                     writer.WriteLine(string.Join(";", ShortageM));
                     writer.WriteLine(string.Join(";", ShortageD));
+
+                    writer.WriteLine("\n");
 
                     writer.WriteLine(string.Join(";", "Мощность контрольного месяца"));
                     List<string> ControlMonthM = new List<string>();
