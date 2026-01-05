@@ -976,9 +976,9 @@ namespace WRPT
             for (int i = 0; i < 12; i++)
             {
                 try
-                { 
+                {
                     VD[i] = GetDouble((string)dataGridView4.Rows[0].Cells[i].Value, 0d);
-                    if (VD[i] < 0 || VD[i] > VU) 
+                    if (VD[i] < 0 || VD[i] > VU)
                     {
                         MessageBox.Show($"Вкладка Диспетчерские остатки:\nДиспетчерские остатки должны быть в пределах полезного объема (0-{VU}).", "Внимание!",
                         MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
@@ -1134,7 +1134,7 @@ namespace WRPT
                 QP[M] = QP1;
                 QS[M] = QS1;
                 //DV[M] = VM1;
-                DV[M] = VM1-VD1+VI;
+                DV[M] = VM1 - VD1 + VI;
                 //Debug.WriteLine("M={0}, DV[M]={1}, VM1={2}, VD1={3}, VI={4}",M, DV[M], VM1, VD1, VI);
                 VM11 = VM1 + VR;
                 //Debug.WriteLine("BB");
@@ -1248,7 +1248,7 @@ namespace WRPT
                 }
                 else
                 {
-                    M = MDA - M1 -1 + (ML - 1) * 12;
+                    M = MDA - M1 - 1 + (ML - 1) * 12;
                 }
                 //Debug.WriteLine("ML= {0}, M= {1}, M1= {2}", ML, M, M1);
                 PC[ML - 1] = PN[M];

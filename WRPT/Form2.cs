@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using System.Diagnostics;
 using System.Globalization;
 using System.Text;
 using System.Windows.Forms.DataVisualization.Charting;
@@ -22,7 +21,7 @@ namespace WRPT
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-            int VUi = Convert.ToInt32(VU); 
+            int VUi = Convert.ToInt32(VU);
             //Debug.WriteLine("VUi= {0}", VUi);
 
             dataGridView1.CellFormatting += new DataGridViewCellFormattingEventHandler(dataGridView1_CellFormatting);
@@ -430,7 +429,7 @@ namespace WRPT
 
                         //    if (Fig2 > MaxY)
                         //    { MaxY = Fig2; }
-                            
+
                         //    Fig1 = Math.Floor((double)data.Rows[i][2] / multiple) * multiple;
                         //    Fig2 = Math.Ceiling((double)data.Rows[i][2] / multiple) * multiple;
                         //    if (Fig1 < MinY)
@@ -472,7 +471,7 @@ namespace WRPT
                 Series series = new Series();
 
                 series.BorderWidth = Width;
-                
+
                 if (new_chart)
                 {
                     series.Name = list[seriesNum];
