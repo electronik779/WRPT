@@ -20,6 +20,11 @@ namespace WRPT
         DataTable tableControlMonth = new DataTable();
 
         DataTable tableExtRemainder = new DataTable();
+        
+        private static int tableW = 697;
+        private static int tableH = 54;
+        private float dpi;
+        private float scale;
 
         public Form1()
         {
@@ -29,78 +34,118 @@ namespace WRPT
             saveFileDialog1.Filter = "CSV файлы (*.csv)|*.csv";
             saveFileDialog1.DefaultExt = "csv";
             saveFileDialog1.AddExtension = true;
+
+            dpi = this.DeviceDpi;
+            scale = dpi / 96;
         }
+
+        private void TableDesign(DataGridView table)
+        {
+            table.AllowUserToAddRows = false;
+            table.AllowUserToDeleteRows = false;
+            table.RowHeadersVisible = false;
+            table.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            table.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            table.AllowUserToOrderColumns = false;
+        }
+
+        private void TableInit(DataGridView table, DataTable dTable, int rows)
+        {
+            if (rows == 1)
+            {
+                dTable.Columns.Add(new DataColumn("0", typeof(string))); //Создаем столбец
+                DataRow row = dTable.NewRow(); //Добавляем строку
+                row[0] = 0; //Задаем данные (номер столбца - 0) 
+                dTable.Rows.Add(row); //Добавляем данные в таблицу
+                table.DataSource = dTable; //Привязываем таблицу к tableGridView
+
+                table.ColumnHeadersVisible = true;
+                int cellH = ((int)((float)tableH * scale) / 2);
+                table.ColumnHeadersHeight = cellH;
+                table.Rows[0].Height = cellH;
+                table.Height = cellH * 2;
+                table.Columns[0].Width = (int)(70f * scale);
+                table.Width = (int)(70f * scale) + 3;
+            }
+            if (rows == 2)
+            {
+                dTable.Columns.Add(new DataColumn("0", typeof(string)));
+                DataRow row0 = dTable.NewRow();
+                DataRow row1 = dTable.NewRow();
+                row0[0] = 0;
+                row1[0] = 0;
+                dTable.Rows.Add(row0);
+                dTable.Rows.Add(row1);
+                table.DataSource = dTable;
+
+                table.ColumnHeadersVisible = false;
+                int cellH = ((int)((float)tableH * scale) / rows);
+                for (int i = 0; i < rows; i++)
+                {
+                    table.Rows[i].Height = cellH;
+                }
+                table.Height = (cellH * rows);
+                table.Columns[0].Width = (int)(70f * scale);
+                table.Width = (int)(70f * scale) + 3;
+            }
+            if (rows == 3)
+            {
+                for (int i = 0; i < 12; i++)
+                {
+                    if (i < 9)
+                    {
+                        dTable.Columns.Add(new DataColumn("0" + (i + 1).ToString(), typeof(string)));
+                    }
+                    else
+                    {
+                        dTable.Columns.Add(new DataColumn((i + 1).ToString(), typeof(string)));
+                    }
+                }
+                DataRow row = dTable.NewRow();
+                for (int i = 0; i < 12; i++)
+                {
+                    row[i] = 0;
+                }
+                dTable.Rows.Add(row);
+                table.DataSource = dTable;
+
+                TableScale12(table);
+            }
+        }
+
+        private void TableScale12(DataGridView table)
+        {
+            table.ColumnHeadersVisible = true;
+            int cellH = ((int)((float)tableH * scale) / 2);
+            int cellW = (int)(70f * scale);
+            table.ColumnHeadersHeight = cellH;
+            table.RowTemplate.Height = cellH;
+            table.Rows[0].Height = cellH;
+            table.Height = (cellH * 2) + (int)(20f * scale);
+            for (int i = 0; i < 12; i++)
+            {
+                table.Columns[i].Width = cellW;
+            }
+            table.Width = tableW;
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
             //Оформление таблиц
-            dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.AllowUserToDeleteRows = false;
-            dataGridView1.RowHeadersVisible = false;
-            dataGridView1.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView1.AllowUserToOrderColumns = false;
-
-            dataGridView2.AllowUserToAddRows = false;
-            dataGridView2.AllowUserToDeleteRows = false;
-            dataGridView2.RowHeadersVisible = false;
-            dataGridView2.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView2.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView2.ColumnHeadersVisible = false;
-            dataGridView2.AllowUserToOrderColumns = false;
-
-            dataGridView3.AllowUserToAddRows = false;
-            dataGridView3.AllowUserToDeleteRows = false;
-            dataGridView3.RowHeadersVisible = false;
-            dataGridView3.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView3.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView3.ColumnHeadersVisible = false;
-            dataGridView3.AllowUserToOrderColumns = false;
-
-            dataGridView4.AllowUserToAddRows = false;
-            dataGridView4.AllowUserToDeleteRows = false;
-            dataGridView4.RowHeadersVisible = false;
-            dataGridView4.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView4.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView4.AllowUserToOrderColumns = false;
-
-            dataGridView5.AllowUserToAddRows = false;
-            dataGridView5.AllowUserToDeleteRows = false;
-            dataGridView5.RowHeadersVisible = false;
-            dataGridView5.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView5.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView5.AllowUserToOrderColumns = false;
-
-            dataGridView6.AllowUserToAddRows = false;
-            dataGridView6.AllowUserToDeleteRows = false;
-            dataGridView6.RowHeadersVisible = false;
-            dataGridView6.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView6.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView6.AllowUserToOrderColumns = false;
+            TableDesign(dataGridView1);
+            TableDesign(dataGridView2);
+            TableDesign(dataGridView3);
+            TableDesign(dataGridView4);
+            TableDesign(dataGridView5);
+            TableDesign(dataGridView6);
 
             //Начальная инициализация
-            tableTributary.Columns.Add(new DataColumn("0", typeof(string))); //Создаем столбец
-            DataRow rowTributary = tableTributary.NewRow(); //Добавляем строку
-            rowTributary[0] = 0; //Задаем данные (номер столбца - 0) 
-            tableTributary.Rows.Add(rowTributary); //Добавляем данные в таблицу
-            dataGridView1.DataSource = tableTributary; //Привязываем таблицу к tableGridView
-
-            tableUpstream.Columns.Add(new DataColumn("0", typeof(string)));
-            DataRow rowUpstream0 = tableUpstream.NewRow();
-            DataRow rowUpstream1 = tableUpstream.NewRow();
-            rowUpstream0[0] = 0;
-            rowUpstream1[0] = 0;
-            tableUpstream.Rows.Add(rowUpstream0);
-            tableUpstream.Rows.Add(rowUpstream1);
-            dataGridView2.DataSource = tableUpstream;
-
-            tableDownstream.Columns.Add(new DataColumn("0", typeof(string)));
-            DataRow rowDownstream0 = tableDownstream.NewRow();
-            DataRow rowDownstream1 = tableDownstream.NewRow();
-            rowDownstream0[0] = 0;
-            rowDownstream1[0] = 0;
-            tableDownstream.Rows.Add(rowDownstream0);
-            tableDownstream.Rows.Add(rowDownstream1);
-            dataGridView3.DataSource = tableDownstream;
+            TableInit(dataGridView1, tableTributary, 1);
+            TableInit(dataGridView2, tableUpstream, 2);
+            TableInit(dataGridView3, tableDownstream, 2);
+            TableInit(dataGridView4, tableRemainder, 3);
+            TableInit(dataGridView5, tableSelections, 3);
+            TableInit(dataGridView6, tableDischarges, 3);
 
             textBox1.Text = "0";
             textBox2.Text = "0";
@@ -115,65 +160,6 @@ namespace WRPT
             textBox11.Text = "0";
             textBox12.Text = "0";
             textBox13.Text = "0";
-
-            for (int i = 0; i < 12; i++)
-            {
-                if (i < 9)
-                {
-                    tableRemainder.Columns.Add(new DataColumn("0" + (i + 1).ToString(), typeof(string)));
-                }
-                else
-                {
-                    tableRemainder.Columns.Add(new DataColumn((i + 1).ToString(), typeof(string)));
-                }
-            }
-            DataRow rowRemainder = tableRemainder.NewRow();
-            for (int i = 0; i < 12; i++)
-            {
-                rowRemainder[i] = 0;
-            }
-            tableRemainder.Rows.Add(rowRemainder);
-            dataGridView4.DataSource = tableRemainder;
-
-            for (int i = 0; i < 12; i++)
-            {
-                if (i < 9)
-                {
-                    tableSelections.Columns.Add(new DataColumn("0" + (i + 1).ToString(), typeof(string)));
-                }
-                else
-                {
-                    tableSelections.Columns.Add(new DataColumn((i + 1).ToString(), typeof(string)));
-                }
-            }
-            DataRow rowSelections = tableSelections.NewRow();
-            for (int i = 0; i < 12; i++)
-            {
-                rowSelections[i] = 0;
-            }
-            tableSelections.Rows.Add(rowSelections);
-            dataGridView5.DataSource = tableSelections;
-
-            for (int i = 0; i < 12; i++)
-            {
-                if (i < 9)
-                {
-                    tableDischarges.Columns.Add(new DataColumn("0" + (i + 1).ToString(), typeof(string)));
-                }
-                else
-                {
-                    tableDischarges.Columns.Add(new DataColumn((i + 1).ToString(), typeof(string)));
-                }
-            }
-            DataRow rowDischarges = tableDischarges.NewRow();
-            for (int i = 0; i < 12; i++)
-            {
-                rowDischarges[i] = 0;
-            }
-            tableDischarges.Rows.Add(rowDischarges);
-            dataGridView6.DataSource = tableDischarges;
-
-
         }
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
@@ -246,6 +232,48 @@ namespace WRPT
             }
             tableTributary.Rows.Add(rowTributary);
             dataGridView1.DataSource = tableTributary;
+
+            int cellH = ((int)((float)tableH * scale) / 2);
+            dataGridView1.Height = (cellH * 2) + (int)(20f * scale);
+            dataGridView1.RowTemplate.Height = cellH;
+            dataGridView1.Rows[0].Height = cellH;
+            dataGridView1.ColumnHeadersHeight = cellH;
+            //Debug.WriteLine("tgvH= {0}, cellH= {1}, tableW {2}", tgvH, cellH, tableW);
+            dataGridView1.Width = tableW;
+            for (int i = 0; i < n; i++)
+            {
+                dataGridView1.Columns[i].Width = 70;
+            }
+        }
+
+        private void TableScale(DataGridView table, int cols)
+        {
+            int cellH = ((int)((float)tableH * scale) / 2);
+            int cellW = (tableW / 10) - 1;
+            if (cols <= 10)
+            {
+                table.Height = (cellH * 2) + 3;
+            }
+            else
+            {
+                table.Height = (cellH * 2) + (int)(20f * scale);
+            }
+            if (cols <= 10)
+            {
+                table.Width = (cellW * cols) + 3;
+            }
+            else
+            {
+                table.Width = tableW;
+            }
+            for (int i = 0; i < 2; i++)
+            {
+                table.Rows[i].Height = cellH;
+            }
+            for (int i = 0; i < cols; i++)
+            {
+                table.Columns[i].Width = cellW;
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -289,6 +317,8 @@ namespace WRPT
             tableUpstream.Rows.Add(rowUpstream0);
             tableUpstream.Rows.Add(rowUpstream1);
             dataGridView2.DataSource = tableUpstream;
+
+            TableScale(dataGridView2, n);
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -332,6 +362,8 @@ namespace WRPT
             tableDownstream.Rows.Add(rowDownstream0);
             tableDownstream.Rows.Add(rowDownstream1);
             dataGridView3.DataSource = tableDownstream;
+
+            TableScale(dataGridView3, n);
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -566,6 +598,18 @@ namespace WRPT
                     tableTributary.Rows.Add(rowTributary);
                     dataGridView1.DataSource = tableTributary;
 
+                    int cellH = ((int)((float)tableH * scale) / 2);
+                    dataGridView1.Height = (cellH * 2) + (int)(20f * scale);
+                    dataGridView1.RowTemplate.Height = cellH;
+                    dataGridView1.Rows[0].Height = cellH;
+                    dataGridView1.ColumnHeadersHeight = cellH;
+                    //Debug.WriteLine("tgvH= {0}, cellH= {1}, tableW {2}", tgvH, cellH, tableW);
+                    dataGridView1.Width = tableW;
+                    for (int i = 0; i < n; i++)
+                    {
+                        dataGridView1.Columns[i].Width = 70;
+                    }
+
 
                     textBox9.Text = block3?.ElementAtOrDefault(0) ?? string.Empty;
                     try
@@ -602,6 +646,8 @@ namespace WRPT
                     tableUpstream.Rows.Add(rowUpstream1);
                     dataGridView2.DataSource = tableUpstream;
 
+                    TableScale(dataGridView2, n);
+
 
                     textBox10.Text = block4?.ElementAtOrDefault(0) ?? string.Empty;
                     try
@@ -636,6 +682,8 @@ namespace WRPT
                     tableDownstream.Rows.Add(rowDownstream1);
                     dataGridView3.DataSource = tableDownstream;
 
+                    TableScale(dataGridView3, n);
+
 
                     tableRemainder.Clear();
                     for (int i = tableRemainder.Columns.Count - 1; i >= 0; i--)
@@ -660,6 +708,8 @@ namespace WRPT
                     }
                     tableRemainder.Rows.Add(rowRemainder);
                     dataGridView4.DataSource = tableRemainder;
+
+                    TableScale12(dataGridView4);
 
 
 
@@ -687,6 +737,9 @@ namespace WRPT
                     tableSelections.Rows.Add(rowSelections);
                     dataGridView5.DataSource = tableSelections;
 
+                    TableScale12(dataGridView5);
+
+
                     tableDischarges.Clear();
                     for (int i = tableDischarges.Columns.Count - 1; i >= 0; i--)
                     {
@@ -710,6 +763,8 @@ namespace WRPT
                     }
                     tableDischarges.Rows.Add(rowDischarges);
                     dataGridView6.DataSource = tableDischarges;
+
+                    TableScale12(dataGridView6);
                 }
                 catch (Exception ex)
                 {
