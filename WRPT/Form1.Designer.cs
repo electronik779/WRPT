@@ -79,6 +79,7 @@
             label35 = new Label();
             dataGridView4 = new DataGridView();
             tabPage6 = new TabPage();
+            label12 = new Label();
             label37 = new Label();
             label38 = new Label();
             dataGridView5 = new DataGridView();
@@ -94,6 +95,7 @@
             executeButton3 = new ToolStripButton();
             openFileDialog1 = new OpenFileDialog();
             saveFileDialog1 = new SaveFileDialog();
+            label13 = new Label();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             tabPage2.SuspendLayout();
@@ -613,6 +615,7 @@
             // 
             // tabPage6
             // 
+            tabPage6.Controls.Add(label12);
             tabPage6.Controls.Add(label37);
             tabPage6.Controls.Add(label38);
             tabPage6.Controls.Add(dataGridView5);
@@ -623,6 +626,15 @@
             tabPage6.TabIndex = 6;
             tabPage6.Text = "Отбор из вдхр.";
             tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Location = new Point(105, 46);
+            label12.Name = "label12";
+            label12.Size = new Size(153, 15);
+            label12.TabIndex = 27;
+            label12.Text = "Отбор из водохранилища:";
             // 
             // label37
             // 
@@ -654,6 +666,7 @@
             // 
             // tabPage7
             // 
+            tabPage7.Controls.Add(label13);
             tabPage7.Controls.Add(label10);
             tabPage7.Controls.Add(label11);
             tabPage7.Controls.Add(dataGridView6);
@@ -752,6 +765,15 @@
             // openFileDialog1
             // 
             openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Location = new Point(105, 46);
+            label13.Name = "label13";
+            label13.Size = new Size(183, 15);
+            label13.TabIndex = 30;
+            label13.Text = "Гарантированные расходы ГЭС:";
             // 
             // Form1
             // 
@@ -859,5 +881,7 @@
         private Label label11;
         private DataGridView dataGridView6;
         private Label label5;
+        private Label label12;
+        private Label label13;
     }
 }
