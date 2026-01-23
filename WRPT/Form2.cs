@@ -10,6 +10,9 @@ namespace WRPT
         double[] QRG = new double[12];
         int M1;
 
+        private float dpi;
+        private float scale;
+
         public Form2(DataTable tableResults, DataTable tableSecurity, DataTable tableSecurity_graph,
             DataTable tableShortage, DataTable tableControlMonth,
             DataTable tableExtRemainder,
@@ -18,6 +21,9 @@ namespace WRPT
 
         {
             InitializeComponent();
+
+            dpi = this.DeviceDpi;
+            scale = dpi / 96;
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
@@ -184,13 +190,13 @@ namespace WRPT
 
         private void Form2_Load(object sender, EventArgs e)
         {
-            TableFormat(dataGridView1, 95);
-            TableFormat(dataGridView2, 100);
-            TableFormat(dataGridView3, 100);
+            TableFormat(dataGridView1, (int)(95 * scale));
+            TableFormat(dataGridView2, (int)(100 * scale));
+            TableFormat(dataGridView3, (int)(100 * scale));
             dataGridView3.ColumnHeadersVisible = false;
-            TableFormat(dataGridView4, 100);
+            TableFormat(dataGridView4, (int)(100 * scale));
             dataGridView4.ColumnHeadersVisible = false;
-            TableFormat(dataGridView5, 80);
+            TableFormat(dataGridView5, (int)(71 * scale));
         }
 
         //private void BuildChart(Chart ch, DataTable data,
