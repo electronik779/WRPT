@@ -10,8 +10,6 @@ namespace WRPT
         double[] QRG = new double[12];
         int M1;
 
-        private static int tableW = 697;
-        private static int tableH = 54;
         private float dpi;
         private float scale;
 

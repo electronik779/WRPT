@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using System.Diagnostics;
 using System.Globalization;
 
 namespace WRPT
@@ -20,7 +19,7 @@ namespace WRPT
         DataTable tableControlMonth = new DataTable();
 
         DataTable tableExtRemainder = new DataTable();
-        
+
         private static int tableW = 697;
         private static int tableH = 54;
         private float dpi;
@@ -1461,7 +1460,7 @@ namespace WRPT
 
             while (Counter < MF)
             {
-                Debug.WriteLine("Pointer= {0}, Counter= {1}, Month= {2}", Pointer, Counter, Month);
+                //Debug.WriteLine("Pointer= {0}, Counter= {1}, Month= {2}", Pointer, Counter, Month);
                 DataRow dr = tableExtRemainder.NewRow();
                 dr[0] = Pointer + 1;
                 dr[1] = Month + 1;

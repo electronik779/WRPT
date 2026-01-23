@@ -84,6 +84,7 @@
             label38 = new Label();
             dataGridView5 = new DataGridView();
             tabPage7 = new TabPage();
+            label13 = new Label();
             label10 = new Label();
             label11 = new Label();
             dataGridView6 = new DataGridView();
@@ -95,7 +96,6 @@
             executeButton3 = new ToolStripButton();
             openFileDialog1 = new OpenFileDialog();
             saveFileDialog1 = new SaveFileDialog();
-            label13 = new Label();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             tabPage2.SuspendLayout();
@@ -509,7 +509,7 @@
             // label31
             // 
             label31.AutoSize = true;
-            label31.Location = new Point(6, 111);
+            label31.Location = new Point(4, 111);
             label31.Name = "label31";
             label31.Size = new Size(87, 15);
             label31.TabIndex = 18;
@@ -518,7 +518,7 @@
             // label32
             // 
             label32.AutoSize = true;
-            label32.Location = new Point(5, 80);
+            label32.Location = new Point(3, 80);
             label32.Name = "label32";
             label32.Size = new Size(94, 15);
             label32.TabIndex = 17;
@@ -588,7 +588,7 @@
             // label34
             // 
             label34.AutoSize = true;
-            label34.Location = new Point(6, 111);
+            label34.Location = new Point(3, 111);
             label34.Name = "label34";
             label34.Size = new Size(96, 15);
             label34.TabIndex = 22;
@@ -597,7 +597,7 @@
             // label35
             // 
             label35.AutoSize = true;
-            label35.Location = new Point(6, 80);
+            label35.Location = new Point(3, 80);
             label35.Name = "label35";
             label35.Size = new Size(43, 15);
             label35.TabIndex = 21;
@@ -677,6 +677,15 @@
             tabPage7.TabIndex = 7;
             tabPage7.Text = "Гарантированные расходы";
             tabPage7.UseVisualStyleBackColor = true;
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Location = new Point(105, 46);
+            label13.Name = "label13";
+            label13.Size = new Size(183, 15);
+            label13.TabIndex = 30;
+            label13.Text = "Гарантированные расходы ГЭС:";
             // 
             // label10
             // 
@@ -765,15 +774,6 @@
             // openFileDialog1
             // 
             openFileDialog1.FileName = "openFileDialog1";
-            // 
-            // label13
-            // 
-            label13.AutoSize = true;
-            label13.Location = new Point(105, 46);
-            label13.Name = "label13";
-            label13.Size = new Size(183, 15);
-            label13.TabIndex = 30;
-            label13.Text = "Гарантированные расходы ГЭС:";
             // 
             // Form1
             // 
