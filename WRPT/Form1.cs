@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Diagnostics;
 using System.Globalization;
 
 namespace WRPT
@@ -36,6 +37,16 @@ namespace WRPT
 
             dpi = this.DeviceDpi;
             scale = dpi / 96;
+
+            // Контекстное меню размножить
+            ContextMenuStrip contextMenu = new ContextMenuStrip();
+            ToolStripMenuItem copyItem = new ToolStripMenuItem("Размножить вправо →");
+            copyItem.Click += CopyItem_Click;
+            contextMenu.Items.Add(copyItem);
+            // Привязываем меню к DataGridView
+            dataGridView4.ContextMenuStrip = contextMenu;
+            dataGridView5.ContextMenuStrip = contextMenu;
+            dataGridView6.ContextMenuStrip = contextMenu;
         }
 
         private void TableDesign(DataGridView table)
@@ -1681,6 +1692,31 @@ namespace WRPT
             {
                 button3_Click(sender, e);
                 e.Handled = true;
+            }
+        }
+
+        private void CopyItem_Click(object sender, EventArgs e)
+        {
+            var menu = (sender as ToolStripMenuItem)?.Owner as ContextMenuStrip;
+            var dgv = menu?.SourceControl as DataGridView;
+            if (dgv != null)
+            {
+                var currentCell = dgv.CurrentCell;
+
+                if (currentCell != null && currentCell.ColumnIndex < dgv.ColumnCount - 1)
+                {
+                    int counter = currentCell.ColumnIndex;
+
+                    // Получаем значение текущей ячейки
+                    object? value = currentCell.Value;
+
+                    while (counter < dgv.ColumnCount - 1)
+                    {
+                        // Записываем в соседнюю справа (ColumnIndex + 1)
+                        dgv.Rows[currentCell.RowIndex].Cells[counter + 1].Value = value;
+                        counter++;
+                    }
+                }
             }
         }
 
