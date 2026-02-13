@@ -1,6 +1,4 @@
 ﻿using System.Data;
-using System.Diagnostics;
-using System.Drawing.Drawing2D;
 using System.Globalization;
 
 namespace WRPT
@@ -1130,7 +1128,7 @@ namespace WRPT
                     if (MD == 11) QRR = QR[0];
                     if (MD < 11) QRR = QR[MD + 1];
                     QP1 = QRR + DVI / 2.63;
-                    if (QP1 > QPF) 
+                    if (QP1 > QPF)
                     {
                         //Debug.WriteLine("QP1>QPF, QP1={0}, QPF={1}", QP1, QPF);
                         QP1 = QPF;
