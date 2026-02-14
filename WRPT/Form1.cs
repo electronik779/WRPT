@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Diagnostics;
 using System.Globalization;
+using WRPT.Properties;
 
 namespace WRPT
 {
@@ -26,6 +27,10 @@ namespace WRPT
         private float dpi;
         private float scale;
 
+        // Контекстное меню размножить
+        ContextMenuStrip contextMenu = new ContextMenuStrip();
+        ToolStripMenuItem copyItem = new ToolStripMenuItem("Размножить вправо →");
+
         public Form1()
         {
             InitializeComponent();
@@ -38,15 +43,15 @@ namespace WRPT
             dpi = this.DeviceDpi;
             scale = dpi / 96;
 
-            // Контекстное меню размножить
-            ContextMenuStrip contextMenu = new ContextMenuStrip();
-            ToolStripMenuItem copyItem = new ToolStripMenuItem("Размножить вправо →");
-            copyItem.Click += CopyItem_Click;
+            // Создаем контекстное меню
+            copyItem.Image = Resources.Right; 
+            copyItem.Click += CopyItem_Click!; // Добавляем обработчик события
             contextMenu.Items.Add(copyItem);
-            // Привязываем меню к DataGridView
-            dataGridView4.ContextMenuStrip = contextMenu;
-            dataGridView5.ContextMenuStrip = contextMenu;
-            dataGridView6.ContextMenuStrip = contextMenu;
+
+            // Добавляем обработчик события для таблиц
+            dataGridView4.CellMouseClick += dataGridView_CellMouseDown!;
+            dataGridView5.CellMouseClick += dataGridView_CellMouseDown!;
+            dataGridView6.CellMouseClick += dataGridView_CellMouseDown!;
         }
 
         private void TableDesign(DataGridView table)
@@ -1716,6 +1721,23 @@ namespace WRPT
                         dgv.Rows[currentCell.RowIndex].Cells[counter + 1].Value = value;
                         counter++;
                     }
+                }
+            }
+        }
+        private void dataGridView_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (sender is DataGridView dgv)
+            {
+                // Проверяем, что нажата правая кнопка и мы находимся внутри таблицы (не на заголовках)
+                if (e.Button == MouseButtons.Right && e.RowIndex >= 0 && e.ColumnIndex >= 0)
+                {
+                    dgv.ClearSelection();
+                    dgv.Rows[e.RowIndex].Cells[e.ColumnIndex].Selected = true;
+
+                    // Устанавливаем текущую ячейку (фокус)
+                    dgv.CurrentCell = dgv.Rows[e.RowIndex].Cells[e.ColumnIndex];
+
+                    contextMenu.Show(dgv, dgv.PointToClient(Cursor.Position));
                 }
             }
         }
