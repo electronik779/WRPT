@@ -435,90 +435,66 @@ namespace WRPT
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
-            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            if (saveFileDialog1.ShowDialog() != DialogResult.OK) return;
+
+            string filename = saveFileDialog1.FileName;
+            var culture = CultureInfo.InvariantCulture;
+
+            // Вспомогательная функция для сбора данных из строк таблицы
+            IEnumerable<string> GetRowData(DataGridView dgv, int rowIdx, int count)
             {
-                // получаем выбранный файл
-                string filename = saveFileDialog1.FileName;
-                //если существует - удаляем
-                if (File.Exists(filename))
+                for (int i = 0; i < count; i++)
                 {
-                    File.Delete(filename);
+                    double val = GetDouble(dgv.Rows[rowIdx].Cells[i].Value?.ToString(), 0);
+                    yield return val.ToString(culture);
                 }
+            }
 
-                List<string> block1 = new List<string>();
-                block1.Add(textBox1.Text);
-                if (radioButton1.Checked == true)
-                { block1.Add("0"); }
-                else
-                { block1.Add("1"); }
-                block1.Add(textBox2.Text);
-                block1.Add(textBox3.Text);
-                block1.Add(textBox12.Text);
-                block1.Add(textBox13.Text);
-                //block1.Add(textBox4.Text);
-                block1.Add(textBox5.Text);
-                block1.Add(textBox6.Text);
-                block1.Add(textBox7.Text);
-                block1.Add(textBox11.Text);
+            // Блок 1: Собираем данные из текстовых полей
+            var block1 = new List<string>
+            {
+                textBox1.Text,
+                radioButton1.Checked ? "0" : "1",
+                GetDouble(textBox2.Text, 0).ToString(culture),
+                GetDouble(textBox3.Text, 0).ToString(culture),
+                GetDouble(textBox12.Text, 0).ToString(culture),
+                GetDouble(textBox13.Text, 0).ToString(culture),
+                GetDouble(textBox5.Text, 0).ToString(culture),
+                GetDouble(textBox6.Text, 0).ToString(culture),
+                GetDouble(textBox7.Text, 0).ToString(culture),
+                GetDouble(textBox11.Text, 0).ToString(culture)
+            };
 
-                List<string> block2 = new List<string>();
-                block2.Add(textBox8.Text);
+            // Собираем остальные блоки
+            int count2 = Convert.ToInt32(textBox8.Text);
+            var block2 = new List<string> { textBox8.Text };
+            block2.AddRange(GetRowData(dataGridView1, 0, count2));
 
-                for (int i = 0; i < Convert.ToInt32(textBox8.Text); i++)
-                {
-                    block2.Add(Convert.ToString(dataGridView1.Rows[0].Cells[i].Value));
-                }
+            int count3 = Convert.ToInt32(textBox9.Text);
+            var block3 = new List<string> { textBox9.Text };
+            block3.AddRange(GetRowData(dataGridView2, 0, count3));
+            block3.AddRange(GetRowData(dataGridView2, 1, count3));
 
-                List<string> block3 = new List<string>();
-                block3.Add(textBox9.Text);
-                for (int i = 0; i < Convert.ToInt32(textBox9.Text); i++)
-                {
-                    block3.Add(Convert.ToString(dataGridView2.Rows[0].Cells[i].Value));
-                }
-                for (int i = 0; i < Convert.ToInt32(textBox9.Text); i++)
-                {
-                    block3.Add(Convert.ToString(dataGridView2.Rows[1].Cells[i].Value));
-                }
+            int count4 = Convert.ToInt32(textBox10.Text);
+            var block4 = new List<string> { textBox10.Text };
+            block4.AddRange(GetRowData(dataGridView3, 0, count4));
+            block4.AddRange(GetRowData(dataGridView3, 1, count4));
 
-                List<string> block4 = new List<string>();
-                block4.Add(textBox10.Text);
-                for (int i = 0; i < Convert.ToInt32(textBox10.Text); i++)
-                {
-                    block4.Add(Convert.ToString(dataGridView3.Rows[0].Cells[i].Value));
-                }
-                for (int i = 0; i < Convert.ToInt32(textBox10.Text); i++)
-                {
-                    block4.Add(Convert.ToString(dataGridView3.Rows[1].Cells[i].Value));
-                }
+            // Блоки с фиксированной длиной 12
+            var block5 = GetRowData(dataGridView4, 0, 12);
+            var block6 = GetRowData(dataGridView5, 0, 12);
+            var block7 = GetRowData(dataGridView6, 0, 12);
 
-                List<string> block5 = new List<string>();
-                for (int i = 0; i < 12; i++)
-                {
-                    block5.Add(Convert.ToString(dataGridView4.Rows[0].Cells[i].Value));
-                }
-
-                List<string> block6 = new List<string>();
-                for (int i = 0; i < 12; i++)
-                {
-                    block6.Add(Convert.ToString(dataGridView5.Rows[0].Cells[i].Value));
-                }
-
-                List<string> block7 = new List<string>();
-                for (int i = 0; i < 12; i++)
-                {
-                    block7.Add(Convert.ToString(dataGridView6.Rows[0].Cells[i].Value));
-                }
-
-                using (StreamWriter writer = new StreamWriter(filename, true, System.Text.Encoding.UTF8))
-                {
-                    writer.WriteLine(string.Join(";", block1));
-                    writer.WriteLine(string.Join(";", block2));
-                    writer.WriteLine(string.Join(";", block3));
-                    writer.WriteLine(string.Join(";", block4));
-                    writer.WriteLine(string.Join(";", block5));
-                    writer.WriteLine(string.Join(";", block6));
-                    writer.WriteLine(string.Join(";", block7));
-                }
+            // Запись в файл (File.Create автоматически перезапишет файл, Delete не нужен)
+            using (StreamWriter writer = new StreamWriter(filename, false, System.Text.Encoding.UTF8))
+            {
+                writer.WriteLine(string.Join(";", block1));
+                writer.WriteLine(string.Join(";", block2));
+                writer.WriteLine(string.Join(";", block3));
+                writer.WriteLine(string.Join(";", block4));
+                writer.WriteLine(string.Join(";", block5));
+                writer.WriteLine(string.Join(";", block6));
+                writer.WriteLine(string.Join(";", block7));
             }
         }
 
@@ -533,20 +509,20 @@ namespace WRPT
 
                 using (StreamReader reader = new StreamReader(filename))
                 {
-                    string line;
+                    string? line;
                     while ((line = reader.ReadLine()) != null)
                     {
                         List<string> row = line.Split(';').ToList();
                         blocks.Add(row);
                     }
                 }
-                List<string> block1 = blocks.ElementAtOrDefault(0);
-                List<string> block2 = blocks.ElementAtOrDefault(1);
-                List<string> block3 = blocks.ElementAtOrDefault(2);
-                List<string> block4 = blocks.ElementAtOrDefault(3);
-                List<string> block5 = blocks.ElementAtOrDefault(4);
-                List<string> block6 = blocks.ElementAtOrDefault(5);
-                List<string> block7 = blocks.ElementAtOrDefault(6);
+                List<string> block1 = blocks.ElementAtOrDefault(0) ?? new List<string>();
+                List<string> block2 = blocks.ElementAtOrDefault(1) ?? new List<string>();
+                List<string> block3 = blocks.ElementAtOrDefault(2) ?? new List<string>();
+                List<string> block4 = blocks.ElementAtOrDefault(3) ?? new List<string>();
+                List<string> block5 = blocks.ElementAtOrDefault(4) ?? new List<string>();
+                List<string> block6 = blocks.ElementAtOrDefault(5) ?? new List<string>();
+                List<string> block7 = blocks.ElementAtOrDefault(6) ?? new List<string>();
 
                 try
                 {
@@ -559,7 +535,6 @@ namespace WRPT
                     textBox3.Text = block1?.ElementAtOrDefault(3) ?? string.Empty;
                     textBox12.Text = block1?.ElementAtOrDefault(4) ?? string.Empty;
                     textBox13.Text = block1?.ElementAtOrDefault(5) ?? string.Empty;
-                    //textBox4.Text = block1?.ElementAtOrDefault(6) ?? string.Empty;
                     textBox5.Text = block1?.ElementAtOrDefault(6) ?? string.Empty;
                     textBox6.Text = block1?.ElementAtOrDefault(7) ?? string.Empty;
                     textBox7.Text = block1?.ElementAtOrDefault(8) ?? string.Empty;
@@ -809,7 +784,7 @@ namespace WRPT
             if (Application.OpenForms["Form2"] != null)
             {
                 // Если Form2 открыта, закрываем ее
-                ((Form)Application.OpenForms["Form2"]).Close();
+                Application.OpenForms["Form2"]?.Close();
             }
 
             int MF = 0;
@@ -1609,7 +1584,7 @@ namespace WRPT
             return AR;
         }
 
-        private double GetDouble(string str, double defaultValue)
+        private double GetDouble(string? str, double defaultValue)
         {
             double result;
             //Try parsing in the current culture
