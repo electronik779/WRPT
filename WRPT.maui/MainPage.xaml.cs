@@ -18,6 +18,7 @@ namespace WRPT.maui
         public ObservableCollection<TableRow> ControlData { get; set; } = new();
         public ObservableCollection<TableRow> SecurityData { get; set; } = new();
         public ObservableCollection<TableRow> VolumeData { get; set; } = new();
+        public ObservableCollection<TableRow> GuaranteedDischargesData { get; set; } = new();
 
         // Страница с проектом и помощью
         private Uri uri = new Uri("https://github.com/electronik779/WRPT");
@@ -40,6 +41,7 @@ namespace WRPT.maui
         double[,] RemainderAccordingDispatchScheduleTableData = new double[0, 0]; // Диспетчерские остатки.
         double[,] IntakeFromReservoirTableData = new double[0, 0]; // Отбор из водохранилища.
         double[,] CharacteristicOfDownstreamTableData = new double[0, 0]; // Характеристика нижнего бьефа. 
+        double[,] GuaranteedDischargesTableData = new double[0, 0]; // Гарантированные расходы ГЭС.
 
         // Сохранено?
         public bool IsSaved { get; set; } = true;
@@ -53,11 +55,11 @@ namespace WRPT.maui
             Current = this;
             BindingContext = this;
 
-            // Инициализация таблиц диспетчерских остатков и отборов
-            InitializeRemainderAndIntakeTables();
+            // Инициализация таблиц диспетчерских остатков, отборов и гарантированных расходов
+            Initialize12MonthsTables();
         }
 
-        private void InitializeRemainderAndIntakeTables()
+        private void Initialize12MonthsTables()
         {
             // Создаем строки для таблицы диспетчерских остатков (12 месяцев)
             RemainderData.Clear();
@@ -110,6 +112,32 @@ namespace WRPT.maui
 
             IntakeCollectionView.ItemsSource = null;
             IntakeCollectionView.ItemsSource = IntakeData;
+
+            // Создаем строки для таблицы гарантированных расходов ГЭС (12 месяцев)
+            GuaranteedDischargesData.Clear();
+
+            // Первая строка - заголовки
+            //var headerRowInt = new TableRow();
+            headerRowInt.Index = 0;
+            headerRowInt.IsEditable = false;
+            headerRowInt.RowLabel = "Месяц"; // Метка только в заголовке
+            headerRowInt.InitializeCells(12, ""); // Только данные (месяцы)
+            for (int i = 0; i < 12; i++)
+            {
+                headerRowInt.Cells[i] = (i + 1).ToString();
+            }
+            GuaranteedDischargesData.Add(headerRowInt);
+
+            // Вторая строка - ввод данных
+            var inputRowDisch = new TableRow();
+            inputRowDisch.Index = 1;
+            inputRowDisch.IsEditable = true;
+            inputRowDisch.RowLabel = "Расход, м³/с";
+            inputRowDisch.InitializeCells(12, "0");
+            GuaranteedDischargesData.Add(inputRowDisch);
+
+            GuarenteedDischargesCollectionView.ItemsSource = null;
+            GuarenteedDischargesCollectionView.ItemsSource = GuaranteedDischargesData;
         }
 
         // Выбор схемы питания. Индивидуальная - задаем потери напора, групповая - задаем к при Q^2
@@ -490,7 +518,7 @@ namespace WRPT.maui
 
                 UsefulVolumeInput.Text = b1.ElementAtOrDefault(2) ?? "0";
                 UselessVolumeInput.Text = b1.ElementAtOrDefault(3) ?? "0";
-                GuaranteedDischargeInput.Text = b1.ElementAtOrDefault(4) ?? "0";
+                //GuaranteedDischargeInput.Text = b1.ElementAtOrDefault(4) ?? "0";
                 FullDischargeInput.Text = b1.ElementAtOrDefault(5) ?? "0";
                 HeadLossInput.Text = b1.ElementAtOrDefault(6) ?? "0";
                 EfficiencyInput.Text = b1.ElementAtOrDefault(7) ?? "0";
@@ -562,6 +590,7 @@ namespace WRPT.maui
             }
         }
 
+        // Вспомогательная функция для заполнения таблиц с одной строкой при открытии файла
         private void FillTableFromCSV(ObservableCollection<TableRow> table, List<string> data1)
         {
             // table[0] is header, table[1] is data
@@ -585,6 +614,7 @@ namespace WRPT.maui
             }
         }
 
+        // Вспомогательная функция для заполнения таблиц с двумя строками при открытии файла
         private void FillTableFromCSV(ObservableCollection<TableRow> table, List<string> data1, List<string> data2)
         {
             // table[0] is row 1 data, table[1] is row 2 data
@@ -683,6 +713,8 @@ namespace WRPT.maui
                     "OK");
             }
         }
+
+        // Из-за проверки закрытия формы без сохранения нужно async task
         public async void Save_Click(object sender, EventArgs e)
         {
             await SaveDataAsync();
@@ -738,6 +770,7 @@ namespace WRPT.maui
             RemainderAccordingDispatchScheduleTableData = new double[1, 12];
             IntakeFromReservoirTableData = new double[1, 12];
             CharacteristicOfDownstreamTableData = new double[2, CharacteristicOfDownstreamCount];
+            GuaranteedDischargesTableData = new double[1, 12];
 
             // Получаем значения из таблиц
             try
@@ -762,6 +795,10 @@ namespace WRPT.maui
                 // 5. Забор из водохранилища (12 месяцев)
                 if (IntakeData.Count >= 1)
                     ExportTableToMatrix(IntakeData, IntakeFromReservoirTableData, startRowIndex: 1);
+
+                // 6. Гарантированные расходы ГЭС (12 месяцев)
+                if (GuaranteedDischargesData.Count >= 1)
+                    ExportTableToMatrix(GuaranteedDischargesData, GuaranteedDischargesTableData, startRowIndex: 1);
             }
             catch (Exception ex)
             {
@@ -772,7 +809,7 @@ namespace WRPT.maui
             // Проверяем кпд агрегата
             if (Efficiency >= 1)
             {
-                await DisplayAlertAsync("Ошибка", "Кпд агрегата не может быть равен\nили больше единицы", "OK");
+                await DisplayAlertAsync("Ошибка!", "Кпд агрегата не может быть равен\nили больше единицы", "OK");
                 return;
             }
 
@@ -1168,7 +1205,7 @@ namespace WRPT.maui
 
             if (!double.TryParse(UsefulVolumeInput.Text?.Replace(',', '.'), NumberStyles.Any, culture, out UsefullVolume)) return;
             if (!double.TryParse(UselessVolumeInput.Text?.Replace(',', '.'), NumberStyles.Any, culture, out UselessVolume)) return;
-            if (!double.TryParse(GuaranteedDischargeInput.Text?.Replace(',', '.'), NumberStyles.Any, culture, out GuaranteedDischarge)) return;
+            //if (!double.TryParse(GuaranteedDischargeInput.Text?.Replace(',', '.'), NumberStyles.Any, culture, out GuaranteedDischarge)) return;
             if (!double.TryParse(FullDischargeInput.Text?.Replace(',', '.'), NumberStyles.Any, culture, out FullDischarge)) return;
             if (!double.TryParse(HeadLossInput.Text?.Replace(',', '.'), NumberStyles.Any, culture, out kHeadLoss)) return;
             if (!double.TryParse(EfficiencyInput.Text?.Replace(',', '.'), NumberStyles.Any, culture, out Efficiency)) return;
@@ -1233,7 +1270,7 @@ namespace WRPT.maui
             if (CheckIntVariable("Количество точек батиграфической характеристики", BathygraphyCountInput.Text)) return true;
             if (CheckIntVariable("Количество точек характеристики нижнего бьефа", CharacteristicOfDownstreamCountInput.Text)) return true;
 
-            if (CheckDoubleVariable("Гарантированный расход ГЭС", GuaranteedDischargeInput.Text)) return true;
+            //if (CheckDoubleVariable("Гарантированный расход ГЭС", GuaranteedDischargeInput.Text)) return true;
             if (CheckDoubleVariable("Полный (максимальный) расход ГЭС", FullDischargeInput.Text)) return true;
             if (CheckDoubleVariable("Потери напора", HeadLossInput.Text)) return true;
             if (CheckDoubleVariable("Кпд гидроагрегата", EfficiencyInput.Text)) return true;
