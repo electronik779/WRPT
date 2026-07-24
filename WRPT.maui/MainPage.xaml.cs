@@ -30,10 +30,12 @@ namespace WRPT.maui
         int CharacteristicOfDownstreamCount = 0; // Количество точек характеристики нижнего бьефа
         double UsefullVolume = 0; // Полезный объем
         double UselessVolume = 0; // Мертвый объем
-        double GuaranteedDischarge = 0; // Гарантированный расход ГЭС
+        double MultiYearVolume = 0; // Объем для многолетнего регулирования
+        double BeginningVolume = 0; // Начальное заполнение полезного объема
         double FullDischarge = 0; // Максимальный расход ГЭС
         double kHeadLoss = 0; // Потери напора / коэффициент при Q^2
         double Efficiency = 0; // Кпд агрегата
+        int ControlMonth = 12; // Номер контрольного месяца
 
         // Исходные данные. Массивы (строки x столбцы)
         double[,] InflowTableData = new double[0, 0]; // Приток.
@@ -500,7 +502,7 @@ namespace WRPT.maui
                         }
                     }
                 }
-                if (blocks.Count < 6)
+                if (blocks.Count < 7)
                 {
                     await DisplayAlertAsync("Ошибка!", "Файл поврежден.", "ОК");
                     return;
@@ -518,10 +520,12 @@ namespace WRPT.maui
 
                 UsefulVolumeInput.Text = b1.ElementAtOrDefault(2) ?? "0";
                 UselessVolumeInput.Text = b1.ElementAtOrDefault(3) ?? "0";
-                //GuaranteedDischargeInput.Text = b1.ElementAtOrDefault(4) ?? "0";
-                FullDischargeInput.Text = b1.ElementAtOrDefault(5) ?? "0";
-                HeadLossInput.Text = b1.ElementAtOrDefault(6) ?? "0";
-                EfficiencyInput.Text = b1.ElementAtOrDefault(7) ?? "0";
+                MultiYearVolumeInput.Text = b1.ElementAtOrDefault(4) ?? "0";
+                BeginningVolumeInput.Text = b1.ElementAtOrDefault(5) ?? "0";
+                FullDischargeInput.Text = b1.ElementAtOrDefault(6) ?? "0";
+                HeadLossInput.Text = b1.ElementAtOrDefault(7) ?? "0";
+                EfficiencyInput.Text = b1.ElementAtOrDefault(8) ?? "0";
+                ControlMonthInput.Text = b1.ElementAtOrDefault(9) ?? "0";
 
                 // Блок 2: Inflow
                 int.TryParse(blocks[1].FirstOrDefault(), out InflowCount);
@@ -535,7 +539,7 @@ namespace WRPT.maui
                 int.TryParse(blocks[3].FirstOrDefault(), out CharacteristicOfDownstreamCount);
                 CharacteristicOfDownstreamCountInput.Text = CharacteristicOfDownstreamCount.ToString();
 
-                // Блоки 5 и 6: Remainder и Intake (по 12 мес)
+                // Блоки 5, 6 и 7: Remainder, Intake и GuarandeedDischrges (по 12 мес)
                 // Для этих таблиц уже есть инициализация, просто заполняем данными
 
                 // Обновляем UI
@@ -572,12 +576,15 @@ namespace WRPT.maui
                 var downstreamData2 = blocks[3].Skip(CharacteristicOfDownstreamCount + 1).Take(CharacteristicOfDownstreamCount).ToList();
                 FillTableFromCSV(DownstreamData, downstreamData1, downstreamData2);
 
-                // Блоки 5 и 6: Remainder и Intake (по 12 мес)
+                // Блоки 5, 6 и 7: Remainder, Intake и GuarandeedDischrges (по 12 мес)
                 var remainderData = blocks[4].Take(12).ToList();
                 FillTableFromCSV(RemainderData, remainderData);
 
                 var intakeData = blocks[5].Take(12).ToList();
                 FillTableFromCSV(IntakeData, intakeData);
+
+                var dischargeData = blocks[6].Take(12).ToList();
+                FillTableFromCSV(GuaranteedDischargesData, dischargeData);
 
                 //InflowCollectionView.ItemsSource = InflowData;
                 BathygraphyCollectionView.ItemsSource = BathygraphyData;
@@ -671,10 +678,12 @@ namespace WRPT.maui
                     selectedValue,
                     UsefullVolume.ToString(culture),
                     UselessVolume.ToString(culture),
-                    GuaranteedDischarge.ToString(culture),
+                    MultiYearVolume.ToString(culture),
+                    BeginningVolume.ToString(culture),
                     FullDischarge.ToString(culture),
                     kHeadLoss.ToString(culture),
-                    Efficiency.ToString(culture)
+                    Efficiency.ToString(culture),
+                    ControlMonth.ToString(culture)
                 });
 
                 // 2. Блоки данных
@@ -690,9 +699,10 @@ namespace WRPT.maui
 
                 string b5 = GetRowData(RemainderData, 1, 12);
                 string b6 = GetRowData(IntakeData, 1, 12);
+                string b7 = GetRowData(GuaranteedDischargesData, 1, 12);
 
                 // 3. Сборка и сохранение
-                string content = string.Join(Environment.NewLine, new[] { b1, b2, b3, b4, b5, b6 });
+                string content = string.Join(Environment.NewLine, new[] { b1, b2, b3, b4, b5, b6, b7 });
 
                 using var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
                 var result = await FileSaver.Default.SaveAsync("Initial_data.csv", stream, CancellationToken.None);
@@ -843,7 +853,7 @@ namespace WRPT.maui
             while (MonthOrdinalNumber < InflowCount)
             {
                 // Параметры предыдущего месяца
-                CurrentConsumption = GuaranteedDischarge + ExcessVolume / 2.63;
+                //CurrentConsumption = GuaranteedDischarge + ExcessVolume / 2.63;
                 if (CurrentConsumption > FullDischarge) CurrentConsumption = FullDischarge;
                 IdleDischargeFlowRate = 0;
 
@@ -997,7 +1007,7 @@ namespace WRPT.maui
                 row.SetCell(1, (CalendarMonth).ToString());                      // 2: Номер месяца
                 row.SetCell(2, InflowTableData[0, i].ToString("F2"));            // 3: Приток
                 row.SetCell(3, Consumption[i].ToString("F2"));                   // 4: Расход ГЭС
-                row.GuaranteedLimit = GuaranteedDischarge; // Сохраняем лимит в саму строку
+                //row.GuaranteedLimit = GuaranteedDischarge; // Сохраняем лимит в саму строку
                 row.SetCell(4, IdleReset[i].ToString("F2"));                     // 5: Расжод холостых сбросов
                 row.SetCell(5, UpstreamLevel[i].ToString("F2"));                 // 6: Уровень верхнего бьефа 
                 row.SetCell(6, DownstreamLevel[i].ToString("F2"));               // 7: Уровень нижнего бьефа
@@ -1130,7 +1140,7 @@ namespace WRPT.maui
             {
                 { "ControlData", ControlData },
                 { "SecurityData", SecurityData },
-                { "GuaranteedDischarge", GuaranteedDischarge },
+                //{ "GuaranteedDischarge", GuaranteedDischarge },
                 { "VolumeData", VolumeData },
                 { "AverageAnnualElectricityGeneration", AverageAnnualElectricityGeneration },
                 { "SumIdleResetVolume", SumIdleResetVolume }
@@ -1205,10 +1215,12 @@ namespace WRPT.maui
 
             if (!double.TryParse(UsefulVolumeInput.Text?.Replace(',', '.'), NumberStyles.Any, culture, out UsefullVolume)) return;
             if (!double.TryParse(UselessVolumeInput.Text?.Replace(',', '.'), NumberStyles.Any, culture, out UselessVolume)) return;
-            //if (!double.TryParse(GuaranteedDischargeInput.Text?.Replace(',', '.'), NumberStyles.Any, culture, out GuaranteedDischarge)) return;
+            if (!double.TryParse(MultiYearVolumeInput.Text?.Replace(',', '.'), NumberStyles.Any, culture, out MultiYearVolume)) return;
+            if (!double.TryParse(BeginningVolumeInput.Text?.Replace(',', '.'), NumberStyles.Any, culture, out BeginningVolume)) return;
             if (!double.TryParse(FullDischargeInput.Text?.Replace(',', '.'), NumberStyles.Any, culture, out FullDischarge)) return;
             if (!double.TryParse(HeadLossInput.Text?.Replace(',', '.'), NumberStyles.Any, culture, out kHeadLoss)) return;
             if (!double.TryParse(EfficiencyInput.Text?.Replace(',', '.'), NumberStyles.Any, culture, out Efficiency)) return;
+            if (!int.TryParse(ControlMonthInput.Text, NumberStyles.Any, culture, out ControlMonth)) return;
         }
 
         private void ExportTableToMatrix(ObservableCollection<TableRow> uiTable, double[,] targetMatrix, int startRowIndex)
