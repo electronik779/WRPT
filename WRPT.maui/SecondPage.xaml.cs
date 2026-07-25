@@ -41,6 +41,8 @@ public partial class SecondPage : ContentPage, IQueryAttributable
 
     public double AverageAnnualElectricityGeneration { get; set; }
     public double SumIdleResetVolume { get; set; }
+    public double AverageInflow {  get; set; }
+    public double FlowUtilizationRate { get; set; }
 
     // Для графиков
     // Расходы
@@ -133,6 +135,22 @@ public partial class SecondPage : ContentPage, IQueryAttributable
             SumIdleResetVolume = sumResetVolumeValue;
 
             OnPropertyChanged(nameof(SumIdleResetVolume));
+        }
+
+        if (query.TryGetValue("AverageInflow", out var averageInflowObj) &&
+            averageInflowObj is double averageInflowValue)
+        {
+            AverageInflow = averageInflowValue;
+
+            OnPropertyChanged(nameof(AverageInflow));
+        }
+
+        if (query.TryGetValue("FlowUtilizationRate", out var flowUtilizationRateObj) &&
+            flowUtilizationRateObj is double flowUtilizationRateValue)
+        {
+            FlowUtilizationRate = flowUtilizationRateValue;
+
+            OnPropertyChanged(nameof(FlowUtilizationRate));
         }
 
         // Строим графики

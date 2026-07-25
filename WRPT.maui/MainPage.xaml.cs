@@ -4,6 +4,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text;
+using System.Linq;
 
 namespace WRPT.maui
 {
@@ -775,6 +776,7 @@ namespace WRPT.maui
             // Получаем значения из текстовых полей
             GetFields();
 
+            // Массивы таблиц
             InflowTableData = new double[1, InflowCount];
             BathygraphyTableData = new double[2, BathygraphyCount];
             RemainderAccordingDispatchScheduleTableData = new double[1, 12];
@@ -816,6 +818,17 @@ namespace WRPT.maui
                 return;
             }
 
+            // Проверяем диспетчерский график
+            for (int i = 0; i < 12; i++)
+            {
+                if (RemainderAccordingDispatchScheduleTableData[0, i] - MultiYearVolume < 0)
+                {
+                    await DisplayAlertAsync("Ошибка в диспетчерском графике!",
+                        "Недопустимая сработка водохранилища.\nVдисп.(i)-Vмноголетний >= 0", "OK");
+                    return;
+                }
+            }
+
             // Проверяем кпд агрегата
             if (Efficiency >= 1)
             {
@@ -828,21 +841,19 @@ namespace WRPT.maui
                                                     // Индексы массивов 0-11, месяцы - 1-12, поэтому -1.
             int PreviousMonth = CalendarMonth - 1; // Предыдущий месяц
             if (PreviousMonth < 0) PreviousMonth = 11; // Сразу в индексах
-            double ExcessVolume = 0; // Избыточный объем. Ноль, т.к. начинаем с полного вдхр
             double CurrentConsumption = 0; // Текущий расход ГЭС
             double IdleDischargeFlowRate = 0; // Расход холостых сбросов
             double IncreaseVolume = 0; // Приращение объема водохранилища
-            double ResidualVolumePreviousMonth =
-                RemainderAccordingDispatchScheduleTableData[0, PreviousMonth]; // Диспетчерский остаток 
-                                                                               // в предыдущем месяце (т.к. начинаем с полного водохранилища, то он 
-                                                                               // д.б. равен полезному объему)
+            double ResidualVolumePreviousMonth = BeginningVolume; // Диспетчерский остаток 
+                                                                  // в предыдущем месяце 
             double ResidualVolumeCurrentMonth = 0; // Диспетчерский остаток в текущем месяце
-            double RequiredVolumeAccordingDispatchSchedule = 0; // Требуемый объем по диспетчерскому графику
+            double RequiredVolumeAccordingDispatchSchedule = 
+                RemainderAccordingDispatchScheduleTableData[0, PreviousMonth]; // Требуемый объем по диспетчерскому графику
             double[] Consumption = new double[InflowCount]; // Фактический расход ГЭС
             double[] IdleReset = new double[InflowCount]; // Фактические холостые сбросы
             double[] ActualResidualVolume = new double[InflowCount]; // Фактический остаточный объем
-                                                                     // над диспетчерским графиком
-            double VolumeInReservoir = 0; // Объем в водохранилище
+            double VolumeInReservoir = BeginningVolume + UselessVolume; // Объем в водохранилище на начало месяца
+                                                                        // (на конец предыдущего)
             double DischargeIntoDownstream = 0; // Расход в нижний бьеф
             double[] UpstreamLevel = new double[InflowCount]; // Отметка ВБ
             double[] DownstreamLevel = new double[InflowCount]; // Отметка НБ
@@ -852,17 +863,36 @@ namespace WRPT.maui
 
             while (MonthOrdinalNumber < InflowCount)
             {
-                // Параметры предыдущего месяца
-                //CurrentConsumption = GuaranteedDischarge + ExcessVolume / 2.63;
-                if (CurrentConsumption > FullDischarge) CurrentConsumption = FullDischarge;
-                IdleDischargeFlowRate = 0;
+                // Предыдущий месяц - между второй линией диспетчерского графика и НПУ
+                if (ResidualVolumePreviousMonth <= RequiredVolumeAccordingDispatchSchedule)
+                // Не выше диспетчерского графика
+                {
+                    CurrentConsumption = GuaranteedDischargesTableData[0, CalendarMonth];
+                }
+                else
+                // Выше диспетчерского графика
+                {
+                    CurrentConsumption = GuaranteedDischargesTableData[0, CalendarMonth] +
+                        ((VolumeInReservoir - UselessVolume) - 
+                        RequiredVolumeAccordingDispatchSchedule) / 2.63;
+                }
 
-                // Вариант 1 - между диспетчерской линией и НПУ
+                //Debug.WriteLine($"=== ПРЕДЫДУЩИЙ МЕСЯЦ ===");
+                //Debug.WriteLine("");
+                //Debug.WriteLine($"ResidualVolumePreviousMonth = {ResidualVolumePreviousMonth}");
+                //Debug.WriteLine($"RequiredVolumeAccordingDispatchSchedule = {RequiredVolumeAccordingDispatchSchedule}");
+                //Debug.WriteLine($"SecondLineVolume = {RequiredVolumeAccordingDispatchSchedule - MultiYearVolume}");
+                //Debug.WriteLine($"GuaranteedDischargesTableData[0, CalendarMonth] = {GuaranteedDischargesTableData[0, CalendarMonth]}");
+                //Debug.WriteLine("");
+
+                // Вариант 1 - между второй линией диспетчерского графика и НПУ
+                IdleDischargeFlowRate = 0;
                 IncreaseVolume = (InflowTableData[0, MonthOrdinalNumber] - CurrentConsumption -
                     IdleDischargeFlowRate - IntakeFromReservoirTableData[0, CalendarMonth]) * 2.63;
                 ResidualVolumeCurrentMonth = ResidualVolumePreviousMonth + IncreaseVolume;
+
                 RequiredVolumeAccordingDispatchSchedule =
-                    RemainderAccordingDispatchScheduleTableData[0, CalendarMonth];
+                RemainderAccordingDispatchScheduleTableData[0, CalendarMonth];
 
                 //Debug.WriteLine($"=== ВАРИАНТ 1 === {MonthOrdinalNumber}");
                 //Debug.WriteLine("");
@@ -871,6 +901,7 @@ namespace WRPT.maui
                 //Debug.WriteLine($"IncreaseVolume = {IncreaseVolume}");
                 //Debug.WriteLine($"ResidualVolumeCurrentMonth = {ResidualVolumeCurrentMonth}");
                 //Debug.WriteLine($"RequiredVolumeAccordingDispatchSchedule = {RequiredVolumeAccordingDispatchSchedule}");
+                //Debug.WriteLine($"SecondLineVolume = {RequiredVolumeAccordingDispatchSchedule - MultiYearVolume}");
                 //Debug.WriteLine("");
 
                 // Вариант 2 - вышли за НПУ
@@ -902,11 +933,13 @@ namespace WRPT.maui
                     //Debug.WriteLine("");
 
                 }
-                // Вариант 3 - ниже диспетчерской линии
-                else if (ResidualVolumeCurrentMonth < RequiredVolumeAccordingDispatchSchedule)
+                // Вариант 3 - ниже второй линии диспетчерского графика
+                else if (ResidualVolumeCurrentMonth < 
+                    RequiredVolumeAccordingDispatchSchedule - MultiYearVolume)
                 {
                     CurrentConsumption = CurrentConsumption +
-                        (ResidualVolumeCurrentMonth - RequiredVolumeAccordingDispatchSchedule) / 2.63;
+                        (ResidualVolumeCurrentMonth - 
+                        (RequiredVolumeAccordingDispatchSchedule - MultiYearVolume)) / 2.63;
                     IncreaseVolume = (InflowTableData[0, MonthOrdinalNumber] - CurrentConsumption -
                         IdleDischargeFlowRate - IntakeFromReservoirTableData[0, CalendarMonth]) * 2.63;
                     ResidualVolumeCurrentMonth = ResidualVolumePreviousMonth + IncreaseVolume;
@@ -920,11 +953,10 @@ namespace WRPT.maui
                     //Debug.WriteLine("");
                 }
 
-                // Запоминаем результаты и вычисляем статический напор, мощность
+                // Запоминаем результаты и вычисляем статический напор, мощность, ...
                 Consumption[MonthOrdinalNumber] = CurrentConsumption;
                 IdleReset[MonthOrdinalNumber] = IdleDischargeFlowRate;
-                ActualResidualVolume[MonthOrdinalNumber] = ResidualVolumeCurrentMonth -
-                    RequiredVolumeAccordingDispatchSchedule;
+                ActualResidualVolume[MonthOrdinalNumber] = ResidualVolumeCurrentMonth;
                 VolumeInReservoir = ResidualVolumeCurrentMonth + UselessVolume;
                 DischargeIntoDownstream = CurrentConsumption + IdleDischargeFlowRate;
                 UpstreamLevel[MonthOrdinalNumber] =
@@ -956,13 +988,15 @@ namespace WRPT.maui
 
                 // Переприсваивание
                 ResidualVolumePreviousMonth = ResidualVolumeCurrentMonth;
-                ExcessVolume = ResidualVolumeCurrentMonth - RequiredVolumeAccordingDispatchSchedule;
 
                 // Следующий месяц
                 MonthOrdinalNumber++;
                 CalendarMonth++;
                 if (CalendarMonth > 11) CalendarMonth = 0;
+                PreviousMonth = CalendarMonth - 1;
+                if (PreviousMonth < 0) PreviousMonth = 11;
             }
+
             // Суммарный объем холостых сбросов
             double MonthIdleResetVolume = 0;
             double SumIdleResetVolume = 0;
@@ -971,6 +1005,17 @@ namespace WRPT.maui
                 MonthIdleResetVolume = IdleReset[i] * 2.63;
                 SumIdleResetVolume += MonthIdleResetVolume;
             }
+
+            // Средний расход ГЭС
+            double AverageConsumption = 1 / (double)InflowCount * Consumption.Sum();
+
+            // Средний приток
+            double sum = 0;
+            foreach (double dis in InflowTableData)
+            {
+                sum += dis;
+            }
+            double AverageInflow = 1 / (double)InflowCount * sum;
 
             // Среднегодовая выработка
             double MonthElectricityProduction = 0;
@@ -981,7 +1026,11 @@ namespace WRPT.maui
                 MonthElectricityProduction = Power[i] * 730;
                 SumElectricityProduction += MonthElectricityProduction;
             }
-            AverageAnnualElectricityGeneration = SumElectricityProduction * 12 / InflowCount;
+            AverageAnnualElectricityGeneration = SumElectricityProduction * 12 / InflowCount *
+                (1 + (BeginningVolume - ResidualVolumeCurrentMonth) / (2.63 * InflowCount * AverageInflow));
+
+            // Коэффициент использования стока
+            double FlowUtilizationRate = AverageConsumption / AverageInflow;
 
             // Готовим таблицы для вывода результатов
 
@@ -1007,13 +1056,13 @@ namespace WRPT.maui
                 row.SetCell(1, (CalendarMonth).ToString());                      // 2: Номер месяца
                 row.SetCell(2, InflowTableData[0, i].ToString("F2"));            // 3: Приток
                 row.SetCell(3, Consumption[i].ToString("F2"));                   // 4: Расход ГЭС
-                //row.GuaranteedLimit = GuaranteedDischarge; // Сохраняем лимит в саму строку
+                row.GuaranteedLimit = GuaranteedDischargesTableData[0, CalendarMonth - 1]; // Сохраняем лимит в саму строку
                 row.SetCell(4, IdleReset[i].ToString("F2"));                     // 5: Расжод холостых сбросов
                 row.SetCell(5, UpstreamLevel[i].ToString("F2"));                 // 6: Уровень верхнего бьефа 
                 row.SetCell(6, DownstreamLevel[i].ToString("F2"));               // 7: Уровень нижнего бьефа
                 row.SetCell(7, StaticHead[i].ToString("F2"));                    // 8: Статический напор
                 row.SetCell(8, Power[i].ToString("N0"));                         // 9: Мощность ГЭС
-                row.SetCell(9, ActualResidualVolume[i].ToString("N1"));          // 10: Остаточный объем над диспетчерсим объемом
+                row.SetCell(9, ActualResidualVolume[i].ToString("N1"));          // 10: Остаточный объем
 
                 ControlData.Add(row);
 
@@ -1105,7 +1154,7 @@ namespace WRPT.maui
             int pointer = InflowCount - BeginningMonth + 1;
             if (pointer > InflowCount - 1) pointer = 0;
 
-            Debug.WriteLine($"pointer= {pointer}, begm= {BeginningMonth}");
+            //Debug.WriteLine($"pointer= {pointer}, begm= {BeginningMonth}");
 
             int month = 0;
 
@@ -1122,12 +1171,11 @@ namespace WRPT.maui
 
                 row.SetCell(0, (pointer + 1).ToString());
                 row.SetCell(1, RemainderAccordingDispatchScheduleTableData[0, month].ToString("N1"));
-                row.SetCell(2, (RemainderAccordingDispatchScheduleTableData[0, month] +
-                    ActualResidualVolume[pointer]).ToString("N1"));
+                row.SetCell(2, ActualResidualVolume[pointer].ToString("N1"));
 
                 VolumeData.Add(row);
 
-                Debug.WriteLine($"i= {i}, month= {month}, pointer+1= {pointer + 1}");
+                //Debug.WriteLine($"i= {i}, month= {month}, pointer+1= {pointer + 1}");
 
                 pointer++;
                 month++;
@@ -1140,10 +1188,12 @@ namespace WRPT.maui
             {
                 { "ControlData", ControlData },
                 { "SecurityData", SecurityData },
-                //{ "GuaranteedDischarge", GuaranteedDischarge },
+                { "GuaranteedDischargesData", GuaranteedDischargesData },
                 { "VolumeData", VolumeData },
                 { "AverageAnnualElectricityGeneration", AverageAnnualElectricityGeneration },
-                { "SumIdleResetVolume", SumIdleResetVolume }
+                { "SumIdleResetVolume", SumIdleResetVolume },
+                { "AverageInflow", AverageInflow },
+                { "FlowUtilizationRate", FlowUtilizationRate }
             };
 
             // Автоматический переход
@@ -1343,7 +1393,7 @@ namespace WRPT.maui
             {
                 await Browser.Default.OpenAsync(uri, BrowserLaunchMode.SystemPreferred);
             }
-            catch (Exception ex)
+            catch 
             {
                 // Обработка ошибок (например, если браузер не установлен на устройстве)
                 await DisplayAlertAsync("Ошибка!",
