@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Maui.Storage;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
@@ -17,12 +18,20 @@ public partial class SecondPage : ContentPage, IQueryAttributable
     private ObservableCollection<TableRow>? _controlData;
     private ObservableCollection<TableRow>? _securityData;
     private ObservableCollection<TableRow>? _volumeData;
+    private ObservableCollection<TableRow>? _controlMonthPowerData;
 
     public ObservableCollection<TableRow>? ControlData
     {
         get => _controlData;
 
         set { _controlData = value; OnPropertyChanged(); }
+    }
+
+    public ObservableCollection<TableRow>? ControlMonthPowerData
+    {
+        get => _controlMonthPowerData;
+
+        set { _controlMonthPowerData = value; OnPropertyChanged(); }
     }
 
     public ObservableCollection<TableRow>? SecurityData
@@ -42,7 +51,10 @@ public partial class SecondPage : ContentPage, IQueryAttributable
     public double AverageAnnualElectricityGeneration { get; set; }
     public double SumIdleResetVolume { get; set; }
     public double AverageInflow {  get; set; }
+    public double AverageConsumption { get; set; }
     public double FlowUtilizationRate { get; set; }
+    public double ReservoirСapacityСoefficient { get; set; }
+    public int ControlMonth {  get; set; }
 
     // Для графиков
     // Расходы
@@ -95,6 +107,23 @@ public partial class SecondPage : ContentPage, IQueryAttributable
             ControlData = controlData;
         }
 
+        // Безопасно извлекаем double число
+        if (query.TryGetValue("ControlMonth", out var controlMonthObj) &&
+            controlMonthObj is int controlMonthValue)
+        {
+            ControlMonth = controlMonthValue;
+
+            OnPropertyChanged(nameof(ControlMonth));
+        }
+
+        if (query.TryGetValue("ControlMonthPowerData", out var controlMonthPowerDataObj) &&
+            controlMonthPowerDataObj is ObservableCollection<TableRow> controlMonthPowerData)
+        {
+            ControlMonthPowerData = controlMonthPowerData;
+        }
+        ControlMonthPowerCollectionView.ItemsSource = null;
+        ControlMonthPowerCollectionView.ItemsSource = ControlMonthPowerData;
+
         // Безопасно извлекаем SecurityData
         if (query.TryGetValue("SecurityData", out var securityDataObj) &&
             securityDataObj is ObservableCollection<TableRow> securityData)
@@ -103,15 +132,15 @@ public partial class SecondPage : ContentPage, IQueryAttributable
         }
 
         // Безопасно извлекаем double число
-        if (query.TryGetValue("GuaranteedDischarg", out var dischargeObj) &&
-            dischargeObj is double dischargeValue)
-        {
-            GuaranteedDischarge = dischargeValue;
+        //if (query.TryGetValue("GuaranteedDischarg", out var dischargeObj) &&
+        //    dischargeObj is double dischargeValue)
+        //{
+        //    GuaranteedDischarge = dischargeValue;
 
-            // Важно: уведомляем XAML, что лимит обновился, 
-            // чтобы конвертер в таблице сразу его увидел
-            OnPropertyChanged(nameof(GuaranteedDischarge));
-        }
+        //    // Важно: уведомляем XAML, что лимит обновился, 
+        //    // чтобы конвертер в таблице сразу его увидел
+        //    OnPropertyChanged(nameof(GuaranteedDischarge));
+        //}
 
         // Безопасно извлекаем VolumeData
         if (query.TryGetValue("VolumeData", out var volumeDataObj) &&
@@ -145,6 +174,14 @@ public partial class SecondPage : ContentPage, IQueryAttributable
             OnPropertyChanged(nameof(AverageInflow));
         }
 
+        if (query.TryGetValue("AverageConsumption", out var averageConsumptionObj) &&
+            averageConsumptionObj is double averageConsumptionValue)
+        {
+            AverageConsumption = averageConsumptionValue;
+
+            OnPropertyChanged(nameof(AverageConsumption));
+        }
+
         if (query.TryGetValue("FlowUtilizationRate", out var flowUtilizationRateObj) &&
             flowUtilizationRateObj is double flowUtilizationRateValue)
         {
@@ -153,8 +190,18 @@ public partial class SecondPage : ContentPage, IQueryAttributable
             OnPropertyChanged(nameof(FlowUtilizationRate));
         }
 
+        if (query.TryGetValue("ReservoirСapacityСoefficient", out var reservoirСapacityСoefficientObj) &&
+            reservoirСapacityСoefficientObj is double reservoirСapacityСoefficientValue)
+        {
+            ReservoirСapacityСoefficient = reservoirСapacityСoefficientValue;
+
+            OnPropertyChanged(nameof(ReservoirСapacityСoefficient));
+        }
+
         // Строим графики
-        if (ControlData != null)
+        if (ControlData != null &&
+            SecurityData != null &&
+            VolumeData != null)
         {
             CreateChart();
         }
@@ -484,11 +531,11 @@ public partial class SecondPage : ContentPage, IQueryAttributable
         //    int counter = 0;
         //    foreach (var row in VolumeData.Take(12)) // Смотрим первые 12 строк
         //    {
-        //        string rawCell1 = (row?.Cells != null && row.Cells.Count > 1) ? row.Cells[1] : "НЕТ ЯЧЕЙКИ";
+        //        string rawCell1 = (row?.Cells != null && row.Cells.Count > 1) ? row.Cells[3] : "НЕТ ЯЧЕЙКИ";
         //        double? parsed = ParseValue(row, 1);
 
         //        System.Diagnostics.Debug.WriteLine(
-        //            $"Строка {counter}: RowLabel='{row?.RowLabel}' | Сырое значение Cells[1]='{rawCell1}' | Результат парсинга={parsed?.ToString() ?? "NULL"}"
+        //            $"Строка {counter}: RowLabel='{row?.RowLabel}' | Сырое значение Cells[3]='{rawCell1}' | Результат парсинга={parsed?.ToString() ?? "NULL"}"
         //        );
         //        counter++;
         //    }
@@ -496,18 +543,32 @@ public partial class SecondPage : ContentPage, IQueryAttributable
         //System.Diagnostics.Debug.WriteLine("=== КОНЕЦ ЛОГА VolumeData ===");
         //// ----------------------------------------
 
-        var volume1Values = VolumeData
+        var volume1stValues = VolumeData
             .Take(12)
             .Select(row => ParseValue(row, 1))
             .ToArray(); // Заменили на массив для стабильности LiveCharts
 
         seriesList.Add(new LineSeries<double?>
         {
-            Values = volume1Values,
+            Values = volume1stValues,
             Name = "Диспетчерский график",
             GeometrySize = 0, // Установили 0, чтобы убрать тяжелые маркеры точек
             LineSmoothness = 0,
             //Stroke = new SolidColorPaint(SKColors.Red, 3), // Делаем главную линию видимой и потолще
+            Fill = null
+        });
+
+        var volume2ndValues = VolumeData
+            .Take (12)
+            .Select(row =>ParseValue(row, 2))
+            .ToArray ();
+        seriesList.Add(new LineSeries<double?>
+        {
+            Values = volume2ndValues,
+            Name = "Диспетчерский график",
+            GeometrySize = 0,
+            LineSmoothness = 0,
+            //Stroke = new SolidColorPaint(SKColors.Red, 3),
             Fill = null
         });
 
@@ -535,7 +596,7 @@ public partial class SecondPage : ContentPage, IQueryAttributable
             var chunk = VolumeData
                 .Skip(i)
                 .Take(chunkSize)
-                .Select(row => ParseValue(row, 2))
+                .Select(row => ParseValue(row, 3))
                 .ToArray();
 
             // 2. Берем цвет из нашего массива по кругу (оператор %)

@@ -20,6 +20,7 @@ namespace WRPT.maui
         public ObservableCollection<TableRow> SecurityData { get; set; } = new();
         public ObservableCollection<TableRow> VolumeData { get; set; } = new();
         public ObservableCollection<TableRow> GuaranteedDischargesData { get; set; } = new();
+        public ObservableCollection<TableRow> ControlMonthPowerData { get; set; } = new();
 
         // Страница с проектом и помощью
         private Uri uri = new Uri("https://github.com/electronik779/WRPT");
@@ -45,6 +46,7 @@ namespace WRPT.maui
         double[,] IntakeFromReservoirTableData = new double[0, 0]; // Отбор из водохранилища.
         double[,] CharacteristicOfDownstreamTableData = new double[0, 0]; // Характеристика нижнего бьефа. 
         double[,] GuaranteedDischargesTableData = new double[0, 0]; // Гарантированные расходы ГЭС.
+        double[] ControlMonthPower = new double[0]; // Мощности контрольного месяца
 
         // Сохранено?
         public bool IsSaved { get; set; } = true;
@@ -783,6 +785,7 @@ namespace WRPT.maui
             IntakeFromReservoirTableData = new double[1, 12];
             CharacteristicOfDownstreamTableData = new double[2, CharacteristicOfDownstreamCount];
             GuaranteedDischargesTableData = new double[1, 12];
+            ControlMonthPower = new double[InflowCount / 12];
 
             // Получаем значения из таблиц
             try
@@ -836,6 +839,7 @@ namespace WRPT.maui
                 return;
             }
 
+            int YearIndex = 1; // Порядковый номер года
             int MonthOrdinalNumber = 0; // Порядковый номер месяца
             int CalendarMonth = BeginningMonth - 1; // Календарный номер месяца в индексах
                                                     // Индексы массивов 0-11, месяцы - 1-12, поэтому -1.
@@ -986,6 +990,26 @@ namespace WRPT.maui
                 Power[MonthOrdinalNumber] = 9.81 * CurrentConsumption *
                     (StaticHead[MonthOrdinalNumber] - HeadLoss) * Efficiency;
 
+                // Мощности контрольного месяца
+                if(CalendarMonth == ControlMonth - 1)
+                {
+                    if (MonthOrdinalNumber <= BeginningMonth ||
+                        MonthOrdinalNumber > InflowCount - BeginningMonth) YearIndex = 0;
+
+                    Debug.WriteLine($"CalendarMonth = {CalendarMonth}");
+                    Debug.WriteLine($"ControlMonth - 1 = {ControlMonth - 1}");
+                    Debug.WriteLine($"");
+                    Debug.WriteLine($"MonthOrdinalNumber = {MonthOrdinalNumber}");
+                    Debug.WriteLine($"BeginningMonth = {BeginningMonth}");
+                    Debug.WriteLine($"InflowCount - BeginningMonth = {InflowCount - BeginningMonth}");
+                    Debug.WriteLine($"YearIndex = {YearIndex}");
+                    Debug.WriteLine($"");
+
+                    ControlMonthPower[YearIndex] = Power[MonthOrdinalNumber];
+                    YearIndex++;
+                    if (YearIndex > InflowCount / 12) YearIndex = 0;
+                }
+
                 // Переприсваивание
                 ResidualVolumePreviousMonth = ResidualVolumeCurrentMonth;
 
@@ -1032,6 +1056,11 @@ namespace WRPT.maui
             // Коэффициент использования стока
             double FlowUtilizationRate = AverageConsumption / AverageInflow;
 
+            // Коэффициент ёмкости водохранилища
+            double ReservoirСapacityСoefficient = UsefullVolume / (AverageInflow * 2.63 * 12);
+            //Debug.WriteLine($"AverageInflowVolume = {AverageInflow * 2.63 * 12}");
+            //Debug.WriteLine($"UsefullVolume = {UsefullVolume}");
+
             // Готовим таблицы для вывода результатов
 
             // Сводная таблица
@@ -1069,6 +1098,29 @@ namespace WRPT.maui
                 CalendarMonth++;
                 if (CalendarMonth > 12) CalendarMonth = 1;
             }
+            
+            // Таблица мощностей контрольного месяца
+            ControlMonthPowerData.Clear();
+            var yearRow = new TableRow();
+            yearRow.Index = 0;
+            yearRow.IsEditable= false;
+            yearRow.RowLabel = "Год";
+            yearRow.InitializeCells(InflowCount / 12, "");
+            for (int i = 0; i < InflowCount / 12; i++)
+            {
+                yearRow.Cells[i] = (i + 1).ToString();
+            }
+            ControlMonthPowerData.Add(yearRow);
+            var yearRow2 = new TableRow();
+            yearRow2.Index = 1;
+            yearRow2.IsEditable= false;
+            yearRow2.RowLabel = "Мощность, кВт";
+            yearRow2.InitializeCells(InflowCount / 12, "");
+            for (int i = 0; i < InflowCount / 12; i++)
+            {
+                yearRow2.Cells[i] = ControlMonthPower[i].ToString("N0");
+            }
+            ControlMonthPowerData.Add(yearRow2);
 
             // Таблица обеспеченностей (приток, расход ГЭС, статический напор, мощность ГЭС)
             // Вычисляем обеспеченность
@@ -1167,11 +1219,12 @@ namespace WRPT.maui
                 };
 
                 // Инициализируем строку
-                row.InitializeCells(3, string.Empty);
+                row.InitializeCells(4, string.Empty);
 
                 row.SetCell(0, (pointer + 1).ToString());
                 row.SetCell(1, RemainderAccordingDispatchScheduleTableData[0, month].ToString("N1"));
-                row.SetCell(2, ActualResidualVolume[pointer].ToString("N1"));
+                row.SetCell(2, (RemainderAccordingDispatchScheduleTableData[0, month] - MultiYearVolume).ToString("N1"));
+                row.SetCell(3, ActualResidualVolume[pointer].ToString("N1"));
 
                 VolumeData.Add(row);
 
@@ -1187,13 +1240,17 @@ namespace WRPT.maui
             var navigationParameters = new ShellNavigationQueryParameters
             {
                 { "ControlData", ControlData },
+                { "ControlMonth", ControlMonth },
+                { "ControlMonthPowerData", ControlMonthPowerData },
                 { "SecurityData", SecurityData },
-                { "GuaranteedDischargesData", GuaranteedDischargesData },
+                //{ "GuaranteedDischargesData", GuaranteedDischargesData },
                 { "VolumeData", VolumeData },
                 { "AverageAnnualElectricityGeneration", AverageAnnualElectricityGeneration },
                 { "SumIdleResetVolume", SumIdleResetVolume },
                 { "AverageInflow", AverageInflow },
-                { "FlowUtilizationRate", FlowUtilizationRate }
+                { "AverageConsumption", AverageConsumption },
+                { "FlowUtilizationRate", FlowUtilizationRate },
+                { "ReservoirСapacityСoefficient", ReservoirСapacityСoefficient }
             };
 
             // Автоматический переход
