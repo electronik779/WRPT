@@ -233,5 +233,5 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            Setup_WRST_*_Win.exe
-            Setup_WRST_*_Mac.dmg
+            Setup_WRPT_*_Win.exe
+            Setup_WRPT_*_Mac.dmg
