@@ -843,6 +843,7 @@ namespace WRPT.maui
             int MonthOrdinalNumber = 0; // Порядковый номер месяца
             int CalendarMonth = BeginningMonth - 1; // Календарный номер месяца в индексах
                                                     // Индексы массивов 0-11, месяцы - 1-12, поэтому -1.
+            ControlMonth--; // Номер контрольного месяца в индексах
             int PreviousMonth = CalendarMonth - 1; // Предыдущий месяц
             if (PreviousMonth < 0) PreviousMonth = 11; // Сразу в индексах
             double CurrentConsumption = 0; // Текущий расход ГЭС
@@ -991,19 +992,19 @@ namespace WRPT.maui
                     (StaticHead[MonthOrdinalNumber] - HeadLoss) * Efficiency;
 
                 // Мощности контрольного месяца
-                if(CalendarMonth == ControlMonth - 1)
+                if(CalendarMonth == ControlMonth)
                 {
-                    if (MonthOrdinalNumber <= BeginningMonth ||
-                        MonthOrdinalNumber > InflowCount - BeginningMonth) YearIndex = 0;
+                    if (MonthOrdinalNumber <= 11 - BeginningMonth + 1 ||
+                        MonthOrdinalNumber >= InflowCount - BeginningMonth + 1) YearIndex = 0;
 
-                    //Debug.WriteLine($"CalendarMonth = {CalendarMonth}");
-                    //Debug.WriteLine($"ControlMonth - 1 = {ControlMonth - 1}");
-                    //Debug.WriteLine($"");
-                    //Debug.WriteLine($"MonthOrdinalNumber = {MonthOrdinalNumber}");
-                    //Debug.WriteLine($"BeginningMonth = {BeginningMonth}");
-                    //Debug.WriteLine($"InflowCount - BeginningMonth = {InflowCount - BeginningMonth}");
-                    //Debug.WriteLine($"YearIndex = {YearIndex}");
-                    //Debug.WriteLine($"");
+                    Debug.WriteLine($"CalendarMonth = {CalendarMonth}");
+                    Debug.WriteLine($"ControlMonth - 1 = {ControlMonth}");
+                    Debug.WriteLine($"");
+                    Debug.WriteLine($"MonthOrdinalNumber = {MonthOrdinalNumber}");
+                    Debug.WriteLine($"BeginningMonth - 1 = {BeginningMonth - 1}");
+                    Debug.WriteLine($"InflowCount - BeginningMonth + 1 = {InflowCount - BeginningMonth + 1}");
+                    Debug.WriteLine($"YearIndex = {YearIndex}");
+                    Debug.WriteLine($"");
 
                     ControlMonthPower[YearIndex] = Power[MonthOrdinalNumber];
                     YearIndex++;
@@ -1241,7 +1242,7 @@ namespace WRPT.maui
             var navigationParameters = new ShellNavigationQueryParameters
             {
                 { "ControlData", ControlData },
-                { "ControlMonth", ControlMonth },
+                { "ControlMonth", ControlMonth + 1 },
                 { "ControlMonthPowerData", ControlMonthPowerData },
                 { "SecurityData", SecurityData },
                 //{ "GuaranteedDischargesData", GuaranteedDischargesData },
