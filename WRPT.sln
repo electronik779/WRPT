@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.10.35122.118
+# Visual Studio Version 18
+VisualStudioVersion = 18.8.12021.73 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WRPT", "WRPT\WRPT.csproj", "{E22A8BE3-347D-415B-80A2-349268F76B26}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WRPT.maui", "WRPT.maui\WRPT.maui.csproj", "{4141E46C-BD49-7F8A-B027-A2A25D24C430}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,14 @@ Global
 		{E22A8BE3-347D-415B-80A2-349268F76B26}.Release|Any CPU.Build.0 = Release|x64
 		{E22A8BE3-347D-415B-80A2-349268F76B26}.Release|x64.ActiveCfg = Release|x64
 		{E22A8BE3-347D-415B-80A2-349268F76B26}.Release|x64.Build.0 = Release|x64
+		{4141E46C-BD49-7F8A-B027-A2A25D24C430}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4141E46C-BD49-7F8A-B027-A2A25D24C430}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4141E46C-BD49-7F8A-B027-A2A25D24C430}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4141E46C-BD49-7F8A-B027-A2A25D24C430}.Debug|x64.Build.0 = Debug|Any CPU
+		{4141E46C-BD49-7F8A-B027-A2A25D24C430}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4141E46C-BD49-7F8A-B027-A2A25D24C430}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4141E46C-BD49-7F8A-B027-A2A25D24C430}.Release|x64.ActiveCfg = Release|Any CPU
+		{4141E46C-BD49-7F8A-B027-A2A25D24C430}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
