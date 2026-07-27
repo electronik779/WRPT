@@ -996,14 +996,14 @@ namespace WRPT.maui
                     if (MonthOrdinalNumber <= BeginningMonth ||
                         MonthOrdinalNumber > InflowCount - BeginningMonth) YearIndex = 0;
 
-                    Debug.WriteLine($"CalendarMonth = {CalendarMonth}");
-                    Debug.WriteLine($"ControlMonth - 1 = {ControlMonth - 1}");
-                    Debug.WriteLine($"");
-                    Debug.WriteLine($"MonthOrdinalNumber = {MonthOrdinalNumber}");
-                    Debug.WriteLine($"BeginningMonth = {BeginningMonth}");
-                    Debug.WriteLine($"InflowCount - BeginningMonth = {InflowCount - BeginningMonth}");
-                    Debug.WriteLine($"YearIndex = {YearIndex}");
-                    Debug.WriteLine($"");
+                    //Debug.WriteLine($"CalendarMonth = {CalendarMonth}");
+                    //Debug.WriteLine($"ControlMonth - 1 = {ControlMonth - 1}");
+                    //Debug.WriteLine($"");
+                    //Debug.WriteLine($"MonthOrdinalNumber = {MonthOrdinalNumber}");
+                    //Debug.WriteLine($"BeginningMonth = {BeginningMonth}");
+                    //Debug.WriteLine($"InflowCount - BeginningMonth = {InflowCount - BeginningMonth}");
+                    //Debug.WriteLine($"YearIndex = {YearIndex}");
+                    //Debug.WriteLine($"");
 
                     ControlMonthPower[YearIndex] = Power[MonthOrdinalNumber];
                     YearIndex++;
@@ -1077,8 +1077,8 @@ namespace WRPT.maui
                     RowLabel = $"Строка {i + 1}"
                 };
 
-                // Инициализируем строку 10 ячейками
-                row.InitializeCells(10, string.Empty);
+                // Инициализируем строку 11 ячейками
+                row.InitializeCells(11, string.Empty);
 
                 // Заполняем ячейки (индексы от 0 до 9)
                 row.SetCell(0, (i + 1).ToString());                              // 1: Порядковый номер
@@ -1092,6 +1092,7 @@ namespace WRPT.maui
                 row.SetCell(7, StaticHead[i].ToString("F2"));                    // 8: Статический напор
                 row.SetCell(8, Power[i].ToString("N0"));                         // 9: Мощность ГЭС
                 row.SetCell(9, ActualResidualVolume[i].ToString("N1"));          // 10: Остаточный объем
+                row.SetCell(10, RemainderAccordingDispatchScheduleTableData[0, CalendarMonth - 1].ToString("N1")); // 11: Диспетчерский объем
 
                 ControlData.Add(row);
 
