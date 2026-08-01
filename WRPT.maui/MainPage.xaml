@@ -334,12 +334,62 @@
                     </ScrollView>
                 </VerticalStackLayout>
 
-                <Label Grid.Row="13" Grid.Column="0" Text="Отбор из водохранилища:" 
+                <Label Grid.Row="13" Grid.Column="0" Text="Гарантированные расходы ГЭС:" 
+                       VerticalOptions="Center"
+                       Margin="0, 10, 0, 0"/>
+                <!-- Таблица гарантированные расходы -->
+                <VerticalStackLayout Grid.Row="14" Grid.Column="0" Grid.ColumnSpan="3" Padding="0" 
+                     Spacing="0">
+                    <!-- Заголовок таблицы -->
+                    <Label Text="{Binding HeaderText}" 
+                           Style="{StaticResource TableLabelStyle}"
+                           FontAttributes="Bold" 
+                           HorizontalOptions="Center"
+                           Margin="0,0,0,0"/>
+
+                    <!-- ScrollableView для горизонтальной прокрутки -->
+                    <ScrollView Orientation="Horizontal">
+                        <CollectionView x:Name="GuarenteedDischargesCollectionView"
+                        ItemsSource="{Binding GuaranteedDischargesData}"
+                        ItemsLayout="VerticalList"
+                        Margin="0,0,0,0">
+
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ColumnDefinitions="60,*" BackgroundColor="{AppThemeBinding Light=White, Dark=#1C1C1E}">
+                                        <!-- Привязка к свойству RowLabel -->
+                                        <Label Text="{Binding RowLabel}" 
+                               Style="{StaticResource TableLabelStyle}"
+                               Grid.Column="0" 
+                               HorizontalTextAlignment="Center" 
+                               VerticalOptions="Center"/>
+
+                                        <!-- Ячейки данных -->
+                                        <StackLayout Grid.Column="1" Orientation="Horizontal" Spacing="5"
+                                     BindableLayout.ItemsSource="{Binding Cells}">
+                                            <BindableLayout.ItemTemplate>
+                                                <DataTemplate>
+                                                    <!-- Применяем созданный стиль через StaticResource -->
+                                                    <Entry Text="{Binding .}" 
+                                           Style="{StaticResource TableCellEntryStyle}"
+                                           TextChanged="OnDoubleEntryTextChanged" 
+                                           Focused="OnEntryFocused"/>
+                                                </DataTemplate>
+                                            </BindableLayout.ItemTemplate>
+                                        </StackLayout>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </ScrollView>
+                </VerticalStackLayout>
+
+                <Label Grid.Row="15" Grid.Column="0" Text="Отбор из водохранилища:" 
                        VerticalOptions="Center"
                        Margin="0, 10, 0, 0"/>
                 
                 <!-- Таблица отбор из вдхр -->
-                <VerticalStackLayout Grid.Row="14" Grid.Column="0" Grid.ColumnSpan="3" Padding="0" 
+                <VerticalStackLayout Grid.Row="16" Grid.Column="0" Grid.ColumnSpan="3" Padding="0" 
                                      Spacing="0">
                     <!-- Заголовок таблицы -->
                     <Label Text="{Binding HeaderText}" 
@@ -385,20 +435,20 @@
                     </ScrollView>
                 </VerticalStackLayout>
 
-                <Label Grid.Row="15" Grid.Column="0" Text="Количество точек характеристики нижнего бьефа" 
+                <Label Grid.Row="17" Grid.Column="0" Text="Количество точек характеристики нижнего бьефа" 
                        VerticalOptions="Center"
                        HorizontalOptions="End"
                        Margin="0, 0, 100, 0"/>
-                <Entry Grid.Row="15" Grid.Column="1" x:Name="CharacteristicOfDownstreamCountInput" Style="{StaticResource ParamEntryStyle}" 
+                <Entry Grid.Row="17" Grid.Column="1" x:Name="CharacteristicOfDownstreamCountInput" Style="{StaticResource ParamEntryStyle}" 
                        TextChanged="OnIntEntryTextChanged" Keyboard="Numeric" Focused="OnEntryFocused"/>
-                <Button Grid.Row="15" Grid.Column="2" Text="Создать" Margin="10,0,0,0" Clicked="CharacteristicOfDownstreamButton_Clicked" />
+                <Button Grid.Row="17" Grid.Column="2" Text="Создать" Margin="10,0,0,0" Clicked="CharacteristicOfDownstreamButton_Clicked" />
 
-                <Label Grid.Row="16" Grid.Column="0" Text="Характеристика нижнего бьефа:" 
+                <Label Grid.Row="18" Grid.Column="0" Text="Характеристика нижнего бьефа:" 
                        VerticalOptions="Center"
                        Margin="0, 10, 0, 0"/>
                 
                 <!-- Таблица нижнего бьефа -->
-                <VerticalStackLayout Grid.Row="17" Grid.Column="0" Grid.ColumnSpan="3" Padding="0" Spacing="20">
+                <VerticalStackLayout Grid.Row="19" Grid.Column="0" Grid.ColumnSpan="3" Padding="0" Spacing="20">
                     <!-- СкроллableView для горизонтальной прокрутки -->
                     <ScrollView Orientation="Horizontal">
                         <CollectionView x:Name="DownstreamCollectionView"
@@ -435,57 +485,7 @@
                         </CollectionView>
                     </ScrollView>
                 </VerticalStackLayout>
-
-                <Label Grid.Row="18" Grid.Column="0" Text="Гарантированные расходы ГЭС:" 
-                       VerticalOptions="Center"
-                       Margin="0, 10, 0, 0"/>
-                <!-- Таблица гарантированные расходы -->
-                <VerticalStackLayout Grid.Row="19" Grid.Column="0" Grid.ColumnSpan="3" Padding="0" 
-                                     Spacing="0">
-                    <!-- Заголовок таблицы -->
-                    <Label Text="{Binding HeaderText}" 
-                           Style="{StaticResource TableLabelStyle}"
-                           FontAttributes="Bold" 
-                           HorizontalOptions="Center"
-                           Margin="0,0,0,0"/>
-
-                    <!-- ScrollableView для горизонтальной прокрутки -->
-                    <ScrollView Orientation="Horizontal">
-                        <CollectionView x:Name="GuarenteedDischargesCollectionView"
-                                        ItemsSource="{Binding GuaranteedDischargesData}"
-                                        ItemsLayout="VerticalList"
-                                        Margin="0,0,0,0">
-
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid ColumnDefinitions="60,*" BackgroundColor="{AppThemeBinding Light=White, Dark=#1C1C1E}">
-                                        <!-- Привязка к свойству RowLabel -->
-                                        <Label Text="{Binding RowLabel}" 
-                                               Style="{StaticResource TableLabelStyle}"
-                                               Grid.Column="0" 
-                                               HorizontalTextAlignment="Center" 
-                                               VerticalOptions="Center"/>
-
-                                        <!-- Ячейки данных -->
-                                        <StackLayout Grid.Column="1" Orientation="Horizontal" Spacing="5"
-                                                     BindableLayout.ItemsSource="{Binding Cells}">
-                                            <BindableLayout.ItemTemplate>
-                                                <DataTemplate>
-                                                    <!-- Применяем созданный стиль через StaticResource -->
-                                                    <Entry Text="{Binding .}" 
-                                                           Style="{StaticResource TableCellEntryStyle}"
-                                                           TextChanged="OnDoubleEntryTextChanged" 
-                                                           Focused="OnEntryFocused"/>
-                                                </DataTemplate>
-                                            </BindableLayout.ItemTemplate>
-                                        </StackLayout>
-                                    </Grid>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-                    </ScrollView>
-                </VerticalStackLayout>
-
+                
                 <Label Grid.Row="20" Grid.Column="0" Text="Схема питания ГЭС" 
                        VerticalOptions="Center"
                        HorizontalOptions="End"
