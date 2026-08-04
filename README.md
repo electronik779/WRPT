@@ -265,7 +265,7 @@ _Гидроэлектростанции. Часть 1. Гидроэлектро�
   - График 3 - обеспеченность напоров ГЭС;
   - График 4 - обеспеченность мощностей ГЭС.
 
-<img width="786" height="871" alt="image" src="https://github.com/user-attachments/assets/1b8199d7-0bd8-48ee-be74-abf7e719e63d" />
+<img width="786" height="861" alt="image" src="https://github.com/user-attachments/assets/e0602d9a-3897-4fcb-922e-89f24c3606fc" />
 
 Последним идет диспетчерский график.
 
