@@ -38,7 +38,7 @@ _Гидроэлектростанции. Часть 1. Гидроэлектро�
 ----
 # Описание интерфейса ввода
 
-<img width="786" height="1131" alt="image" src="https://github.com/user-attachments/assets/3894638d-e4d7-477d-b289-e203c51bf33b" />
+<img width="786" height="1132" alt="image" src="https://github.com/user-attachments/assets/516917c9-c2f3-46ed-81bf-9a90f292d8ef" />
 
 >[!NOTE]
 >Окно программы имеет вертикальную прокрутку.
