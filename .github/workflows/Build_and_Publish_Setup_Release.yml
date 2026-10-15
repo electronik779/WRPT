@@ -103,7 +103,8 @@ jobs:
 
   build-macos:
     if: inputs.build_macos == true
-    runs-on: macos-26
+    #runs-on: macos-26
+    runs-on: macos-27
     strategy:
       matrix:
         arch: [maccatalyst-x64, maccatalyst-arm64]
@@ -111,9 +112,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Select Xcode 26.6
+      - name: Verify Xcode Version
         run: |
-          sudo xcode-select --switch /Applications/Xcode_26.6.app
+          xcodebuild -version
+
+      #- name: Select Xcode 26.6
+      #  run: |
+      #    sudo xcode-select --switch /Applications/Xcode_26.6.app
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
