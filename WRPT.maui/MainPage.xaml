@@ -142,7 +142,7 @@
                 <Label Grid.Row="0" Grid.Column="0" Text="Номер календарного месяца начала расчета" 
                        VerticalOptions="Center"
                        HorizontalOptions="End"
-                       Margin="0, 0, 136, 0"/>
+                       Margin="0, 0, 135, 0"/>
                 <Entry Grid.Row="0" Grid.Column="1" x:Name="BeginningMonthInput" 
                        Style="{StaticResource ParamEntryStyle}" 
                        TextChanged="OnIntEntryTextChanged" 
@@ -151,7 +151,7 @@
                 <Label Grid.Row="1" Grid.Column="0" Text="Количество значений притока" 
                        VerticalOptions="Center"
                        HorizontalOptions="End"
-                       Margin="0, 0, 234, 0"/>
+                       Margin="0, 0, 232, 0"/>
                 <Entry Grid.Row="1" Grid.Column="1" x:Name="InflowCountInput" Style="{StaticResource ParamEntryStyle}" 
                        TextChanged="OnIntEntryTextChanged" Keyboard="Numeric" Focused="OnEntryFocused"/>
                 <Button Grid.Row="1" Grid.Column="2" Text="Создать" Margin="10,0,0,0" Clicked="InflowButton_Clicked" />
@@ -206,28 +206,28 @@
                 <Label Grid.Row="4" Grid.Column="0" Text="Полезный объем водохранилища, млн.м³" 
                        VerticalOptions="Center"
                        HorizontalOptions="End"
-                       Margin="0, 0, 157, 0"/>
+                       Margin="0, 0, 156, 0"/>
                 <Entry Grid.Row="4" Grid.Column="1" x:Name="UsefulVolumeInput" Style="{StaticResource ParamEntryStyle}" 
                        TextChanged="OnDoubleEntryTextChanged" Keyboard="Numeric" Focused="OnEntryFocused"/>
 
                 <Label Grid.Row="5" Grid.Column="0" Text="Мёртвый объем водохранилища, млн.м³" 
                        VerticalOptions="Center"
                        HorizontalOptions="End"
-                       Margin="0, 0, 164, 0"/>
+                       Margin="0, 0, 163, 0"/>
                 <Entry Grid.Row="5" Grid.Column="1" x:Name="UselessVolumeInput" Style="{StaticResource ParamEntryStyle}" 
                        TextChanged="OnDoubleEntryTextChanged" Keyboard="Numeric" Focused="OnEntryFocused"/>
 
                 <Label Grid.Row="6" Grid.Column="0" Text="Объем, выделенный для многолетнего регулирования, млн.м³" 
                        VerticalOptions="Center"
                        HorizontalOptions="End"
-                       Margin="0, 0, 13, 0"/>
+                       Margin="0, 0, 12, 0"/>
                 <Entry Grid.Row="6" Grid.Column="1" x:Name="MultiYearVolumeInput" Style="{StaticResource ParamEntryStyle}" 
                        TextChanged="OnDoubleEntryTextChanged" Keyboard="Numeric" Focused="OnEntryFocused"/>
 
                 <Label Grid.Row="7" Grid.Column="0" Text="Начальное заполнение полезного объема, млн.м³" 
                        VerticalOptions="Center"
                        HorizontalOptions="End"
-                       Margin="0, 0, 98, 0"/>
+                       Margin="0, 0, 96, 0"/>
                 <Entry Grid.Row="7" Grid.Column="1" x:Name="BeginningVolumeInput" Style="{StaticResource ParamEntryStyle}" 
                        TextChanged="OnDoubleEntryTextChanged" Keyboard="Numeric" Focused="OnEntryFocused"/>
 
@@ -438,7 +438,7 @@
                 <Label Grid.Row="17" Grid.Column="0" Text="Количество точек характеристики нижнего бьефа" 
                        VerticalOptions="Center"
                        HorizontalOptions="End"
-                       Margin="0, 0, 100, 0"/>
+                       Margin="0, 0, 99, 0"/>
                 <Entry Grid.Row="17" Grid.Column="1" x:Name="CharacteristicOfDownstreamCountInput" Style="{StaticResource ParamEntryStyle}" 
                        TextChanged="OnIntEntryTextChanged" Keyboard="Numeric" Focused="OnEntryFocused"/>
                 <Button Grid.Row="17" Grid.Column="2" Text="Создать" Margin="10,0,0,0" Clicked="CharacteristicOfDownstreamButton_Clicked" />
@@ -489,7 +489,7 @@
                 <Label Grid.Row="20" Grid.Column="0" Text="Схема питания ГЭС" 
                        VerticalOptions="Center"
                        HorizontalOptions="End"
-                       Margin="0, 0, 312, 0"/>
+                       Margin="0, 0, 311, 0"/>
                 <VerticalStackLayout Grid.Row="20" Grid.Column="1" x:Name="RadioGroup">
                     <RadioButton Content="индивидуальная" Value="0" TextColor="{AppThemeBinding Light=Black, Dark=White}" 
                  CheckedChanged="OnRadioChanged" IsChecked="True" />
@@ -500,28 +500,28 @@
                 <Label Grid.Row="21" Grid.Column="0" Text="Полный (максимальный) расход ГЭС, м³/с" 
                        VerticalOptions="Center"
                        HorizontalOptions="End"
-                       Margin="0, 0, 160, 0"/>
+                       Margin="0, 0, 159, 0"/>
                 <Entry Grid.Row="21" Grid.Column="1" x:Name="FullDischargeInput" Style="{StaticResource ParamEntryStyle}" 
                        TextChanged="OnDoubleEntryTextChanged" Keyboard="Numeric" Focused="OnEntryFocused"/>
 
                 <Label Grid.Row="22" Grid.Column="0" x:Name="HeadLossLable" Text="Потери напора, м" 
                        VerticalOptions="Center"
                        HorizontalOptions="End"
-                       Margin="0, 0, 322, 0"/>
+                       Margin="0, 0, 321, 0"/>
                 <Entry Grid.Row="22" Grid.Column="1" x:Name="HeadLossInput" Style="{StaticResource ParamEntryStyle}" 
                        TextChanged="OnDoubleEntryTextChanged" Keyboard="Numeric" Focused="OnEntryFocused"/>
 
                 <Label Grid.Row="23" Grid.Column="0" Text="Кпд гидроагрегата" 
                        VerticalOptions="Center"
                        HorizontalOptions="End"
-                       Margin="0, 0, 316, 0"/>
+                       Margin="0, 0, 315, 0"/>
                 <Entry Grid.Row="23" Grid.Column="1" x:Name="EfficiencyInput" Style="{StaticResource ParamEntryStyle}" 
                        TextChanged="OnDoubleEntryTextChanged" Keyboard="Numeric" Focused="OnEntryFocused"/>
 
                 <Label Grid.Row="24" Grid.Column="0" Text="Номер контрольного месяца" 
                        VerticalOptions="Center"
                        HorizontalOptions="End"
-                       Margin="0, 0, 245, 0"/>
+                       Margin="0, 0, 244, 0"/>
                 <Entry Grid.Row="24" Grid.Column="1" x:Name="ControlMonthInput" Style="{StaticResource ParamEntryStyle}" 
                        TextChanged="OnIntEntryTextChanged" Keyboard="Numeric" Focused="OnEntryFocused"
                        Text="12"/>
