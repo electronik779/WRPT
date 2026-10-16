@@ -33,28 +33,44 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
+          cache: true
+          cache-dependency-path: '**/WRPT.maui.csproj'
+
+      - name: Cache Windows MAUI Workloads
+        id: cache-windows-workloads
+        uses: actions/cache@v4
+        with:
+          path: |
+            AppData\Local\Microsoft\dotnet\sdk-advertising
+            AppData\Local\Microsoft\dotnet\metadata
+            AppData\Local\Microsoft\dotnet\packs
+          key: ${{ runner.os }}-workloads-${{ hashFiles('**/WRPT.maui.csproj') }}
 
       - name: Install MAUI Workload
-        run: dotnet workload install maui
+        if: steps.cache-windows-workloads.outputs.cache-hit != 'true'
+        run: dotnet workload restore WRPT.maui/WRPT.maui.csproj
 
       - name: Create Dummy License File (Windows)
         shell: pwsh
         run: |
           New-Item -Path "." -Name "MIT License.txt" -ItemType "file" -Force
 
+      # ИСПРАВЛЕНО: Заменен --framework на -p:TargetFramework и полностью удалены любые слеши \ перед матрицей
+      - name: Restore NuGet Packages (Windows)
+        run: dotnet restore WRPT.maui/WRPT.maui.csproj -p:TargetFramework=net10.0-windows10.0.19041.0 -r ${{ matrix.arch }}
+
       - name: Build Windows
         run: >
           dotnet publish WRPT.maui/WRPT.maui.csproj 
-          -f net10.0-windows10.0.19041.0
-          -p:TargetFrameworks=net10.0-windows10.0.19041.0
+          --framework net10.0-windows10.0.19041.0
           -c Release 
           -r ${{ matrix.arch }}
           -p:SolutionDir="../"
           -p:PublishSingleFile=false 
           -p:WindowsAppSDKSelfContained=false
           --self-contained false
+          -p:UseMonoRuntime=false
 
-      # ИСПРАВЛЕНО: Указываем точный путь к папке публикации согласно логам отладки
       - name: Upload Raw Windows Files for Installer
         uses: actions/upload-artifact@v4
         with:
@@ -90,7 +106,6 @@ jobs:
         run: New-Item -ItemType Directory -Force -Path "WRPT-setup-universal"
 
       - name: Compile Universal Installer
-        # Флаг /F переопределяет OutputBaseFilename из setup.iss на динамическое имя с тегом
         run: |
           cd WRPT.maui\Installer_files
           iscc /F"Setup_WRPT_${{ inputs.release_tag }}_Win" setup.iss
@@ -103,59 +118,77 @@ jobs:
 
   build-macos:
     if: inputs.build_macos == true
-    #runs-on: macos-26
-    runs-on: macos-27
-    strategy:
-      matrix:
-        arch: [maccatalyst-x64, maccatalyst-arm64]
+    runs-on: xcode-27
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Verify Xcode Version
-        run: |
-          xcodebuild -version
-
-      #- name: Select Xcode 26.6
-      #  run: |
-      #    sudo xcode-select --switch /Applications/Xcode_26.6.app
+        run: xcodebuild -version
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
+          cache: true
+          cache-dependency-path: '**/WRPT.maui.csproj'
 
-      - name: Install MAUI Workload
+      - name: Install MAUI Workloads Globally
         run: |
-          dotnet workload install maui
-          dotnet workload install maccatalyst
+          dotnet workload install maui maccatalyst --ignore-failed-sources
 
       - name: Create Dummy License File (macOS)
-        run: |
-          touch "MIT License.txt"
+        run: touch "MIT License.txt"
 
-      - name: Build macOS
+      # ИСПРАВЛЕНО: Заменен не поддерживаемый --framework на валидное свойство -p:TargetFramework=...
+      - name: Restore NuGet Packages (macOS)
+        run: |
+          dotnet restore WRPT.maui/WRPT.maui.csproj -p:TargetFramework=net10.0-maccatalyst -r maccatalyst-x64
+          dotnet restore WRPT.maui/WRPT.maui.csproj -p:TargetFramework=net10.0-maccatalyst -r maccatalyst-arm64
+
+      - name: Build macOS (x64)
         run: >
           dotnet publish WRPT.maui/WRPT.maui.csproj 
-          -f net10.0-maccatalyst
-          -p:TargetFrameworks=net10.0-maccatalyst
+          --framework net10.0-maccatalyst
           -c Release 
-          -r ${{ matrix.arch }}
+          -r maccatalyst-x64
           -p:SolutionDir="../"
           -p:CreatePackage=true
           -p:PublishTrimmed=true
           -p:PublishSingleFile=false
+          -p:SupportedOSPlatformVersion=17.0
+
+      - name: Build macOS (arm64)
+        run: >
+          dotnet publish WRPT.maui/WRPT.maui.csproj 
+          --framework net10.0-maccatalyst
+          -c Release 
+          -r maccatalyst-arm64
+          -p:SolutionDir="../"
+          -p:CreatePackage=true
+          -p:PublishTrimmed=true
+          -p:PublishSingleFile=false
+          -p:SupportedOSPlatformVersion=17.0
 
       - name: Archive macOS App
         run: |
-          cd WRPT.maui/bin/Release/net10.0-maccatalyst/${{ matrix.arch }}/
-          zip -r ../../../../../WRPT.maui-${{ matrix.arch }}.zip WRPT.maui.app
+          cd WRPT.maui/bin/Release/net10.0-maccatalyst/maccatalyst-x64/
+          zip -r ../../../../../WRPT.maui-maccatalyst-x64.zip WRPT.maui.app
+          
+          cd ../maccatalyst-arm64/
+          zip -r ../../../../../WRPT.maui-maccatalyst-arm64.zip WRPT.maui.app
 
-      - name: Upload Raw macOS App
+      - name: Upload Raw macOS x64 App
         uses: actions/upload-artifact@v4
         with:
-          name: raw-mac-${{ matrix.arch }}
-          path: WRPT.maui-${{ matrix.arch }}.zip
+          name: raw-mac-maccatalyst-x64
+          path: WRPT.maui-maccatalyst-x64.zip
+
+      - name: Upload Raw macOS arm64 App
+        uses: actions/upload-artifact@v4
+        with:
+          name: raw-mac-maccatalyst-arm64
+          path: WRPT.maui-maccatalyst-arm64.zip
 
   build-macos-dmg:
     if: inputs.build_macos == true
@@ -195,7 +228,6 @@ jobs:
             -output "WRPT-Universal.app/Contents/MacOS/$EXEC_NAME"
 
       - name: Create DMG Installer
-        # ИСПРАВЛЕНО: Изменено имя результирующего .dmg файла
         run: |
           mkdir -p dmg-source
           mv WRPT-Universal.app dmg-source/WRPT.app
